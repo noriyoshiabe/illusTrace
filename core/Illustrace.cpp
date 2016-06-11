@@ -22,7 +22,6 @@ void Illustrace::binarize()
 {
     binarizedImage = sourceImage.clone();
     brightnessFilter.apply(binarizedImage);
-
     previewImage = binarizedImage;
     notify(IllustraceEvent::PreviewImageChanged);
 
@@ -30,6 +29,11 @@ void Illustrace::binarize()
     notify(IllustraceEvent::PreviewImageChanged);
 
     binaryThresholdFilter.apply(binarizedImage);
+    notify(IllustraceEvent::PreviewImageChanged);
+
+    thinnedImage = binarizedImage.clone();
+    thinningFilter.apply(thinnedImage);
+    previewImage = thinnedImage;
     notify(IllustraceEvent::PreviewImageChanged);
 }
 

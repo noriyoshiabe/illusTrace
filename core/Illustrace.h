@@ -4,6 +4,7 @@
 #include "BrightnessFilter.h"
 #include "BlurFilter.h"
 #include "BinaryThresholdFilter.h"
+#include "ThinningFilter.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -23,10 +24,12 @@ public:
     BrightnessFilter brightnessFilter;
     BlurFilter blurFilter;
     BinaryThresholdFilter binaryThresholdFilter;
+    ThinningFilter thinningFilter;
 
 private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
+    cv::Mat thinnedImage;
     cv::Mat previewImage;
 };
 

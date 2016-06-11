@@ -7,6 +7,7 @@ set(SOURCES
   BrightnessFilter.cpp
   BlurFilter.cpp
   BinaryThresholdFilter.cpp
+  ThinningFilter.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})
