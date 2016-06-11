@@ -1,7 +1,9 @@
 #include "CLI.h"
 
 #include <iostream>
+#include <string>
 #include <getopt.h>
+#include "opencv2/highgui.hpp"
 
 using namespace illustrace;
 using namespace cli;
@@ -11,8 +13,10 @@ const std::string CLI::VERSION = "0.1.0";
 int CLI::main(int argc, char **argv)
 {
     static struct option _options[] = {
-        { "help", no_argument, NULL, 'h'},
-        { "version", no_argument, NULL, 'v'},
+        {"brightness", required_argument, NULL, 'b'},
+        {"wait", required_argument, NULL, 'w'},
+        {"help", no_argument, NULL, 'h'},
+        {"version", no_argument, NULL, 'v'},
 
         {NULL, 0, NULL, 0}
     };
@@ -20,8 +24,14 @@ int CLI::main(int argc, char **argv)
     CLI cli;
     int opt;
 
-    while (-1 != (opt = getopt_long(argc, argv, "hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "b:w:hv", _options, NULL))) {
         switch (opt) {
+        case 'b':
+            cli.brightness = std::stod(optarg);
+            break;
+        case 'w':
+            cli.view.wait = std::stoi(optarg);
+            break;
         case 'h':
             cli.help();
             return EXIT_SUCCESS;
@@ -29,17 +39,18 @@ int CLI::main(int argc, char **argv)
             cli.version();
             return EXIT_SUCCESS;
         case '?':
+            cli.usage();
             return EXIT_FAILURE;
         }
     }
 
-    if (optind < argc) {
-        if (!cli.loadSourceImage(argv[optind])) {
-            return EXIT_FAILURE;
-        }
+    if (argc <= optind) {
+        std::cout << "Input file not specified." << std::endl;
+        cli.usage();
+        return EXIT_FAILURE;
     }
-    
-    return cli.run() ? EXIT_SUCCESS : EXIT_FAILURE;
+
+    return cli.execute(argv[optind]) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 CLI::CLI()
@@ -50,19 +61,26 @@ CLI::CLI()
 void CLI::help()
 {
     const std::string HEADER =
-        "Welcome to the illustrace.\n"
-        "\n"
-        "illustrace CLI (beta): version " + VERSION + "\n"
+        "illustrace CLI version " + VERSION + "\n"
         "Copyright (c) 2016, Noriyoshi Abe. All Rights Reserved.\n";
-
-    const std::string USAGE =
-        "Usage: illustrace [options] [file]\n"
-        "Options:\n"
-        "  -h, --help    This help text.\n"
-        "  -v, --version Show program version.\n";
     
     std::cout << HEADER;
+
+    usage();
+}
+
+void CLI::usage()
+{
     std::cout << std::endl;
+
+    const std::string USAGE =
+        "Usage: illustrace [options] file\n"
+        "Options:\n"
+        "  -w, --wait <msec> Wait milli seconds for each of image proccessing phase."
+        "                    0 is infinity and key input is needed for continue."
+        "  -h, --help        This help text.\n"
+        "  -v, --version     Show program version.\n";
+
     std::cout << USAGE;
     std::cout << std::endl;
 }
@@ -72,12 +90,18 @@ void CLI::version()
     std::cout << "illustrace CLI Version " << VERSION << " June 11, 2016" << std::endl;
 }
 
-bool CLI::loadSourceImage(const char *filename)
+bool CLI::execute(const char *inputFilePath)
 {
-    return illustrace.loadSourceImage(filename);
-}
+    bool ret = illustrace.loadSourceImage(inputFilePath);
+    if (!ret) {
+        std::cout << "Could not load source image." << std::endl;
+        goto ERROR;
+    }
 
-bool CLI::run()
-{
-    return true;
+    illustrace.adjustBrightness(brightness);
+
+    cv::waitKey(0);
+
+ERROR:
+    return ret;
 }

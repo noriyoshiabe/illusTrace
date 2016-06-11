@@ -8,7 +8,7 @@ using namespace cli;
 
 static const char WindowName[] = "illustrace CLI";
 
-View::View()
+View::View() : wait(-1)
 {
     cv::namedWindow(WindowName, cv::WINDOW_AUTOSIZE);
 }
@@ -20,6 +20,16 @@ View::~View()
 
 void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList)
 {
-    imshow(WindowName, *va_arg(argList, cv::Mat *));
-    cv::waitKey(0);
+    switch (event) {
+    case core::IllustraceEvent::SourceImageLoaded:
+        imshow(WindowName, sender->getSourceImage());
+        break;
+    case core::IllustraceEvent::BrightnessChanged:
+        imshow(WindowName, sender->getBrightnessChangedImage());
+        break;
+    }
+
+    if (0 <= wait) {
+        cv::waitKey(wait);
+    }
 }

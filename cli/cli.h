@@ -15,12 +15,14 @@ public:
     CLI();
 
     void help();
+    void usage();
     void version();
-    bool run();
-    bool loadSourceImage(const char *filename);
+    bool execute(const char *inputFilePath);
+
+    View view;
+    double brightness;
 
 private:
-    View view;
     core::Illustrace illustrace;
 };
 
