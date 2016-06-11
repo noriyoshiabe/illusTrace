@@ -5,6 +5,7 @@
 #include "BlurFilter.h"
 #include "BinaryThresholdFilter.h"
 #include "ThinningFilter.h"
+#include "EdgeFilter.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -18,7 +19,6 @@ class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filepath);
     void binarize();
-    void thin();
     void buildCenterLine();
     void buildOutline();
     void drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints);
@@ -29,6 +29,7 @@ public:
     BlurFilter blurFilter;
     BinaryThresholdFilter binaryThresholdFilter;
     ThinningFilter thinningFilter;
+    EdgeFilter edgeFilter;
 
     bool plotKeyPoints;
 
@@ -36,6 +37,7 @@ private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
     cv::Mat thinnedImage;
+    cv::Mat edgeImage;
     cv::Mat previewImage;
 };
 

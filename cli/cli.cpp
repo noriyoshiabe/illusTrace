@@ -123,7 +123,6 @@ bool CLI::execute(const char *inputFilePath)
         illustrace.buildOutline();
     }
     else {
-        illustrace.thin();
         illustrace.buildCenterLine();
     }
 
