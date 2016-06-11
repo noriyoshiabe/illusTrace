@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.5)
 project(illustrace-cli)
 set(TARGET_NAME illustrace)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
+find_package(OpenCV)
+
 add_definitions(-Wall)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
@@ -23,3 +26,4 @@ include_directories(
 
 add_executable(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} illustrace-core)
+target_link_libraries(${TARGET_NAME} ${OpenCV_LIBRARIES})
