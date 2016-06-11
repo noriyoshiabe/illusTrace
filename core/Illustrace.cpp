@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "opencv2/highgui.hpp"
+#include "opencv2/features2d.hpp"
 
 using namespace illustrace;
 using namespace core;
@@ -34,6 +35,26 @@ void Illustrace::binarize()
     thinnedImage = binarizedImage.clone();
     thinningFilter.apply(thinnedImage);
     previewImage = thinnedImage;
+    notify(IllustraceEvent::PreviewImageChanged);
+}
+
+void Illustrace::buildCenterLine()
+{
+    std::vector<cv::KeyPoint> keyPoints;
+
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 4);
+    detector->detect(thinnedImage, keyPoints);
+
+    if (plotKeyPoints) {
+        drawKeyPoints(thinnedImage, keyPoints);
+    }
+}
+
+void Illustrace::drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints)
+{
+    cv::Mat dstImage;
+    cv::drawKeypoints(image, keyPoints, dstImage);
+    previewImage = dstImage;
     notify(IllustraceEvent::PreviewImageChanged);
 }
 

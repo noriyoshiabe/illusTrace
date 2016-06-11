@@ -23,8 +23,9 @@ int CLI::main(int argc, char **argv)
     };
 
     CLI cli;
-    int opt;
+    cli.illustrace.plotKeyPoints = true;
 
+    int opt;
     while (-1 != (opt = getopt_long(argc, argv, "b:B:w:hv", _options, NULL))) {
         switch (opt) {
         case 'b':
@@ -112,8 +113,9 @@ bool CLI::execute(const char *inputFilePath)
     }
 
     illustrace.binarize();
+    illustrace.buildCenterLine();
 
-    if (-1 == view.wait) {
+    if (0 != view.wait) {
         cv::waitKey(0);
     }
 

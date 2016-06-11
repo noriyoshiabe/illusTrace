@@ -18,6 +18,8 @@ class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filepath);
     void binarize();
+    void buildCenterLine();
+    void drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints);
 
     cv::Mat &getPreviewImage();
 
@@ -25,6 +27,8 @@ public:
     BlurFilter blurFilter;
     BinaryThresholdFilter binaryThresholdFilter;
     ThinningFilter thinningFilter;
+
+    bool plotKeyPoints;
 
 private:
     cv::Mat sourceImage;
