@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-mod
 find_package(OpenCV)
 
 add_definitions(-Wall)
+add_definitions(-std=c++11)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
   add_definitions(-DDEBUG)

@@ -1,19 +1,21 @@
 #pragma once
 
+#include "Observable.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
 namespace core {
 
-class Illustrace {
+enum class IllustraceEvent {
+    OnLoadSourceImage,
+};
+
+class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filename);
 
 private:
     cv::Mat sourceImage;
-    cv::Mat resultImage;
-
-    void setResultImage(cv::Mat &image);
 };
 
 } // namespace core

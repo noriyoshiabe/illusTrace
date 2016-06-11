@@ -12,14 +12,8 @@ bool Illustrace::loadSourceImage(const char *filename)
     if (!sourceImage.data) {
         return false;
     }
-    
-    setResultImage(sourceImage);
-    return true;
-}
 
-void Illustrace::setResultImage(cv::Mat &image)
-{
-    resultImage = image;
+    notify(IllustraceEvent::OnLoadSourceImage);
     
-    // TODO notify
+    return true;
 }
