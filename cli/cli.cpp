@@ -8,7 +8,7 @@ using namespace cli;
 
 const std::string CLI::VERSION = "0.1.0";
 
-int CLI::run(int argc, char **argv)
+int CLI::main(int argc, char **argv)
 {
     static struct option _options[] = {
         { "help", no_argument, NULL, 'h'},
@@ -17,10 +17,8 @@ int CLI::run(int argc, char **argv)
         {NULL, 0, NULL, 0}
     };
 
-    int opt;
-    const char *input = NULL;
-
     CLI cli;
+    int opt;
 
     while (-1 != (opt = getopt_long(argc, argv, "hv", _options, NULL))) {
         switch (opt) {
@@ -34,9 +32,14 @@ int CLI::run(int argc, char **argv)
             return EXIT_FAILURE;
         }
     }
+
+    if (optind < argc) {
+        if (!cli.loadSourceImage(argv[optind])) {
+            return EXIT_FAILURE;
+        }
+    }
     
-    std::cout << "Hi!!" << std::endl;
-    return 0;
+    return cli.run() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 void CLI::help()
@@ -62,4 +65,14 @@ void CLI::help()
 void CLI::version()
 {
     std::cout << "illustrace CLI Version " << VERSION << " June 11, 2016" << std::endl;
+}
+
+bool CLI::loadSourceImage(const char *filename)
+{
+    return illustrace.loadSourceImage(filename);
+}
+
+bool CLI::run()
+{
+    return true;
 }
