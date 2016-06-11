@@ -42,7 +42,7 @@ void Illustrace::buildCenterLine()
 
     std::vector<cv::KeyPoint> keyPoints;
 
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 4);
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 2);
     detector->detect(thinnedImage, keyPoints);
 
     if (plotKeyPoints) {
@@ -59,7 +59,7 @@ void Illustrace::buildOutline()
 
     std::vector<cv::KeyPoint> keyPoints;
 
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 4);
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 2);
     detector->detect(edgeImage, keyPoints);
 
     if (plotKeyPoints) {
