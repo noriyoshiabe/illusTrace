@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdarg>
+
 namespace illustrace {
 namespace core {
 
@@ -8,7 +10,7 @@ class Observer {
 public:
     Observer() {};
     virtual ~Observer() {};
-    virtual void notify(C *sender, E event) = 0;
+    virtual void notify(C *sender, E event, va_list argList) = 0;
 };
 
 } // namespace core

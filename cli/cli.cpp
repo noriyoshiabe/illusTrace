@@ -42,6 +42,11 @@ int CLI::main(int argc, char **argv)
     return cli.run() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
+CLI::CLI()
+{
+    illustrace.addObserver(&view);
+}
+
 void CLI::help()
 {
     const std::string HEADER =

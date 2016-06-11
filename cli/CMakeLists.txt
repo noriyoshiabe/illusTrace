@@ -18,6 +18,7 @@ add_subdirectory (../core ${CMAKE_CURRENT_BINARY_DIR}/core)
 set(SOURCES
   main.cpp
   CLI.cpp
+  View.cpp
 )
 
 include_directories(

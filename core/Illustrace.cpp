@@ -13,7 +13,7 @@ bool Illustrace::loadSourceImage(const char *filename)
         return false;
     }
 
-    notify(IllustraceEvent::OnLoadSourceImage);
+    notify(IllustraceEvent::OnLoadSourceImage, &sourceImage);
     
     return true;
 }

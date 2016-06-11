@@ -20,9 +20,12 @@ public:
         }
     }
 
-    void notify(E event) {
+    void notify(E event, ...) {
+        va_list argList;
         for (auto *observer : observers) {
-            observer->notify(static_cast<C *>(this), event);
+            va_start(argList, event);
+            observer->notify(static_cast<C *>(this), event, argList);
+            va_end(argList);
         }
     }
 
