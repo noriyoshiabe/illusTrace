@@ -3,7 +3,7 @@
 #include "Filter.h"
 
 namespace illustrace {
-namespace core {
+namespace filter {
 
 class BrightnessFilter : public Filter {
 public:
@@ -16,5 +16,5 @@ public:
     double contrast;
 };
 
-} // namespace core
+} // namespace filter
 } // namespace illustrace

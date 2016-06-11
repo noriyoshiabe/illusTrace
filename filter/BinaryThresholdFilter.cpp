@@ -1,7 +1,7 @@
 #include "BinaryThresholdFilter.h" 
 
 using namespace illustrace;
-using namespace core;
+using namespace filter;
 
 void BinaryThresholdFilter::apply(cv::Mat &image)
 {

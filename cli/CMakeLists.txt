@@ -14,6 +14,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
 endif ()
 
 add_subdirectory (../core ${CMAKE_CURRENT_BINARY_DIR}/core)
+add_subdirectory (../filter ${CMAKE_CURRENT_BINARY_DIR}/filter)
 
 set(SOURCES
   main.cpp
@@ -24,8 +25,10 @@ set(SOURCES
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ../core
+  ../filter
 )
 
 add_executable(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} illustrace-core)
+target_link_libraries(${TARGET_NAME} illustrace-filter)
 target_link_libraries(${TARGET_NAME} ${OpenCV_LIBRARIES})

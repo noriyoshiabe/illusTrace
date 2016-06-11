@@ -25,11 +25,11 @@ public:
 
     cv::Mat &getPreviewImage();
 
-    BrightnessFilter brightnessFilter;
-    BlurFilter blurFilter;
-    BinaryThresholdFilter binaryThresholdFilter;
-    ThinningFilter thinningFilter;
-    EdgeFilter edgeFilter;
+    filter::BrightnessFilter brightnessFilter;
+    filter::BlurFilter blurFilter;
+    filter::BinaryThresholdFilter binaryThresholdFilter;
+    filter::ThinningFilter thinningFilter;
+    filter::EdgeFilter edgeFilter;
 
     bool plotKeyPoints;
 

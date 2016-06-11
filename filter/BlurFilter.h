@@ -3,7 +3,7 @@
 #include "Filter.h"
 
 namespace illustrace {
-namespace core {
+namespace filter {
 
 class BlurFilter : public Filter {
 public:
@@ -14,5 +14,5 @@ public:
     int blur;
 };
 
-} // namespace core
+} // namespace filter
 } // namespace illustrace

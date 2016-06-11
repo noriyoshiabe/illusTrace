@@ -3,12 +3,12 @@
 #include "Filter.h"
 
 namespace illustrace {
-namespace core {
+namespace filter {
 
 class EdgeFilter : public Filter {
 public:
     void apply(cv::Mat &image);
 };
 
-} // namespace core
+} // namespace filter
 } // namespace illustrace

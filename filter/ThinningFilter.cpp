@@ -3,7 +3,7 @@
 #include <cstring>
 
 using namespace illustrace;
-using namespace core;
+using namespace filter;
 
 void ThinningFilter::apply(cv::Mat &image)
 {

@@ -3,7 +3,7 @@
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
-namespace core {
+namespace filter {
 
 class Filter {
 public:
@@ -12,5 +12,5 @@ public:
     virtual void apply(cv::Mat &image) = 0;
 };
 
-} // namespace core
+} // namespace filter
 } // namespace illustrace

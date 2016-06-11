@@ -1,7 +1,7 @@
 #include "BrightnessFilter.h" 
 
 using namespace illustrace;
-using namespace core;
+using namespace filter;
 
 void BrightnessFilter::apply(cv::Mat &image)
 {

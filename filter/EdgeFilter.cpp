@@ -1,7 +1,7 @@
 #include "EdgeFilter.h" 
 
 using namespace illustrace;
-using namespace core;
+using namespace filter;
 
 void EdgeFilter::apply(cv::Mat &image)
 {
