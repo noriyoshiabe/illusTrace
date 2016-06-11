@@ -21,6 +21,7 @@ public:
 
     View view;
     core::Illustrace illustrace;
+    bool outline;
 };
 
 } // namespace cli

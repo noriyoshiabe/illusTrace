@@ -31,7 +31,10 @@ void Illustrace::binarize()
 
     binaryThresholdFilter.apply(binarizedImage);
     notify(IllustraceEvent::PreviewImageChanged);
+}
 
+void Illustrace::thin()
+{
     thinnedImage = binarizedImage.clone();
     thinningFilter.apply(thinnedImage);
     previewImage = thinnedImage;
@@ -47,6 +50,18 @@ void Illustrace::buildCenterLine()
 
     if (plotKeyPoints) {
         drawKeyPoints(thinnedImage, keyPoints);
+    }
+}
+
+void Illustrace::buildOutline()
+{
+    std::vector<cv::KeyPoint> keyPoints;
+
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 4);
+    detector->detect(binarizedImage, keyPoints);
+
+    if (plotKeyPoints) {
+        drawKeyPoints(binarizedImage, keyPoints);
     }
 }
 

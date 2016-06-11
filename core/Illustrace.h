@@ -18,7 +18,9 @@ class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filepath);
     void binarize();
+    void thin();
     void buildCenterLine();
+    void buildOutline();
     void drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints);
 
     cv::Mat &getPreviewImage();

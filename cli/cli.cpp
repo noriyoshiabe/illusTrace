@@ -13,6 +13,7 @@ const std::string CLI::VERSION = "0.1.0";
 int CLI::main(int argc, char **argv)
 {
     static struct option _options[] = {
+        {"outline", no_argument, NULL, 'O'},
         {"brightness", required_argument, NULL, 'b'},
         {"blur", required_argument, NULL, 'B'},
         {"wait", required_argument, NULL, 'w'},
@@ -26,8 +27,11 @@ int CLI::main(int argc, char **argv)
     cli.illustrace.plotKeyPoints = true;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "b:B:w:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:w:hv", _options, NULL))) {
         switch (opt) {
+        case 'O':
+            cli.outline = true;
+            break;
         case 'b':
             cli.illustrace.brightnessFilter.brightness = std::stod(optarg);
             break;
@@ -88,10 +92,11 @@ void CLI::usage()
     const std::string USAGE =
         "Usage: illustrace [options] file\n"
         "Options:\n"
-        "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0."
-        "  -B, --blur <size>        Blur size of the preprocess for binarize."
-        "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase."
-        "                           0 is infinity and key input is needed for continue."
+        "  -O, --outline            Outline trace mode. Default is center line mode.\n"
+        "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0.\n"
+        "  -B, --blur <size>        Blur size of the preprocess for binarize.\n"
+        "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase.\n"
+        "                           0 is infinity and key input is needed for continue.\n"
         "  -h, --help               This help text.\n"
         "  -v, --version            Show program version.\n";
 
@@ -113,7 +118,14 @@ bool CLI::execute(const char *inputFilePath)
     }
 
     illustrace.binarize();
-    illustrace.buildCenterLine();
+
+    if (outline) {
+        illustrace.buildOutline();
+    }
+    else {
+        illustrace.thin();
+        illustrace.buildCenterLine();
+    }
 
     if (0 != view.wait) {
         cv::waitKey(0);
