@@ -10,7 +10,7 @@ public:
     BrightnessFilter(double brightness = 0.0, double contrast = 1.0)
         : brightness(brightness), contrast(contrast) {};
 
-    cv::Mat apply(cv::Mat &image);
+    void apply(cv::Mat &image);
 
     double brightness;
     double contrast;

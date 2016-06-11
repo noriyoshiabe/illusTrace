@@ -13,25 +13,23 @@ bool Illustrace::loadSourceImage(const char *filepath)
         return false;
     }
 
-    notify(IllustraceEvent::SourceImageLoaded);
-    
+    previewImage = sourceImage;
+    notify(IllustraceEvent::PreviewImageChanged);
     return true;
 }
-void Illustrace::adjustBrightness(double brightness, double contrast)
+
+void Illustrace::binarize(double brightness)
 {
     brightnessFilter.brightness = brightness;
-    brightnessFilter.contrast = contrast;
-    brightnessChangedImage = brightnessFilter.apply(sourceImage);
 
-    notify(IllustraceEvent::BrightnessChanged);
+    binarizedImage = sourceImage.clone();
+    brightnessFilter.apply(binarizedImage);
+
+    previewImage = binarizedImage;
+    notify(IllustraceEvent::PreviewImageChanged);
 }
 
-cv::Mat &Illustrace::getSourceImage()
+cv::Mat &Illustrace::getPreviewImage()
 {
-    return sourceImage;
-}
-
-cv::Mat &Illustrace::getBrightnessChangedImage()
-{
-    return brightnessChangedImage;
+    return previewImage;
 }

@@ -21,15 +21,12 @@ View::~View()
 void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList)
 {
     switch (event) {
-    case core::IllustraceEvent::SourceImageLoaded:
-        imshow(WindowName, sender->getSourceImage());
-        break;
-    case core::IllustraceEvent::BrightnessChanged:
-        imshow(WindowName, sender->getBrightnessChangedImage());
-        break;
-    }
+    case core::IllustraceEvent::PreviewImageChanged:
+        imshow(WindowName, sender->getPreviewImage());
 
-    if (0 <= wait) {
-        cv::waitKey(wait);
+        if (0 <= wait) {
+            cv::waitKey(wait);
+        }
+        break;
     }
 }

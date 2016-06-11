@@ -98,9 +98,11 @@ bool CLI::execute(const char *inputFilePath)
         goto ERROR;
     }
 
-    illustrace.adjustBrightness(brightness);
+    illustrace.binarize(brightness);
 
-    cv::waitKey(0);
+    if (-1 == view.wait) {
+        cv::waitKey(0);
+    }
 
 ERROR:
     return ret;

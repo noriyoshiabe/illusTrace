@@ -8,21 +8,20 @@ namespace illustrace {
 namespace core {
 
 enum class IllustraceEvent {
-    SourceImageLoaded,
-    BrightnessChanged,
+    PreviewImageChanged,
 };
 
 class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filepath);
-    void adjustBrightness(double brightness, double contrast = 1.0);
+    void binarize(double brightness);
 
-    cv::Mat &getSourceImage();
-    cv::Mat &getBrightnessChangedImage();
+    cv::Mat &getPreviewImage();
 
 private:
     cv::Mat sourceImage;
-    cv::Mat brightnessChangedImage;
+    cv::Mat binarizedImage;
+    cv::Mat previewImage;
 
     BrightnessFilter brightnessFilter;
 };

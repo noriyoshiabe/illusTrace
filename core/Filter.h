@@ -9,7 +9,7 @@ class Filter {
 public:
     Filter() {};
     virtual ~Filter() {};
-    virtual cv::Mat apply(cv::Mat &image) = 0;
+    virtual void apply(cv::Mat &image) = 0;
 };
 
 } // namespace core
