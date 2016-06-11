@@ -2,6 +2,8 @@
 
 #include "Observable.h"
 #include "BrightnessFilter.h"
+#include "BlurFilter.h"
+#include "BinaryThresholdFilter.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -14,16 +16,18 @@ enum class IllustraceEvent {
 class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     bool loadSourceImage(const char *filepath);
-    void binarize(double brightness);
+    void binarize();
 
     cv::Mat &getPreviewImage();
+
+    BrightnessFilter brightnessFilter;
+    BlurFilter blurFilter;
+    BinaryThresholdFilter binaryThresholdFilter;
 
 private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
     cv::Mat previewImage;
-
-    BrightnessFilter brightnessFilter;
 };
 
 } // namespace core

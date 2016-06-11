@@ -18,4 +18,3 @@ public:
 
 } // namespace core
 } // namespace illustrace
-

@@ -14,6 +14,7 @@ int CLI::main(int argc, char **argv)
 {
     static struct option _options[] = {
         {"brightness", required_argument, NULL, 'b'},
+        {"blur", required_argument, NULL, 'B'},
         {"wait", required_argument, NULL, 'w'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
@@ -24,10 +25,20 @@ int CLI::main(int argc, char **argv)
     CLI cli;
     int opt;
 
-    while (-1 != (opt = getopt_long(argc, argv, "b:w:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "b:B:w:hv", _options, NULL))) {
         switch (opt) {
         case 'b':
-            cli.brightness = std::stod(optarg);
+            cli.illustrace.brightnessFilter.brightness = std::stod(optarg);
+            break;
+        case 'B':
+            {
+                int blur = std::stoi(optarg);
+                if (0 > blur || 0 == blur % 2) {
+                    std::cout << "-B <blur> must be sined odd number." << std::endl;
+                    return EXIT_SUCCESS;
+                }
+                cli.illustrace.blurFilter.blur = blur;
+            }
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
@@ -76,10 +87,12 @@ void CLI::usage()
     const std::string USAGE =
         "Usage: illustrace [options] file\n"
         "Options:\n"
-        "  -w, --wait <msec> Wait milli seconds for each of image proccessing phase."
-        "                    0 is infinity and key input is needed for continue."
-        "  -h, --help        This help text.\n"
-        "  -v, --version     Show program version.\n";
+        "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0."
+        "  -B, --blur <size>        Blur size of the preprocess for binarize."
+        "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase."
+        "                           0 is infinity and key input is needed for continue."
+        "  -h, --help               This help text.\n"
+        "  -v, --version            Show program version.\n";
 
     std::cout << USAGE;
     std::cout << std::endl;
@@ -98,7 +111,7 @@ bool CLI::execute(const char *inputFilePath)
         goto ERROR;
     }
 
-    illustrace.binarize(brightness);
+    illustrace.binarize();
 
     if (-1 == view.wait) {
         cv::waitKey(0);

@@ -20,9 +20,6 @@ public:
     bool execute(const char *inputFilePath);
 
     View view;
-    double brightness;
-
-private:
     core::Illustrace illustrace;
 };
 

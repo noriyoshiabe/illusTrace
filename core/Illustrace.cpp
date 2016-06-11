@@ -18,14 +18,18 @@ bool Illustrace::loadSourceImage(const char *filepath)
     return true;
 }
 
-void Illustrace::binarize(double brightness)
+void Illustrace::binarize()
 {
-    brightnessFilter.brightness = brightness;
-
     binarizedImage = sourceImage.clone();
     brightnessFilter.apply(binarizedImage);
 
     previewImage = binarizedImage;
+    notify(IllustraceEvent::PreviewImageChanged);
+
+    blurFilter.apply(binarizedImage);
+    notify(IllustraceEvent::PreviewImageChanged);
+
+    binaryThresholdFilter.apply(binarizedImage);
     notify(IllustraceEvent::PreviewImageChanged);
 }
 
