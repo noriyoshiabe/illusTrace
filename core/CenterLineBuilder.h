@@ -5,6 +5,23 @@
 #include <list>
 #include <unordered_set>
 
+namespace illustrace {
+namespace core {
+
+struct ConnectedLine {
+    cv::Point start;
+    cv::Point end;
+
+    ConnectedLine(cv::Point start, cv::Point end) : start(start), end(end) {};
+
+    bool operator == (ConnectedLine const &other) const {
+        return this->start == other.start && this->end == other.end;
+    }
+};
+
+} // namespace core
+} // namespace illustrace
+
 namespace std {
 
 template<>
@@ -17,7 +34,15 @@ struct hash<cv::Point> {
     }
 };
 
+template<>
+struct hash<illustrace::core::ConnectedLine> {
+    size_t operator()(const illustrace::core::ConnectedLine &line) const {
+        return std::hash<cv::Point>()(line.start) ^ std::hash<cv::Point>()(line.end);
+    }
+};
+
 }
+
 namespace illustrace {
 namespace core {
 
@@ -34,19 +59,18 @@ enum class Direction : int {
 
 class CenterLineBuilder {
 public:
-    void build(cv::Mat &thinnedImage, std::vector<cv::KeyPoint> &keyPoints, std::vector<std::vector<cv::Point>> &results);
+    void build(cv::Mat &thinnedImage, std::vector<std::vector<cv::Point>> &results);
 
 private:
-    std::vector<cv::Point> points;
-    std::unordered_set<cv::Point> startCandidates;
-    std::unordered_set<cv::Point> connectingPoints;
+    std::unordered_set<ConnectedLine> connectedLines;
     int width;
     int height;
     uchar **bitmap;
-    uchar **checked;
+    int checkedY;
 
-    cv::Point searchStartPoint(cv::Mat &thinnedImage, cv::Point keyPoint);
-    bool scan(Direction direction, std::list<cv::Point> &line, cv::Point pixel);
+    bool searchStartPoint(cv::Point &point);
+    bool scan(Direction direction, std::list<cv::Point> &line, cv::Point point);
+    bool isNeighborConnected(cv::Point &point);
 
     inline Direction directionToScan(Direction current, int stage) {
         const Direction table[] = {

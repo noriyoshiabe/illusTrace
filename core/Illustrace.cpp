@@ -40,16 +40,8 @@ void Illustrace::buildCenterLine()
     previewImage = image;
     notify(IllustraceEvent::PreviewImageChanged);
 
-    std::vector<cv::KeyPoint> keyPoints;
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 5);
-    detector->detect(image, keyPoints);
-
-    if (plotKeyPoints) {
-        drawKeyPoints(image, keyPoints);
-    }
-
     std::vector<std::vector<cv::Point>> lines;
-    centerLineBuilder.build(image, keyPoints, lines);
+    centerLineBuilder.build(image, lines);
 
     if (plotLines) {
         image.setTo(cv::Scalar(255, 255, 255));
@@ -64,6 +56,10 @@ void Illustrace::buildCenterLine()
                     cv::line(image, line[i], line[i + 1], cv::Scalar(0), 1);
                 }
             }
+
+            previewImage = image;
+            notify(IllustraceEvent::PreviewImageChanged);
+            cv::waitKey(0);
         }
 
         previewImage = image;
