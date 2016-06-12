@@ -70,7 +70,6 @@ private:
 
     bool searchStartPoint(cv::Point &point);
     bool scan(Direction direction, std::list<cv::Point> &line, cv::Point point);
-    bool isNeighborConnected(cv::Point &point);
 
     inline Direction directionToScan(Direction current, int stage) {
         const Direction table[] = {

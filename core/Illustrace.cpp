@@ -49,17 +49,13 @@ void Illustrace::buildCenterLine()
         for (auto line : lines) {
             int sizeMinus1 = line.size() - 1;
             if (0 == sizeMinus1) {
-                cv::line(image, line[0], line[0], cv::Scalar(0), 1);
+                cv::line(image, line[0], line[0], cv::Scalar(0), 2);
             }
             else {
                 for (int i = 0; i < sizeMinus1; ++i) {
-                    cv::line(image, line[i], line[i + 1], cv::Scalar(0), 1);
+                    cv::line(image, line[i], line[i + 1], cv::Scalar(0), 2);
                 }
             }
-
-            previewImage = image;
-            notify(IllustraceEvent::PreviewImageChanged);
-            cv::waitKey(0);
         }
 
         previewImage = image;

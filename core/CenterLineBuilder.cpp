@@ -39,9 +39,7 @@ void CenterLineBuilder::build(cv::Mat &thinnedImage, std::vector<std::vector<cv:
         }
 
         if (!connected) {
-            if (!isNeighborConnected(point)) {
-                results.push_back(std::vector<cv::Point>(line.begin(), line.end()));
-            }
+            results.push_back(std::vector<cv::Point>(line.begin(), line.end()));
         }
     }
 
@@ -121,22 +119,4 @@ bool CenterLineBuilder::scan(Direction direction, std::list<cv::Point> &line, cv
     }
 
     return connected;
-}
-
-bool CenterLineBuilder::isNeighborConnected(cv::Point &point)
-{
-    if (0 < point.x && 128 == bitmap[point.y][point.x - 1]) {
-        return true;
-    }
-    if (0 < point.y && 128 == bitmap[point.y - 1][point.x]) {
-        return true;
-    }
-    if (point.x < width - 1 && 128 == bitmap[point.y][point.x + 1]) {
-        return true;
-    }
-    if (point.y < height - 1 && 128 == bitmap[point.y + 1][point.x]) {
-        return true;
-    }
-
-    return false;
 }
