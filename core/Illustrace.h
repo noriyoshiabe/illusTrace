@@ -6,6 +6,7 @@
 #include "BinaryThresholdFilter.h"
 #include "ThinningFilter.h"
 #include "EdgeFilter.h"
+#include "CenterLineBuilder.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -31,12 +32,14 @@ public:
     filter::ThinningFilter thinningFilter;
     filter::EdgeFilter edgeFilter;
 
+    CenterLineBuilder centerLineBuilder;
+
     bool plotKeyPoints;
+    bool plotLines;
 
 private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
-    cv::Mat thinnedImage;
     cv::Mat edgeImage;
     cv::Mat previewImage;
 };

@@ -35,18 +35,39 @@ void Illustrace::binarize()
 
 void Illustrace::buildCenterLine()
 {
-    thinnedImage = binarizedImage.clone();
-    thinningFilter.apply(thinnedImage);
-    previewImage = thinnedImage;
+    cv::Mat image = binarizedImage.clone();
+    thinningFilter.apply(image);
+    previewImage = image;
     notify(IllustraceEvent::PreviewImageChanged);
 
     std::vector<cv::KeyPoint> keyPoints;
-
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 2);
-    detector->detect(thinnedImage, keyPoints);
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 5);
+    detector->detect(image, keyPoints);
 
     if (plotKeyPoints) {
-        drawKeyPoints(thinnedImage, keyPoints);
+        drawKeyPoints(image, keyPoints);
+    }
+
+    std::vector<std::vector<cv::Point>> lines;
+    centerLineBuilder.build(image, keyPoints, lines);
+
+    if (plotLines) {
+        image.setTo(cv::Scalar(255, 255, 255));
+
+        for (auto line : lines) {
+            int sizeMinus1 = line.size() - 1;
+            if (0 == sizeMinus1) {
+                cv::line(image, line[0], line[0], cv::Scalar(0), 1);
+            }
+            else {
+                for (int i = 0; i < sizeMinus1; ++i) {
+                    cv::line(image, line[i], line[i + 1], cv::Scalar(0), 1);
+                }
+            }
+        }
+
+        previewImage = image;
+        notify(IllustraceEvent::PreviewImageChanged);
     }
 }
 

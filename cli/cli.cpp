@@ -25,6 +25,7 @@ int CLI::main(int argc, char **argv)
 
     CLI cli;
     cli.illustrace.plotKeyPoints = true;
+    cli.illustrace.plotLines = true;
 
     int opt;
     while (-1 != (opt = getopt_long(argc, argv, "Ob:B:w:hv", _options, NULL))) {

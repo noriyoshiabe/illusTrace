@@ -4,6 +4,7 @@ project(illustrace-core)
 
 set(SOURCES
   Illustrace.cpp
+  CenterLineBuilder.cpp
 )
 
 include_directories(
