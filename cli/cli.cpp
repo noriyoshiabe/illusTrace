@@ -16,6 +16,8 @@ int CLI::main(int argc, char **argv)
         {"outline", no_argument, NULL, 'O'},
         {"brightness", required_argument, NULL, 'b'},
         {"blur", required_argument, NULL, 'B'},
+        {"detail", required_argument, NULL, 'd'},
+        {"thickness", required_argument, NULL, 't'},
         {"wait", required_argument, NULL, 'w'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
@@ -28,7 +30,7 @@ int CLI::main(int argc, char **argv)
     cli.illustrace.plotLines = true;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:w:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:hv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -45,6 +47,12 @@ int CLI::main(int argc, char **argv)
                 }
                 cli.illustrace.blurFilter.blur = blur;
             }
+            break;
+        case 'd':
+            cli.illustrace.detail = std::stod(optarg);
+            break;
+        case 't':
+            cli.illustrace.thickness = std::stoi(optarg);
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
@@ -96,6 +104,8 @@ void CLI::usage()
         "  -O, --outline            Outline trace mode. Default is center line mode.\n"
         "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0.\n"
         "  -B, --blur <size>        Blur size of the preprocess for binarize.\n"
+        "  -d, --detail <value>     Adjustment for line detail. 0.0 to 1.0.\n"
+        "  -t, --thickness <value>  Adjustment for line thickness. 0 < value.\n"
         "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase.\n"
         "                           0 is infinity and key input is needed for continue.\n"
         "  -h, --help               This help text.\n"
@@ -125,6 +135,7 @@ bool CLI::execute(const char *inputFilePath)
     }
     else {
         illustrace.buildCenterLine();
+        illustrace.approximateCenterLine();
     }
 
     if (0 != view.wait) {

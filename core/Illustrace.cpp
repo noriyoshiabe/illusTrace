@@ -40,27 +40,46 @@ void Illustrace::buildCenterLine()
     previewImage = image;
     notify(IllustraceEvent::PreviewImageChanged);
 
-    std::vector<std::vector<cv::Point>> lines;
-    centerLineBuilder.build(image, lines);
+    centerLines.clear();
+    centerLineBuilder.build(image, centerLines);
 
     if (plotLines) {
-        image.setTo(cv::Scalar(255, 255, 255));
+        drawCenterLines(centerLines);
+    }
+}
 
-        for (auto line : lines) {
-            int sizeMinus1 = line.size() - 1;
-            if (0 == sizeMinus1) {
-                cv::line(image, line[0], line[0], cv::Scalar(0), 2);
-            }
-            else {
-                for (int i = 0; i < sizeMinus1; ++i) {
-                    cv::line(image, line[i], line[i + 1], cv::Scalar(0), 2);
-                }
+void Illustrace::approximateCenterLine()
+{
+    approximatedCenterLines.empty();
+
+    for (auto lines : centerLines) {
+        std::vector<cv::Point> approx;
+        cv::approxPolyDP(cv::Mat(lines), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(lines, true), false);
+        approximatedCenterLines.push_back(approx);
+    }
+
+    if (plotLines) {
+        drawCenterLines(approximatedCenterLines);
+    }
+}
+
+void Illustrace::drawCenterLines(std::vector<std::vector<cv::Point>> lines)
+{
+    previewImage.setTo(cv::Scalar(255, 255, 255));
+
+    for (auto line : lines) {
+        int sizeMinus1 = line.size() - 1;
+        if (0 == sizeMinus1) {
+            cv::line(previewImage, line[0], line[0], cv::Scalar(0), thickness);
+        }
+        else {
+            for (int i = 0; i < sizeMinus1; ++i) {
+                cv::line(previewImage, line[i], line[i + 1], cv::Scalar(0), thickness);
             }
         }
-
-        previewImage = image;
-        notify(IllustraceEvent::PreviewImageChanged);
     }
+
+    notify(IllustraceEvent::PreviewImageChanged);
 }
 
 void Illustrace::buildOutline()
