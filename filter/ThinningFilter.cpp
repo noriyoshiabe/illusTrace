@@ -32,23 +32,22 @@ void ThinningFilter::apply(cv::Mat &image)
 
             for (int x = 1; x < xRangeMax; ++x) {
                 if (0 == currRow[x]) {
-                    // [p9 p2 p3 pA]
-                    // [p8 p1 p4 pB]
-                    // [p7 p6 p5 pC]
+                    // [p7 p0 p1 pA]
+                    // [p6    p2 pB]
+                    // [p5 p4 p3 pC]
                     // [pG pF pE pD]
 
-                    int p1 = 1;
-                    int p2 = 0 == prevRow[x  ] ? 1 : 0;
-                    int p3 = 0 == prevRow[x+1] ? 1 : 0;
-                    int p4 = 0 == currRow[x+1] ? 1 : 0;
-                    int p5 = 0 == nextRow[x+1] ? 1 : 0;
-                    int p6 = 0 == nextRow[x  ] ? 1 : 0;
-                    int p7 = 0 == nextRow[x-1] ? 1 : 0;
-                    int p8 = 0 == currRow[x-1] ? 1 : 0;
-                    int p9 = 0 == prevRow[x-1] ? 1 : 0;
+                    int p0 = 0 == prevRow[x  ] ? 1 : 0;
+                    int p1 = 0 == prevRow[x+1] ? 1 : 0;
+                    int p2 = 0 == currRow[x+1] ? 1 : 0;
+                    int p3 = 0 == nextRow[x+1] ? 1 : 0;
+                    int p4 = 0 == nextRow[x  ] ? 1 : 0;
+                    int p5 = 0 == nextRow[x-1] ? 1 : 0;
+                    int p6 = 0 == currRow[x-1] ? 1 : 0;
+                    int p7 = 0 == prevRow[x-1] ? 1 : 0;
 
                     // For avoid vanish point with 4 pixels square
-                    if (p1 && p4 && p6 && p5) {
+                    if (p2 && p4 && p3) {
                         if (y + 2 < height && x + 2 < width) {
                             int pA = 0 == prevRow[x+2] ? 1 : 0;
                             int pB = 0 == currRow[x+2] ? 1 : 0;
@@ -65,22 +64,32 @@ void ThinningFilter::apply(cv::Mat &image)
                     }
 
                     int a = 0;
+                    if (!p0 && p1) ++a;
+                    if (!p1 && p2) ++a;
                     if (!p2 && p3) ++a;
                     if (!p3 && p4) ++a;
                     if (!p4 && p5) ++a;
                     if (!p5 && p6) ++a;
                     if (!p6 && p7) ++a;
-                    if (!p7 && p8) ++a;
-                    if (!p8 && p9) ++a;
-                    if (!p9 && p2) ++a;
+                    if (!p7 && p0) ++a;
 
-                    int b = p2 + p3 + p4 + p5 + p6 + p7 + p8 +p9;
+                    int b = p0 + p1 + p2 + p3 + p4 + p5 + p6 +p7;
 
-                    if (a == 1 && 2 <= b && b <= 6) {
-                        if ((!(k & 1) && p2*p4*p6 == 0 && p4*p6*p8 == 0)
-                            || ((k & 1) && p2*p4*p8 == 0 && p2*p6*p8 == 0)) {
-                            currImageRow[x] = 255;
-                            flag = true;
+                    if (2 <= b && b <= 6) {
+                        int c = 0;
+                        if ((p0 + p1 + p2 +p5 == 0 && p4 + p6 == 2)
+                                || (p2 + p3 + p4 + p7 == 0 && p0 + p6 == 2)) {
+                            c = 1;
+                        }
+
+                        if (a == 1 || c == 1){
+                            int e = (p2 + p4) * p0 * p6;
+                            int f = (p0 + p6) * p2 * p4;
+                            if ((!(k & 1) && e == 0)
+                                    || ( (k & 1) && f == 0)) {
+                                currImageRow[x] = 255;
+                                flag = true;
+                            }
                         }
                     }
                 }
