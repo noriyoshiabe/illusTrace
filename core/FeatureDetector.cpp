@@ -23,6 +23,19 @@ void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point> &keyPo
             }
         }
     }
+
+    std::sort(keyPoints.begin(), keyPoints.end(), [](const cv::Point &a, const cv::Point &b) {
+        return a.x == b.x ? a.y < b.y : a.x < b.x;
+    });
+
+    int size = keyPoints.size();
+    for (int i = 1; i < size; ++i) {
+        if (keyPoints[i - 1] == keyPoints[i]) {
+            keyPoints.erase(keyPoints.begin() + i);
+            --i;
+            --size;
+        }
+    }
 }
 
 bool FeatureDetector::correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point &result)

@@ -48,7 +48,7 @@ void Illustrace::buildCenterLine()
     }
 
     centerLines.clear();
-    centerLineBuilder.build(image, centerLines);
+    centerLineBuilder.build(image, keyPoints, centerLines);
 
     if (plotLines) {
         drawCenterLines(centerLines);

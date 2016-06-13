@@ -59,7 +59,7 @@ enum class Direction : int {
 
 class CenterLineBuilder {
 public:
-    void build(cv::Mat &thinnedImage, std::vector<std::vector<cv::Point>> &results);
+    void build(cv::Mat &thinnedImage, std::vector<cv::Point> keyPoints, std::vector<std::vector<cv::Point>> &results);
 
 private:
     std::unordered_set<ConnectedLine> connectedLines;
