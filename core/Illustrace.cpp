@@ -84,9 +84,9 @@ void Illustrace::drawCenterLines(std::vector<std::vector<cv::Point>> lines)
                 cv::line(previewImage, line[i], line[i + 1], cv::Scalar(0), thickness);
             }
         }
-    }
 
-    notify(IllustraceEvent::PreviewImageChanged);
+        notify(IllustraceEvent::PreviewImageChanged);
+    }
 }
 
 void Illustrace::buildOutline()

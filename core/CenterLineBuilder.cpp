@@ -85,7 +85,12 @@ bool CenterLineBuilder::scan(Direction direction, std::list<cv::Point> &line, cv
         {-1,  1}, // SouthWest
     };
 
+    cv::Point startPoint = point;
+    bool reversed = false;
+
+REVERSE:
     int stage = 0;
+
     while (stage < 8) {
         for (stage = 0; stage < 8; ++stage) {
             Direction toScan = directionToScan(direction, stage);
@@ -116,6 +121,13 @@ bool CenterLineBuilder::scan(Direction direction, std::list<cv::Point> &line, cv
 
             break;
         }
+    }
+
+    if (!reversed) {
+        line.reverse();
+        point = startPoint;
+        reversed = true;
+        goto REVERSE;
     }
 
     return connected;
