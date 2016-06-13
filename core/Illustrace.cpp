@@ -40,6 +40,13 @@ void Illustrace::buildCenterLine()
     previewImage = image;
     notify(IllustraceEvent::PreviewImageChanged);
 
+    std::vector<cv::Point> keyPoints;
+    featureDetector.detect(image, keyPoints);
+
+    if (plotKeyPoints) {
+        drawKeyPoints(image, keyPoints);
+    }
+
     centerLines.clear();
     centerLineBuilder.build(image, centerLines);
 
@@ -89,20 +96,22 @@ void Illustrace::buildOutline()
     previewImage = edgeImage;
     notify(IllustraceEvent::PreviewImageChanged);
 
-    std::vector<cv::KeyPoint> keyPoints;
-
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 2);
-    detector->detect(edgeImage, keyPoints);
+    std::vector<cv::Point> keyPoints;
+    featureDetector.detect(edgeImage, keyPoints);
 
     if (plotKeyPoints) {
         drawKeyPoints(edgeImage, keyPoints);
     }
 }
 
-void Illustrace::drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints)
+void Illustrace::drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints)
 {
     cv::Mat dstImage;
-    cv::drawKeypoints(image, keyPoints, dstImage);
+    cv::cvtColor(image, dstImage, CV_GRAY2RGB);
+    for (auto point : keyPoints) {
+        cv::circle(dstImage, point, 5, cv::Scalar(0, 0, 255));
+    }
+
     previewImage = dstImage;
     notify(IllustraceEvent::PreviewImageChanged);
 }

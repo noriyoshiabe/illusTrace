@@ -6,6 +6,7 @@
 #include "BinaryThresholdFilter.h"
 #include "ThinningFilter.h"
 #include "EdgeFilter.h"
+#include "FeatureDetector.h"
 #include "CenterLineBuilder.h"
 #include "opencv2/imgproc.hpp"
 
@@ -27,7 +28,7 @@ public:
     void buildOutline();
 
     void drawCenterLines(std::vector<std::vector<cv::Point>> lines);
-    void drawKeyPoints(cv::Mat &image, std::vector<cv::KeyPoint> &keyPoints);
+    void drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints);
 
     cv::Mat &getPreviewImage();
 
@@ -37,6 +38,7 @@ public:
     filter::ThinningFilter thinningFilter;
     filter::EdgeFilter edgeFilter;
 
+    FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
 
     bool plotKeyPoints;
