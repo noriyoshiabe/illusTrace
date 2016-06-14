@@ -1,4 +1,5 @@
 #include "Illustrace.h"
+#include "BezierPath.h"
 
 #include "opencv2/highgui.hpp"
 

@@ -7,6 +7,7 @@
 #include "ThinningFilter.h"
 #include "NegativeFilter.h"
 #include "CenterLineBuilder.h"
+#include "BezierSplineBuilder.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
