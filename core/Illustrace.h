@@ -5,7 +5,7 @@
 #include "BlurFilter.h"
 #include "BinaryThresholdFilter.h"
 #include "ThinningFilter.h"
-#include "EdgeFilter.h"
+#include "NegativeFilter.h"
 #include "FeatureDetector.h"
 #include "CenterLineBuilder.h"
 #include "opencv2/imgproc.hpp"
@@ -26,8 +26,10 @@ public:
     void buildCenterLine();
     void approximateCenterLine();
     void buildOutline();
+    void approximateOutline();
 
     void drawCenterLines(std::vector<std::vector<cv::Point>> lines);
+    void drawContours(std::vector<std::vector<cv::Point>> contours, std::vector<cv::Vec4i> hierarchy);
     void drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints);
 
     cv::Mat &getPreviewImage();
@@ -36,7 +38,7 @@ public:
     filter::BlurFilter blurFilter;
     filter::BinaryThresholdFilter binaryThresholdFilter;
     filter::ThinningFilter thinningFilter;
-    filter::EdgeFilter edgeFilter;
+    filter::NegativeFilter negativeFilter;
 
     FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
@@ -47,13 +49,16 @@ public:
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;
 
+    std::vector<std::vector<cv::Point>> outlineContours;
+    std::vector<std::vector<cv::Point>> approximatedOutlineContours;
+    std::vector<cv::Vec4i> outlineHierarchy;
+
     double detail;
     int thickness;
 
 private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
-    cv::Mat edgeImage;
     cv::Mat previewImage;
 };
 

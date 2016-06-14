@@ -132,6 +132,7 @@ bool CLI::execute(const char *inputFilePath)
 
     if (outline) {
         illustrace.buildOutline();
+        illustrace.approximateOutline();
     }
     else {
         illustrace.buildCenterLine();

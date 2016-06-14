@@ -70,6 +70,33 @@ void Illustrace::approximateCenterLine()
     }
 }
 
+void Illustrace::buildOutline()
+{
+    cv::Mat negative = binarizedImage.clone();
+    negativeFilter.apply(negative);
+
+    cv::findContours(negative, outlineContours, outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+    if (plotLines) {
+        drawContours(outlineContours, outlineHierarchy);
+    }
+}
+
+void Illustrace::approximateOutline()
+{
+    approximatedOutlineContours.empty();
+
+    for (auto lines : outlineContours) {
+        std::vector<cv::Point> approx;
+        cv::approxPolyDP(cv::Mat(lines), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(lines, true), false);
+        approximatedOutlineContours.push_back(approx);
+    }
+
+    if (plotLines) {
+        drawContours(approximatedOutlineContours, outlineHierarchy);
+    }
+}
+
 void Illustrace::drawCenterLines(std::vector<std::vector<cv::Point>> lines)
 {
     previewImage.setTo(cv::Scalar(255, 255, 255));
@@ -89,19 +116,15 @@ void Illustrace::drawCenterLines(std::vector<std::vector<cv::Point>> lines)
     }
 }
 
-void Illustrace::buildOutline()
+void Illustrace::drawContours(std::vector<std::vector<cv::Point>> contours, std::vector<cv::Vec4i> hierarchy)
 {
-    edgeImage = binarizedImage.clone();
-    edgeFilter.apply(edgeImage);
-    previewImage = edgeImage;
-    notify(IllustraceEvent::PreviewImageChanged);
-
-    std::vector<cv::Point> keyPoints;
-    featureDetector.detect(edgeImage, keyPoints);
-
-    if (plotKeyPoints) {
-        drawKeyPoints(edgeImage, keyPoints);
+    previewImage.setTo(cv::Scalar(255, 255, 255));
+    
+    for(int idx = 0; 0 <= idx; idx = hierarchy[idx][0]) {
+        cv::drawContours(previewImage, contours, idx, cv::Scalar(0), CV_FILLED, 8, hierarchy);
     }
+
+    notify(IllustraceEvent::PreviewImageChanged);
 }
 
 void Illustrace::drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints)

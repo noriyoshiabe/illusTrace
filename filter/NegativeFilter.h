@@ -5,7 +5,7 @@
 namespace illustrace {
 namespace filter {
 
-class EdgeFilter : public Filter {
+class NegativeFilter : public Filter {
 public:
     void apply(cv::Mat &image);
 };
