@@ -25,6 +25,7 @@ void CenterLineBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> keyP
     while (searchStartPoint(point)) {
         std::list<cv::Point> line;
         line.push_back(point);
+        connectedPoints.push_back(point);
         bitmap[point.y][point.x] = 128;
 
         bool connected = false;
@@ -34,12 +35,30 @@ void CenterLineBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> keyP
                 results.push_back(std::vector<cv::Point>(line.begin(), line.end()));
                 line = std::list<cv::Point>();
                 line.push_back(point);
+                connectedPoints.push_back(point);
                 connected = true;
             }
         }
 
         if (!connected) {
             results.push_back(std::vector<cv::Point>(line.begin(), line.end()));
+        }
+    }
+
+    for (int i = results.size() - 1; 0 <= i; --i) {
+        auto line = results[i];
+        if (1 == line.size()) {
+            cv::Point _point = line[0];
+
+            auto fit = std::find_if(connectedPoints.begin(), connectedPoints.end(), [&](const cv::Point &point) {
+                return point.x - 2 <= _point.x && _point.x <= point.x + 2
+                    && point.y - 2 <= _point.y && _point.y <= point.y + 2
+                    && point.x != _point.x && _point.y != point.y;
+            });
+
+            if (fit != connectedPoints.end()) {
+                results.erase(results.begin() + i);
+            }
         }
     }
 
@@ -115,6 +134,7 @@ REVERSE:
             ConnectedLine connectedLine = ConnectedLine(prev, point);
             if (connectedLines.find(connectedLine) == connectedLines.end()) {
                 line.push_back(point);
+                connectedPoints.push_back(point);
                 connectedLines.insert(connectedLine);
                 connected = true;
             }

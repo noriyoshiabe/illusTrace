@@ -63,6 +63,7 @@ public:
 
 private:
     std::unordered_set<ConnectedLine> connectedLines;
+    std::vector<cv::Point> connectedPoints;
     int width;
     int height;
     uchar **bitmap;
