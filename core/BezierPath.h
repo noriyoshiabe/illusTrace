@@ -12,19 +12,19 @@ public:
     BezierPath(int segmentCount = 10, cv::Scalar color = cv::Scalar(0, 0, 0), int thickness = 1);
     ~BezierPath() {};
 
-    void moveToPoint(const cv::Point &point);
-    void curveToPoint(const cv::Point &point, const cv::Point &control1, const cv::Point &control2);
+    void moveToPoint(const cv::Point2f &point);
+    void curveToPoint(const cv::Point2f &point, const cv::Point2f &control1, const cv::Point2f &control2);
     void stroke(cv::Mat &image);
 
-    void plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point> anchors, std::vector<cv::Point> controls);
+    void plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point2f> anchors, std::vector<cv::Point2f> controls);
 
-private:
     float segmentCount;
     cv::Scalar color;
     int thickness;
 
-    std::vector<cv::Point> anchors;
-    std::vector<cv::Point> controls;
+private:
+    std::vector<cv::Point2f> anchors;
+    std::vector<cv::Point2f> controls;
     int size;
     int length;
 };

@@ -25,6 +25,7 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
 
     if (1 == length) {
         results.push_back(BezierVertex<cv::Point2f>(line[0], line[0], line[0]));
+        results.push_back(BezierVertex<cv::Point2f>(line[0], line[0], line[0]));
         return;
     }
 
@@ -36,6 +37,9 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
 
     auto prev2 = BezierVertex<cv::Point2f>(line[0], cv::Point2f(), cv::Point2f());
     auto prev1 = BezierVertex<cv::Point2f>(line[1], cv::Point2f(), cv::Point2f());
+
+    results.push_back(prev2);
+    results.push_back(prev1);
 
     for (int i = 2; i < length; ++i) {
         auto current = BezierVertex<cv::Point2f>(line[i], cv::Point2f(), cv::Point2f());
@@ -80,6 +84,8 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
                 // TODO Close Path
             }
         }
+
+        results.push_back(current);
 
         prev2 = prev1;
         prev1 = current;

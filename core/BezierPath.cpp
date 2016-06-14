@@ -10,13 +10,13 @@ BezierPath::BezierPath(int segmentCount, cv::Scalar color, int thickness)
     length = 0;
 }
 
-void BezierPath::moveToPoint(const cv::Point &point)
+void BezierPath::moveToPoint(const cv::Point2f &point)
 {
     anchors.push_back(point);
     ++length;
 }
 
-void BezierPath::curveToPoint(const cv::Point &point, const cv::Point &control1, const cv::Point &control2)
+void BezierPath::curveToPoint(const cv::Point2f &point, const cv::Point2f &control1, const cv::Point2f &control2)
 {
     controls.push_back(control1);
     controls.push_back(control2);
@@ -68,7 +68,7 @@ void BezierPath::stroke(cv::Mat &image)
     length = 0;
 }
 
-void BezierPath::plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point> anchors, std::vector<cv::Point> controls)
+void BezierPath::plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point2f> anchors, std::vector<cv::Point2f> controls)
 {
     int lengthMinus1 = anchors.size() - 1;
     for (int i = 0; i < lengthMinus1; ++i) {

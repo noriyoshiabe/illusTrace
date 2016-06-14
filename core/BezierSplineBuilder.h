@@ -10,6 +10,9 @@ namespace core {
 
 class BezierSplineBuilder {
 public:
+    BezierSplineBuilder(double smoothing = 1.0, bool closePath = false)
+        : smoothing(smoothing), closePath(closePath) {};
+
     void build(std::vector<cv::Point> &line, std::vector<BezierVertex<cv::Point2f>> &results);
     
     double smoothing;

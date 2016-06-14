@@ -145,6 +145,7 @@ bool CLI::execute(const char *inputFilePath)
     else {
         illustrace.buildCenterLine();
         illustrace.approximateCenterLine();
+        //illustrace.buildBezierizedCenterLine();
     }
 
     if (0 != view.wait) {

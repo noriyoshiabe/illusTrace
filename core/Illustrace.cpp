@@ -1,5 +1,4 @@
 #include "Illustrace.h"
-#include "BezierPath.h"
 
 #include "opencv2/highgui.hpp"
 
@@ -49,7 +48,7 @@ void Illustrace::buildCenterLine()
 
 void Illustrace::approximateCenterLine()
 {
-    approximatedCenterLines.empty();
+    approximatedCenterLines.clear();
 
     for (auto lines : centerLines) {
         std::vector<cv::Point> approx;
@@ -59,6 +58,22 @@ void Illustrace::approximateCenterLine()
 
     if (plotLines) {
         drawCenterLines(approximatedCenterLines);
+    }
+}
+
+void Illustrace::buildBezierizedCenterLine()
+{
+    bezierizedCenterLine.clear();
+
+    std::vector<BezierVertex<cv::Point2f>> bezierLine;
+
+    for (auto line : approximatedCenterLines) {
+        bezierSplineBuilder.build(line, bezierLine);
+        bezierizedCenterLine.push_back(bezierLine);
+    }
+
+    if (plotLines) {
+        drawBezierizedLine(bezierizedCenterLine);
     }
 }
 
@@ -76,7 +91,7 @@ void Illustrace::buildOutline()
 
 void Illustrace::approximateOutline()
 {
-    approximatedOutlineContours.empty();
+    approximatedOutlineContours.clear();
 
     for (auto lines : outlineContours) {
         std::vector<cv::Point> approx;
@@ -122,6 +137,29 @@ void Illustrace::drawContours(std::vector<std::vector<cv::Point>> contours, std:
     
     for(int idx = 0; 0 <= idx; idx = hierarchy[idx][0]) {
         cv::drawContours(previewImage, contours, idx, cv::Scalar(0), CV_FILLED, lineType, hierarchy);
+    }
+
+    notify(IllustraceEvent::PreviewImageChanged);
+}
+
+void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierLines)
+{
+    bezierPath.thickness = thickness;
+
+    previewImage.setTo(cv::Scalar(255, 255, 255));
+    
+    for (auto bezierLine : bezierLines) {
+        bezierPath.moveToPoint(bezierLine[0].pt);
+        cv::Point2f ctl1 = bezierLine[0].ctl.next;
+
+        int length = bezierLine.size();
+        for (int i = 1; i < length; ++i) {
+            BezierVertex<cv::Point2f> vtx = bezierLine[i];
+            bezierPath.curveToPoint(vtx.pt, ctl1, vtx.ctl.prev);
+            ctl1 = vtx.ctl.next;
+        }
+
+        bezierPath.stroke(previewImage);
     }
 
     notify(IllustraceEvent::PreviewImageChanged);

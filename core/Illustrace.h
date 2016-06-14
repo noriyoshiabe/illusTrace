@@ -8,6 +8,7 @@
 #include "NegativeFilter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
+#include "BezierPath.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -23,14 +24,17 @@ public:
 
     bool loadSourceImage(const char *filepath);
     void binarize();
+
     void buildCenterLine();
     void approximateCenterLine();
+    void buildBezierizedCenterLine();
+
     void buildOutline();
     void approximateOutline();
 
     void drawCenterLines(std::vector<std::vector<cv::Point>> lines);
     void drawContours(std::vector<std::vector<cv::Point>> contours, std::vector<cv::Vec4i> hierarchy);
-    void drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints);
+    void drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierLines);
 
     cv::Mat &getPreviewImage();
 
@@ -41,6 +45,9 @@ public:
     filter::NegativeFilter negativeFilter;
 
     CenterLineBuilder centerLineBuilder;
+    BezierSplineBuilder bezierSplineBuilder;
+
+    BezierPath bezierPath;
 
     bool plotKeyPoints;
     bool plotLines;
@@ -49,6 +56,7 @@ public:
 
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;
+    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLine;
 
     std::vector<std::vector<cv::Point>> outlineContours;
     std::vector<std::vector<cv::Point>> approximatedOutlineContours;
