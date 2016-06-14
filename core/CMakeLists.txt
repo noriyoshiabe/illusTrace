@@ -5,6 +5,7 @@ project(illustrace-core)
 set(SOURCES
   Illustrace.cpp
   CenterLineBuilder.cpp
+  BezierPath.cpp
 )
 
 include_directories(
