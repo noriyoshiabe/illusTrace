@@ -6,6 +6,7 @@ set(SOURCES
   Illustrace.cpp
   CenterLineBuilder.cpp
   BezierPath.cpp
+  BezierSplineBuilder.cpp
 )
 
 include_directories(
