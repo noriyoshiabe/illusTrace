@@ -5,7 +5,7 @@
 using namespace illustrace;
 using namespace core;
 
-void CenterLineBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> keyPoints, std::vector<std::vector<cv::Point>> &results)
+void CenterLineBuilder::build(cv::Mat &thinnedImage, std::vector<std::vector<cv::Point>> &results)
 {
     width = thinnedImage.cols;
     height = thinnedImage.rows;

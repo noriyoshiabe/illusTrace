@@ -6,7 +6,6 @@
 #include "BinaryThresholdFilter.h"
 #include "ThinningFilter.h"
 #include "NegativeFilter.h"
-#include "FeatureDetector.h"
 #include "CenterLineBuilder.h"
 #include "opencv2/imgproc.hpp"
 
@@ -40,7 +39,6 @@ public:
     filter::ThinningFilter thinningFilter;
     filter::NegativeFilter negativeFilter;
 
-    FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
 
     bool plotKeyPoints;

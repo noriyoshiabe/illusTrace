@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "opencv2/highgui.hpp"
-#include "opencv2/features2d.hpp"
 
 using namespace illustrace;
 using namespace core;
@@ -40,15 +39,8 @@ void Illustrace::buildCenterLine()
     previewImage = image;
     notify(IllustraceEvent::PreviewImageChanged);
 
-    std::vector<cv::Point> keyPoints;
-    featureDetector.detect(image, keyPoints);
-
-    if (plotKeyPoints) {
-        drawKeyPoints(image, keyPoints);
-    }
-
     centerLines.clear();
-    centerLineBuilder.build(image, keyPoints, centerLines);
+    centerLineBuilder.build(image, centerLines);
 
     if (plotLines) {
         drawCenterLines(centerLines);
@@ -124,18 +116,6 @@ void Illustrace::drawContours(std::vector<std::vector<cv::Point>> contours, std:
         cv::drawContours(previewImage, contours, idx, cv::Scalar(0), CV_FILLED, CV_AA, hierarchy);
     }
 
-    notify(IllustraceEvent::PreviewImageChanged);
-}
-
-void Illustrace::drawKeyPoints(cv::Mat &image, std::vector<cv::Point> &keyPoints)
-{
-    cv::Mat dstImage;
-    cv::cvtColor(image, dstImage, CV_GRAY2RGB);
-    for (auto point : keyPoints) {
-        cv::circle(dstImage, point, 5, cv::Scalar(0, 0, 255));
-    }
-
-    previewImage = dstImage;
     notify(IllustraceEvent::PreviewImageChanged);
 }
 
