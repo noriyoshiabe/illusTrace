@@ -70,6 +70,7 @@ void Illustrace::buildBezierizedCenterLine()
     for (auto line : approximatedCenterLines) {
         bezierSplineBuilder.build(line, bezierLine);
         bezierizedCenterLine.push_back(bezierLine);
+        bezierLine = std::vector<BezierVertex<cv::Point2f>>();
     }
 
     if (plotLines) {
@@ -147,7 +148,19 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
     bezierPath.thickness = thickness;
 
     previewImage.setTo(cv::Scalar(255, 255, 255));
-    
+
+#if 0
+    for (auto b : bezierLines) {
+        int sizeMinus1 = b.size() - 1;
+        for (int i = 0; i < sizeMinus1; ++i) {
+            cv::line(previewImage, b[i].pt, b[i + 1].pt, cv::Scalar(0), thickness, 8);
+        }
+    }
+
+    notify(IllustraceEvent::PreviewImageChanged);
+    return;
+#endif    
+
     for (auto bezierLine : bezierLines) {
         bezierPath.moveToPoint(bezierLine[0].pt);
         cv::Point2f ctl1 = bezierLine[0].ctl.next;
@@ -155,11 +168,15 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
         int length = bezierLine.size();
         for (int i = 1; i < length; ++i) {
             BezierVertex<cv::Point2f> vtx = bezierLine[i];
-            bezierPath.curveToPoint(vtx.pt, ctl1, vtx.ctl.prev);
+            //bezierPath.curveToPoint(vtx.pt, ctl1, vtx.ctl.prev);
+            bezierPath.curveToPoint(vtx.pt, vtx.pt, vtx.pt);
             ctl1 = vtx.ctl.next;
         }
 
         bezierPath.stroke(previewImage);
+        bezierPath.plotContolPointAndHandles(previewImage);
+        notify(IllustraceEvent::PreviewImageChanged);
+        //cv::waitKey(0);
     }
 
     notify(IllustraceEvent::PreviewImageChanged);

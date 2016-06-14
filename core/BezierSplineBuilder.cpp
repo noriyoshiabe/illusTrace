@@ -56,8 +56,8 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
 
         prev1.ctl.next.x = ctlNextVX + prev1.pt.x;
         prev1.ctl.next.y = ctlNextVY + prev1.pt.y;
-        prev1.ctl.prev.x = prev1.pt.x - prev1.ctl.next.x;
-        prev1.ctl.prev.y = prev1.pt.y - prev1.ctl.next.y;
+        prev1.ctl.prev.x = prev1.pt.x - ctlNextVX;
+        prev1.ctl.prev.y = prev1.pt.y - ctlNextVY;
 
         if (2 == i && !closePath) {
             ctlNextVX = v1.x / 2.0 * smoothing;
@@ -75,13 +75,26 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
                 double ctlPrevVY = -v2.y / 2.0 * smoothing;
                 ctlPrevVX = ctlPrevVX * cos(-t) - ctlPrevVY * sin(-t);
                 ctlPrevVY = ctlPrevVX * sin(-t) - ctlPrevVY * cos(-t);
-                current.ctl.prev.x = ctlPrevVX + current.pt.x;
-                current.ctl.prev.y = ctlPrevVY + current.pt.y;
+                current.ctl.prev.x = ctlPrevVX + ctlPrevVX;
+                current.ctl.prev.y = ctlPrevVY + ctlPrevVX;
             }
             else {
                 // TODO Close Path
             }
         }
+
+        ////////////////
+        printf("h:%f %f    a:%f %f    h:%f %f\n",
+                prev1.ctl.prev.x, prev1.ctl.prev.y,
+                prev1.pt.x, prev1.pt.y,
+                prev1.ctl.next.x, prev1.ctl.next.y
+                );
+
+        prev1.ctl.next.x = prev1.pt.x;
+        prev1.ctl.next.y = prev1.pt.y;
+        prev1.ctl.prev.x = prev1.pt.x;
+        prev1.ctl.prev.y = prev1.pt.y;
+        /////////////////
 
         results.push_back(prev1);
 

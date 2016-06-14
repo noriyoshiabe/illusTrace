@@ -16,7 +16,7 @@ public:
     void curveToPoint(const cv::Point2f &point, const cv::Point2f &control1, const cv::Point2f &control2);
     void stroke(cv::Mat &image);
 
-    void plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point2f> anchors, std::vector<cv::Point2f> controls);
+    void plotContolPointAndHandles(cv::Mat &image);
 
     float segmentCount;
     cv::Scalar color;
@@ -25,8 +25,6 @@ public:
 private:
     std::vector<cv::Point2f> anchors;
     std::vector<cv::Point2f> controls;
-    int size;
-    int length;
 };
 
 } // namespace core

@@ -6,14 +6,13 @@ using namespace core;
 BezierPath::BezierPath(int segmentCount, cv::Scalar color, int thickness)
     : segmentCount(float(segmentCount)), color(color), thickness(thickness)
 {
-    size = 64;
-    length = 0;
 }
 
 void BezierPath::moveToPoint(const cv::Point2f &point)
 {
+    anchors.clear();
+    controls.clear();
     anchors.push_back(point);
-    ++length;
 }
 
 void BezierPath::curveToPoint(const cv::Point2f &point, const cv::Point2f &control1, const cv::Point2f &control2)
@@ -21,7 +20,6 @@ void BezierPath::curveToPoint(const cv::Point2f &point, const cv::Point2f &contr
     controls.push_back(control1);
     controls.push_back(control2);
     anchors.push_back(point);
-    ++length;
 }
 
 void BezierPath::stroke(cv::Mat &image)
@@ -37,6 +35,7 @@ void BezierPath::stroke(cv::Mat &image)
     cv::Point2f p1;
     cv::Point2f p2;
 
+    int length = anchors.size();
     for (int i = 1; i < length; ++i) {
         cv::Point2f a2 = anchors[i];
         cv::Point2f c2 = controls[i];
@@ -64,11 +63,9 @@ void BezierPath::stroke(cv::Mat &image)
         a1 = a2;
         c1 = c2;
     }
-
-    length = 0;
 }
 
-void BezierPath::plotContolPointAndHandles(cv::Mat &image, std::vector<cv::Point2f> anchors, std::vector<cv::Point2f> controls)
+void BezierPath::plotContolPointAndHandles(cv::Mat &image)
 {
     int lengthMinus1 = anchors.size() - 1;
     for (int i = 0; i < lengthMinus1; ++i) {
