@@ -19,6 +19,8 @@ int CLI::main(int argc, char **argv)
         {"detail", required_argument, NULL, 'd'},
         {"thickness", required_argument, NULL, 't'},
         {"wait", required_argument, NULL, 'w'},
+        {"step", no_argument, NULL, 's'},
+        {"anti-alias", no_argument, NULL, 'a'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
 
@@ -30,7 +32,7 @@ int CLI::main(int argc, char **argv)
     cli.illustrace.plotLines = true;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:sahv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -56,6 +58,12 @@ int CLI::main(int argc, char **argv)
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
+            break;
+        case 's':
+            cli.illustrace.step = true;
+            break;
+        case 'a':
+            cli.illustrace.antiAlias = true;
             break;
         case 'h':
             cli.help();

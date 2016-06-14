@@ -43,6 +43,8 @@ public:
 
     bool plotKeyPoints;
     bool plotLines;
+    bool step;
+    bool antiAlias;
 
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;

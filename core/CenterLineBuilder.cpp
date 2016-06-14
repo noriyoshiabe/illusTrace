@@ -94,14 +94,14 @@ bool CenterLineBuilder::scan(Direction direction, std::list<cv::Point> &line, cv
         int x;
         int y;
     } coordTable[8] = {
-        {-1,  0}, // West
-        {-1, -1}, // NorthWest
         { 0, -1}, // North
+        {-1, -1}, // NorthWest
         { 1, -1}, // NorthEast
+        {-1,  0}, // West
         { 1,  0}, // East
         { 1,  1}, // SouthEast
-        { 0,  1}, // South
         {-1,  1}, // SouthWest
+        { 0,  1}, // South
     };
 
     cv::Point startPoint = point;
