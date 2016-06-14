@@ -104,11 +104,11 @@ void Illustrace::drawCenterLines(std::vector<std::vector<cv::Point>> lines)
     for (auto line : lines) {
         int sizeMinus1 = line.size() - 1;
         if (0 == sizeMinus1) {
-            cv::line(previewImage, line[0], line[0], cv::Scalar(0), thickness);
+            cv::line(previewImage, line[0], line[0], cv::Scalar(0), thickness, CV_AA);
         }
         else {
             for (int i = 0; i < sizeMinus1; ++i) {
-                cv::line(previewImage, line[i], line[i + 1], cv::Scalar(0), thickness);
+                cv::line(previewImage, line[i], line[i + 1], cv::Scalar(0), thickness, CV_AA);
             }
         }
     }
@@ -121,7 +121,7 @@ void Illustrace::drawContours(std::vector<std::vector<cv::Point>> contours, std:
     previewImage.setTo(cv::Scalar(255, 255, 255));
     
     for(int idx = 0; 0 <= idx; idx = hierarchy[idx][0]) {
-        cv::drawContours(previewImage, contours, idx, cv::Scalar(0), CV_FILLED, 8, hierarchy);
+        cv::drawContours(previewImage, contours, idx, cv::Scalar(0), CV_FILLED, CV_AA, hierarchy);
     }
 
     notify(IllustraceEvent::PreviewImageChanged);
