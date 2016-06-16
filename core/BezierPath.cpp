@@ -37,8 +37,10 @@ void BezierPath::stroke(cv::Mat &image)
 
     int length = anchors.size();
     for (int i = 1; i < length; ++i) {
+        cv::Point2f a1 = anchors[i-1];
         cv::Point2f a2 = anchors[i];
-        cv::Point2f c2 = controls[i];
+        cv::Point2f c1 = controls[(i-1)*2];
+        cv::Point2f c2 = controls[(i-1)*2+1];
 
         p1.x = a1.x;
         p1.y = a1.y;
@@ -59,21 +61,23 @@ void BezierPath::stroke(cv::Mat &image)
         }
 
         cv::line(image, p2, a2, color, thickness, CV_AA);
-
-        a1 = a2;
-        c1 = c2;
     }
 }
 
 void BezierPath::plotContolPointAndHandles(cv::Mat &image)
 {
-    int lengthMinus1 = anchors.size() - 1;
-    for (int i = 0; i < lengthMinus1; ++i) {
-        cv::line(image, anchors[i], controls[i], cv::Scalar(128, 0, 0), 1, CV_AA);
-        cv::line(image, anchors[i+1], controls[i+1], cv::Scalar(128, 0, 0), 1, CV_AA);
-        cv::circle(image, anchors[i], 5, cv::Scalar(128, 0, 0), 1, CV_AA);
-        cv::circle(image, anchors[i+1], 5, cv::Scalar(128, 0, 0), 1, CV_AA);
-        cv::circle(image, controls[i], 5, cv::Scalar(128, 0, 0), 1, CV_AA);
-        cv::circle(image, controls[i+1], 5, cv::Scalar(128, 0, 0), 1, CV_AA);
+    int length = anchors.size();
+    for (int i = 1; i < length; ++i) {
+        cv::Point2f a1 = anchors[i-1];
+        cv::Point2f a2 = anchors[i];
+        cv::Point2f c1 = controls[(i-1)*2];
+        cv::Point2f c2 = controls[(i-1)*2+1];
+
+        cv::line(image, a1, c1, cv::Scalar(128, 0, 0), 1, CV_AA);
+        cv::line(image, a2, c2, cv::Scalar(128, 0, 0), 1, CV_AA);
+        cv::circle(image, a1, 5, cv::Scalar(128, 0, 0), 1, CV_AA);
+        cv::circle(image, a2, 5, cv::Scalar(128, 0, 0), 1, CV_AA);
+        cv::circle(image, c1, 5, cv::Scalar(128, 0, 0), 1, CV_AA);
+        cv::circle(image, c2, 5, cv::Scalar(128, 0, 0), 1, CV_AA);
     }
 }

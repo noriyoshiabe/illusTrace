@@ -154,6 +154,8 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
         int sizeMinus1 = b.size() - 1;
         for (int i = 0; i < sizeMinus1; ++i) {
             cv::line(previewImage, b[i].pt, b[i + 1].pt, cv::Scalar(0), thickness, 8);
+            //cv::line(previewImage, b[i].ctl.prev, b[i + 1].ctl.prev, cv::Scalar(0), thickness, 8);
+            //cv::line(previewImage, b[i].ctl.next, b[i + 1].ctl.next, cv::Scalar(0), thickness, 8);
         }
     }
 
@@ -168,8 +170,8 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
         int length = bezierLine.size();
         for (int i = 1; i < length; ++i) {
             BezierVertex<cv::Point2f> vtx = bezierLine[i];
-            //bezierPath.curveToPoint(vtx.pt, ctl1, vtx.ctl.prev);
-            bezierPath.curveToPoint(vtx.pt, vtx.pt, vtx.pt);
+            bezierPath.curveToPoint(vtx.pt, ctl1, vtx.ctl.prev);
+            //bezierPath.curveToPoint(vtx.pt, vtx.pt, vtx.pt);
             ctl1 = vtx.ctl.next;
         }
 

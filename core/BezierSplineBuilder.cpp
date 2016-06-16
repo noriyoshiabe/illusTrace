@@ -35,72 +35,41 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
         return;
     }
 
-    auto prev2 = BezierVertex<cv::Point2f>(line[0], cv::Point2f(), cv::Point2f());
-    auto prev1 = BezierVertex<cv::Point2f>(line[1], cv::Point2f(), cv::Point2f());
 
-    for (int i = 2; i < length; ++i) {
-        auto current = BezierVertex<cv::Point2f>(line[i], cv::Point2f(), cv::Point2f());
+    for (int i = 0; i < length; ++i) {
+        // TODO Close Path
 
-        cv::Point v1 = vector(prev2.pt, prev1.pt);
-        cv::Point v2 = vector(prev1.pt, current.pt);
+        auto current = BezierVertex<cv::Point2f>(line[i], line[i], line[i]);
 
-        double cosT = dotProduct(v1, v2) / (vectorLength(v1) * vectorLength(v2));
-        double t = acos(cosT);
+        if (0 < i && i < lengthMinus1) {
+            auto prev = BezierVertex<cv::Point2f>(line[i-1], line[i-1], line[i-1]);
+            auto next = BezierVertex<cv::Point2f>(line[i+1], line[i+1], line[i+1]); 
 
-        t /= 2.0;
+            cv::Point v1 = vector(prev.pt, current.pt);
+            cv::Point v2 = vector(current.pt, next.pt);
 
-        double ctlNextVX = v2.x / 2.0 * smoothing;
-        double ctlNextVY = v2.y / 2.0 * smoothing;
-        ctlNextVX = ctlNextVX * cos(t) - ctlNextVY * sin(t);
-        ctlNextVY = ctlNextVX * sin(t) - ctlNextVY * cos(t);
+            double lv1 = vectorLength(v1);
+            double lv2 = vectorLength(v2);
 
-        prev1.ctl.next.x = ctlNextVX + prev1.pt.x;
-        prev1.ctl.next.y = ctlNextVY + prev1.pt.y;
-        prev1.ctl.prev.x = prev1.pt.x - ctlNextVX;
-        prev1.ctl.prev.y = prev1.pt.y - ctlNextVY;
+            double cosT = dotProduct(v1, v2) / (lv1 * lv2);
+            double t = acos(cosT);
 
-        if (2 == i && !closePath) {
-            ctlNextVX = v1.x / 2.0 * smoothing;
-            ctlNextVY = v1.y / 2.0 * smoothing;
+            t /= 2.0;
+            t *= -1.0;
+
+            double ctlNextVX = v2.x / 2.0 * smoothing;
+            double ctlNextVY = v2.y / 2.0 * smoothing;
             ctlNextVX = ctlNextVX * cos(t) - ctlNextVY * sin(t);
-            ctlNextVY = ctlNextVX * sin(t) - ctlNextVY * cos(t);
-            prev2.ctl.next.x = ctlNextVX + prev2.pt.x;
-            prev2.ctl.next.y = ctlNextVY + prev2.pt.y;
-            results.push_back(prev2);
+            ctlNextVY = ctlNextVX * sin(t) + ctlNextVY * cos(t);
+
+            current.ctl.next.x = ctlNextVX + current.pt.x;
+            current.ctl.next.y = ctlNextVY + current.pt.y;
+
+            double scale = lv1 / lv2;
+            current.ctl.prev.x = current.pt.x - (ctlNextVX * scale);
+            current.ctl.prev.y = current.pt.y - (ctlNextVY * scale);
         }
 
-        if (lengthMinus1 == i) {
-            if (!closePath) {
-                double ctlPrevVX = -v2.x / 2.0 * smoothing;
-                double ctlPrevVY = -v2.y / 2.0 * smoothing;
-                ctlPrevVX = ctlPrevVX * cos(-t) - ctlPrevVY * sin(-t);
-                ctlPrevVY = ctlPrevVX * sin(-t) - ctlPrevVY * cos(-t);
-                current.ctl.prev.x = ctlPrevVX + ctlPrevVX;
-                current.ctl.prev.y = ctlPrevVY + ctlPrevVX;
-            }
-            else {
-                // TODO Close Path
-            }
-        }
-
-        ////////////////
-        printf("h:%f %f    a:%f %f    h:%f %f\n",
-                prev1.ctl.prev.x, prev1.ctl.prev.y,
-                prev1.pt.x, prev1.pt.y,
-                prev1.ctl.next.x, prev1.ctl.next.y
-                );
-
-        prev1.ctl.next.x = prev1.pt.x;
-        prev1.ctl.next.y = prev1.pt.y;
-        prev1.ctl.prev.x = prev1.pt.x;
-        prev1.ctl.prev.y = prev1.pt.y;
-        /////////////////
-
-        results.push_back(prev1);
-
-        prev2 = prev1;
-        prev1 = current;
+        results.push_back(current);
     }
-
-    results.push_back(prev1);
 }
