@@ -176,7 +176,7 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
         }
 
         bezierPath.stroke(previewImage);
-        bezierPath.plotContolPointAndHandles(previewImage);
+        //bezierPath.plotContolPointAndHandles(previewImage);
         notify(IllustraceEvent::PreviewImageChanged);
         //cv::waitKey(0);
     }
