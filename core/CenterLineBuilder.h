@@ -14,7 +14,7 @@ public:
     void build(Graph &graph, std::vector<std::vector<cv::Point>> &results);
 
 private:
-    void walk(GraphVertex *vertex, std::list<cv::Point> &line);
+    void walk(GraphVertex *vertex, cv::Point *prev, std::list<cv::Point> &line);
 };
 
 } // namespace core

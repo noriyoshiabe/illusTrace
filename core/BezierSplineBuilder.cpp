@@ -1,27 +1,8 @@
 #include "BezierSplineBuilder.h"
+#include "Vector2D.h"
 
 using namespace illustrace;
 using namespace core;
-
-inline cv::Point vector(cv::Point p1, cv::Point p2)
-{
-    return cv::Point(p2.x - p1.x, p2.y - p1.y);
-}
-
-inline double dotProduct(cv::Point &v1, cv::Point &v2)
-{
-    return v1.x * v2.x + v1.y * v2.y;
-}
-
-inline double crossProduct(cv::Point &v1, cv::Point &v2)
-{
-    return v1.x * v2.y - v1.y * v2.x;
-}
-
-inline double vectorLength(cv::Point &p)
-{
-    return sqrt(p.x * p.x + p.y * p.y);
-}
 
 void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<BezierVertex<cv::Point2f>> &results)
 {
@@ -50,10 +31,10 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
             auto prev = BezierVertex<cv::Point2f>(line[i-1], line[i-1], line[i-1]);
             auto next = BezierVertex<cv::Point2f>(line[i+1], line[i+1], line[i+1]); 
 
-            cv::Point v1 = vector(prev.pt, current.pt);
-            cv::Point v2 = vector(current.pt, next.pt);
+            cv::Point v1 = lib::vector(prev.pt, current.pt);
+            cv::Point v2 = lib::vector(current.pt, next.pt);
 
-            double t = -atan2(crossProduct(v1, v2), dotProduct(v1, v2));
+            double t = -atan2(lib::crossProduct(v1, v2), lib::dotProduct(v1, v2));
             double f = (M_PI - fabs(t)) / M_PI;
 
             t /= 2.0;
@@ -66,7 +47,7 @@ void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<Bezier
             current.ctl.next.x = ctlNextVX + current.pt.x;
             current.ctl.next.y = ctlNextVY + current.pt.y;
 
-            double scale = vectorLength(v1) / vectorLength(v2);
+            double scale = lib::vectorLength(v1) / lib::vectorLength(v2);
             current.ctl.prev.x = current.pt.x - (ctlNextVX * scale);
             current.ctl.prev.y = current.pt.y - (ctlNextVY * scale);
         }
