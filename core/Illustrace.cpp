@@ -37,6 +37,9 @@ void Illustrace::buildCenterLine()
     featureDetector.detect(thinnedImage, centerLineKeyPoints);
     notify(IllustraceEvent::CenterLineKeyPointDetected);
 
+    graphBuilder.build(thinnedImage, centerLineKeyPoints, centerLineGraph);
+    notify(IllustraceEvent::CenterLineGraphBuilt);
+
     centerLines.clear();
     centerLineBuilder.build(thinnedImage, centerLines);
     notify(IllustraceEvent::CenterLineBuilt);

@@ -9,6 +9,7 @@
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
 #include "FeatureDetector.h"
+#include "GraphBuilder.h"
 
 #include "opencv2/imgproc.hpp"
 
@@ -23,6 +24,7 @@ enum class IllustraceEvent {
     Thinned,
     NegativeFilterApplied,
     CenterLineKeyPointDetected,
+    CenterLineGraphBuilt,
     CenterLineBuilt,
     CenterLineApproximated,
     CenterLineBezierized,
@@ -55,8 +57,11 @@ public:
     FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
     BezierSplineBuilder bezierSplineBuilder;
+    GraphBuilder graphBuilder;
 
     std::vector<cv::Point> centerLineKeyPoints;
+    Graph centerLineGraph;
+
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;
     std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;

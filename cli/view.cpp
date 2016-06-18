@@ -55,6 +55,10 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         copyFrom(sender->thinnedImage);
         plotPoints(sender->centerLineKeyPoints);
         break;
+    case core::IllustraceEvent::CenterLineGraphBuilt:
+        clearPreview();
+        plotGraph(sender->centerLineGraph);
+        break;
     case core::IllustraceEvent::CenterLineBuilt:
         clearPreview();
         drawLines(sender->centerLines, sender->thickness);
@@ -87,6 +91,7 @@ void View::clearPreview()
     cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_rectangle(cr, 0, 0, preview.cols - 1, preview.rows - 1);
     cairo_fill(cr);
+    imshow(WindowName, preview);
 }
 
 void View::copyFrom(cv::Mat &image)
@@ -112,9 +117,10 @@ void View::copyFrom(cv::Mat &image)
             }
         }
     }
+    imshow(WindowName, preview);
 }
 
-void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness, bool closePath)
+void View::drawLines(std::vector<std::vector<cv::Point>> &lines, double thickness, bool closePath)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
@@ -150,7 +156,7 @@ void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> bezierLines, double thickness)
+void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
@@ -179,13 +185,34 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
     imshow(WindowName, preview);
 }
 
-void View::plotPoints(std::vector<cv::Point> points)
+void View::plotPoints(std::vector<cv::Point> &points)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_source_rgb(cr, 1, 0, 0);
 
     for (auto point : points) {
         cairo_arc(cr, point.x, point.y, 2, 0, 2 * M_PI);
+        cairo_stroke(cr);
+    }
+
+    imshow(WindowName, preview);
+}
+
+void View::plotGraph(core::Graph &graph)
+{
+    cairo_set_line_width(cr, 1);
+
+    for (auto *vertex : graph.vertices) {
+        cairo_set_source_rgb(cr, 0, 0, 1);
+
+        for (auto *_vertex : vertex->adjacencyList) {
+            cairo_move_to(cr, vertex->point.x, vertex->point.y);
+            cairo_line_to(cr, _vertex->point.x, _vertex->point.y);
+            cairo_stroke(cr);
+        }
+
+        cairo_set_source_rgb(cr, 1, 0, 0);
+        cairo_arc(cr, vertex->point.x, vertex->point.y, 2, 0, 2 * M_PI);
         cairo_stroke(cr);
     }
 
