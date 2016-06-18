@@ -84,6 +84,8 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoint
         int yOffset = y * width;
         for (int x = 0; x < width; ++x) {
             bitmap[y][x] = thinnedImage.data[yOffset + x];
+            vertexMap[y][x] = nullptr;
+            vertexHist[y][x] = nullptr;
         }
     }
 
