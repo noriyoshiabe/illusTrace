@@ -17,11 +17,8 @@ struct GraphVertex {
 
 class Graph {
 public:
-    ~Graph() {
-        for (auto *vertex : vertices) {
-            delete vertex;
-        }
-    }
+    ~Graph();
+    void clear();
 
     std::vector<GraphVertex *> vertices;
 };

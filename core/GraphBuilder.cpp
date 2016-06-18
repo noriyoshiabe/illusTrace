@@ -3,6 +3,19 @@
 using namespace illustrace;
 using namespace core;
 
+Graph::~Graph()
+{
+    clear();
+}
+
+void Graph::clear()
+{
+    for (auto *vertex : vertices) {
+        delete vertex;
+    }
+    vertices.clear();
+}
+
 enum class Direction : int {
     North = 0,
     NorthEast,
@@ -36,6 +49,8 @@ inline Direction directionToScan(Direction current, int stage) {
 
 void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoints, Graph &results)
 {
+    results.clear();
+
     int width = thinnedImage.cols;
     int height = thinnedImage.rows;
 
