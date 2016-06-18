@@ -9,7 +9,7 @@
 namespace illustrace {
 namespace cli {
 
-class View : public core::Observer<core::Illustrace, core::IllustraceEvent> {
+class View : public lib::Observer<core::Illustrace, core::IllustraceEvent> {
 public:
     View();
     ~View();

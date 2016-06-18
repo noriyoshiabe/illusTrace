@@ -13,6 +13,7 @@ set(SOURCES
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ../filter
+  ../lib
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})

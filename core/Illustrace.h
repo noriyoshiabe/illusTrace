@@ -33,7 +33,7 @@ enum class IllustraceEvent {
     // TODO OutlineBezierized,
 };
 
-class Illustrace : public Observable<Illustrace, IllustraceEvent> {
+class Illustrace : public lib::Observable<Illustrace, IllustraceEvent> {
 public:
     Illustrace() : detail(1.0), thickness(1) {};
 

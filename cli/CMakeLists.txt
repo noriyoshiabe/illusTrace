@@ -27,6 +27,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ../core
   ../filter
+  ../lib
 )
 
 add_executable(${TARGET_NAME} ${SOURCES})

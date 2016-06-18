@@ -4,7 +4,7 @@
 #include "Observer.h"
 
 namespace illustrace {
-namespace core {
+namespace lib {
 
 template <class C, typename E>
 class Observable {
@@ -33,5 +33,5 @@ private:
     std::vector<Observer<C, E> *> observers;
 };
 
-} // namespace core
+} // namespace lib
 } // namespace illustrace
