@@ -4,6 +4,7 @@
 #include <string>
 #include <getopt.h>
 #include "opencv2/highgui.hpp"
+#include "Log.h"
 
 using namespace illustrace;
 using namespace cli;
@@ -20,6 +21,7 @@ int CLI::main(int argc, char **argv)
         {"thickness", required_argument, NULL, 't'},
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 's'},
+        {"trace", no_argument, NULL, 'T'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
 
@@ -29,7 +31,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:shv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:sThv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -58,6 +60,13 @@ int CLI::main(int argc, char **argv)
             break;
         case 's':
             cli.view.step = true;
+            break;
+        case 'T':
+#ifdef DEBUG
+            __IsTrace__ = true;
+#else
+            std::cout << "Warning: --trace option is only available for debug build." << std::endl;
+#endif
             break;
         case 'h':
             cli.help();
@@ -130,18 +139,25 @@ bool CLI::execute(const char *inputFilePath)
         goto ERROR;
     }
 
+    __Trace__
     illustrace.binarize();
 
     if (outline) {
+        __Trace__
         illustrace.buildOutline();
+        __Trace__
         illustrace.approximateOutline();
     }
     else {
+        __Trace__
         illustrace.buildCenterLine();
+        __Trace__
         illustrace.approximateCenterLine();
+        __Trace__
         illustrace.buildBezierizedCenterLine();
     }
 
+    __Trace__
     view.waitKey();
 
 ERROR:

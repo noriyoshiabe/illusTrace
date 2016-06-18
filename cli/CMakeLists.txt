@@ -16,6 +16,7 @@ endif ()
 
 add_subdirectory (../core ${CMAKE_CURRENT_BINARY_DIR}/core)
 add_subdirectory (../filter ${CMAKE_CURRENT_BINARY_DIR}/filter)
+add_subdirectory (../lib ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 set(SOURCES
   main.cpp
@@ -33,5 +34,6 @@ include_directories(
 add_executable(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} illustrace-core)
 target_link_libraries(${TARGET_NAME} illustrace-filter)
+target_link_libraries(${TARGET_NAME} illustrace-lib)
 target_link_libraries(${TARGET_NAME} ${OpenCV_LIBRARIES})
 target_link_libraries(${TARGET_NAME} ${CAIRO_LIBRARIES})
