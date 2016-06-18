@@ -27,5 +27,15 @@ inline double vectorLength(const T &p)
     return sqrt(p.x * p.x + p.y * p.y);
 }
 
+template<class T>
+inline double cornerRadian(const T &p1, const T &p2, const T &p3)
+{
+    T v1 = vector(p1, p2);
+    T v2 = vector(p2, p3);
+    double lv1 = vectorLength(v1);
+    double lv2 = vectorLength(v2);
+    return acos(dotProduct(v1, v2) / (lv1 * lv2));
+}
+
 } // namespace lib
 } // namespace illustrace

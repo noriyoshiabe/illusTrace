@@ -35,17 +35,24 @@ void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point *prev, std::list<cv:
         if (1 < length && prev) {
             double minRadian = 999.0;
             int minIndex = 0;
+            
             for (int i = 0; i < length; ++i) {
-                cv::Point v1 = lib::vector(*prev, vertex->point);
-                cv::Point v2 = lib::vector(vertex->point, vertex->adjacencyList[i]->point);
-                double lv1 = lib::vectorLength(v1);
-                double lv2 = lib::vectorLength(v2);
-                double radian = acos(lib::dotProduct(v1, v2) / (lv1 * lv2));
+                double radian = lib::cornerRadian(*prev, vertex->point, vertex->adjacencyList[i]->point);
                 if (minRadian > radian) {
                     minRadian = radian;
                     minIndex = i;
                 }
             }
+
+            for (int i = 0; i < length; ++i) {
+                for (int j = i + 1; j < length; ++j) {
+                    double radian = lib::cornerRadian(vertex->adjacencyList[i]->point, vertex->point, vertex->adjacencyList[j]->point);
+                    if (minRadian > radian) {
+                        return;
+                    }
+                }
+            }
+
             _vertex = vertex->adjacencyList[minIndex];
         }
         else {
