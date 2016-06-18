@@ -21,7 +21,9 @@ View::~View()
 
 void View::waitKey()
 {
-    cv::waitKey(0);
+    if (0 != wait) {
+        cv::waitKey(0);
+    }
 }
 
 void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList)
@@ -46,6 +48,9 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
     case core::IllustraceEvent::Thinned:
         imshow(WindowName, sender->thinnedImage);
         break;
+    case core::IllustraceEvent::NegativeFilterApplied:
+        imshow(WindowName, sender->negativeImage);
+        break;
     case core::IllustraceEvent::CenterLineBuilt:
         drawLines(sender->centerLines, sender->thickness);
         break;
@@ -56,10 +61,10 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
         break;
     case core::IllustraceEvent::OutlineBuilt:
-        drawLines(sender->outlineContours, sender->thickness);
+        drawLines(sender->outlineContours, sender->thickness, true);
         break;
     case core::IllustraceEvent::OutlineApproximated:
-        drawLines(sender->approximatedOutlineContours, sender->thickness);
+        drawLines(sender->approximatedOutlineContours, sender->thickness, true);
         break;
     }
 
@@ -68,7 +73,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
     }
 }
 
-void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness)
+void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness, bool closePath)
 {
     cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_rectangle(cr, 0, 0, preview.cols - 1, preview.rows - 1);
@@ -89,6 +94,10 @@ void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness
             for (int i = 1; i < size; ++i) {
                 cairo_line_to(cr, line[i].x, line[i].y);
             }
+        }
+
+        if (closePath) {
+            cairo_line_to(cr, line[0].x, line[0].y);
         }
 
         cairo_stroke(cr);

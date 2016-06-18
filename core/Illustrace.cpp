@@ -70,10 +70,11 @@ void Illustrace::buildBezierizedCenterLine()
 
 void Illustrace::buildOutline()
 {
-    cv::Mat negative = binarizedImage.clone();
-    negativeFilter.apply(negative);
+    negativeImage = binarizedImage.clone();
+    negativeFilter.apply(negativeImage);
+    notify(IllustraceEvent::NegativeFilterApplied);
 
-    cv::findContours(negative, outlineContours, outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+    cv::findContours(negativeImage, outlineContours, outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
     notify(IllustraceEvent::OutlineBuilt);
 }

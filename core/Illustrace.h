@@ -19,6 +19,7 @@ enum class IllustraceEvent {
     BlurFilterApplied,
     Binarized,
     Thinned,
+    NegativeFilterApplied,
     CenterLineBuilt,
     CenterLineApproximated,
     CenterLineBezierized,
@@ -65,6 +66,7 @@ public:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
     cv::Mat thinnedImage;
+    cv::Mat negativeImage;
 };
 
 } // namespace core
