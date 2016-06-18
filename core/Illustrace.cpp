@@ -1,7 +1,5 @@
 #include "Illustrace.h"
 
-#include "opencv2/highgui.hpp"
-
 using namespace illustrace;
 using namespace core;
 
@@ -34,6 +32,10 @@ void Illustrace::buildCenterLine()
     thinnedImage = binarizedImage.clone();
     thinningFilter.apply(thinnedImage);
     notify(IllustraceEvent::Thinned);
+
+    centerLineKeyPoints.clear();
+    featureDetector.detect(thinnedImage, centerLineKeyPoints);
+    notify(IllustraceEvent::CenterLineKeyPointDetected);
 
     centerLines.clear();
     centerLineBuilder.build(thinnedImage, centerLines);

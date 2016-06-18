@@ -6,6 +6,7 @@ set(SOURCES
   Illustrace.cpp
   CenterLineBuilder.cpp
   BezierSplineBuilder.cpp
+  FeatureDetector.cpp
 )
 
 include_directories(

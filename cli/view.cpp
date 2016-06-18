@@ -51,19 +51,28 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
     case core::IllustraceEvent::NegativeFilterApplied:
         imshow(WindowName, sender->negativeImage);
         break;
+    case core::IllustraceEvent::CenterLineKeyPointDetected:
+        copyFrom(sender->thinnedImage);
+        plotPoints(sender->centerLineKeyPoints);
+        break;
     case core::IllustraceEvent::CenterLineBuilt:
+        clearPreview();
         drawLines(sender->centerLines, sender->thickness);
         break;
     case core::IllustraceEvent::CenterLineApproximated:
+        clearPreview();
         drawLines(sender->approximatedCenterLines, sender->thickness);
         break;
     case core::IllustraceEvent::CenterLineBezierized:
+        clearPreview();
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
         break;
     case core::IllustraceEvent::OutlineBuilt:
+        clearPreview();
         drawLines(sender->outlineContours, sender->thickness, true);
         break;
     case core::IllustraceEvent::OutlineApproximated:
+        clearPreview();
         drawLines(sender->approximatedOutlineContours, sender->thickness, true);
         break;
     }
@@ -73,12 +82,40 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
     }
 }
 
-void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness, bool closePath)
+void View::clearPreview()
 {
     cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_rectangle(cr, 0, 0, preview.cols - 1, preview.rows - 1);
     cairo_fill(cr);
+}
 
+void View::copyFrom(cv::Mat &image)
+{
+    int srcChannel = image.channels();
+    int dstChannel = preview.channels();
+
+    for (int y = 0; y < preview.rows; ++y) {
+        int yOffsetSrc = y * preview.cols * srcChannel;
+        int yOffsetDst = y * preview.cols * dstChannel;
+        for (int x = 0; x < preview.cols; ++x) {
+            uchar *src = &image.data[yOffsetSrc + (x * srcChannel)];
+            uchar *dst = &preview.data[yOffsetDst + (x * dstChannel)];
+            if (1 == srcChannel) {
+                dst[0] = src[0];
+                dst[1] = src[0];
+                dst[2] = src[0];
+            }
+            else {
+                dst[0] = src[0];
+                dst[1] = src[1];
+                dst[2] = src[2];
+            }
+        }
+    }
+}
+
+void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness, bool closePath)
+{
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
 
@@ -115,10 +152,6 @@ void View::drawLines(std::vector<std::vector<cv::Point>> lines, double thickness
 
 void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> bezierLines, double thickness)
 {
-    cairo_set_source_rgb(cr, 1, 1, 1);
-    cairo_rectangle(cr, 0, 0, preview.cols - 1, preview.rows - 1);
-    cairo_fill(cr);
-
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
 
@@ -141,6 +174,19 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
                 cv::waitKey(wait);
             }
         }
+    }
+
+    imshow(WindowName, preview);
+}
+
+void View::plotPoints(std::vector<cv::Point> points)
+{
+    cairo_set_line_width(cr, 1);
+    cairo_set_source_rgb(cr, 1, 0, 0);
+
+    for (auto point : points) {
+        cairo_arc(cr, point.x, point.y, 2, 0, 2 * M_PI);
+        cairo_stroke(cr);
     }
 
     imshow(WindowName, preview);

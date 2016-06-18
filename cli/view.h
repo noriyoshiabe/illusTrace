@@ -26,8 +26,11 @@ private:
 
     void notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList);
 
+    void clearPreview();
+    void copyFrom(cv::Mat &image);
     void drawLines(std::vector<std::vector<cv::Point>> lines, double thickness, bool closePath = false);
     void drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> bezierLines, double thickness);
+    void plotPoints(std::vector<cv::Point> points);
 };
 
 } // namespace cli

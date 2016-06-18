@@ -8,6 +8,8 @@
 #include "NegativeFilter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
+#include "FeatureDetector.h"
+
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -20,6 +22,7 @@ enum class IllustraceEvent {
     Binarized,
     Thinned,
     NegativeFilterApplied,
+    CenterLineKeyPointDetected,
     CenterLineBuilt,
     CenterLineApproximated,
     CenterLineBezierized,
@@ -49,9 +52,11 @@ public:
     filter::ThinningFilter thinningFilter;
     filter::NegativeFilter negativeFilter;
 
+    FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
     BezierSplineBuilder bezierSplineBuilder;
 
+    std::vector<cv::Point> centerLineKeyPoints;
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;
     std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;
