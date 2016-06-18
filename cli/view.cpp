@@ -124,6 +124,7 @@ void View::drawLines(std::vector<std::vector<cv::Point>> &lines, double thicknes
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
     for (auto line : lines) {
         int size = line.size();
@@ -160,6 +161,7 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
     for (auto bezierLine : bezierLines) {
         cairo_move_to(cr, bezierLine[0].pt.x, bezierLine[0].pt.y);
@@ -201,6 +203,7 @@ void View::plotPoints(std::vector<cv::Point> &points)
 void View::plotGraph(core::Graph &graph)
 {
     cairo_set_line_width(cr, 1);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
 
     for (auto *vertex : graph.vertices) {
         cairo_set_source_rgb(cr, 0, 0, 1);
