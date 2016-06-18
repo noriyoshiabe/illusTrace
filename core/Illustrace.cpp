@@ -49,9 +49,9 @@ void Illustrace::approximateCenterLine()
 {
     approximatedCenterLines.clear();
 
-    for (auto lines : centerLines) {
+    for (auto line : centerLines) {
         std::vector<cv::Point> approx;
-        cv::approxPolyDP(cv::Mat(lines), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(lines, true), false);
+        cv::approxPolyDP(cv::Mat(line), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(line, true), false);
         approximatedCenterLines.push_back(approx);
     }
 
@@ -88,9 +88,9 @@ void Illustrace::approximateOutline()
 {
     approximatedOutlineContours.clear();
 
-    for (auto lines : outlineContours) {
+    for (auto line : outlineContours) {
         std::vector<cv::Point> approx;
-        cv::approxPolyDP(cv::Mat(lines), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(lines, true), false);
+        cv::approxPolyDP(cv::Mat(line), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(line, true), false);
         approximatedOutlineContours.push_back(approx);
     }
 
