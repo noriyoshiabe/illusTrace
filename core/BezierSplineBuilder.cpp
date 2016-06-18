@@ -4,7 +4,7 @@
 using namespace illustrace;
 using namespace core;
 
-void BezierSplineBuilder::build(std::vector<cv::Point> &line, std::vector<BezierVertex<cv::Point2f>> &results)
+void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, std::vector<BezierVertex<cv::Point2f>> &results)
 {
     int length = line.size();
     int lengthMinus1 = length - 1;

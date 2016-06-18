@@ -19,7 +19,7 @@ void Graph::clear()
 void Graph::dump()
 {
     for (auto *vertex : vertices) {
-        printf("point=[%d,%d] adjacency=[", vertex->point.x, vertex->point.y);
+        printf("point=[%f,%f] adjacency=[", vertex->point.x, vertex->point.y);
         bool needSep = false;
         for (auto *_vertex : vertex->adjacencyList) {
             if (needSep) {
@@ -65,7 +65,7 @@ inline Direction directionToScan(Direction current, int stage) {
     return static_cast<Direction>(direction);
 }
 
-void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoints, Graph &results)
+void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results)
 {
     results.clear();
 

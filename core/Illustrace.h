@@ -59,15 +59,15 @@ public:
     BezierSplineBuilder bezierSplineBuilder;
     GraphBuilder graphBuilder;
 
-    std::vector<cv::Point> centerLineKeyPoints;
+    std::vector<cv::Point2f> centerLineKeyPoints;
     Graph centerLineGraph;
 
-    std::vector<std::vector<cv::Point>> centerLines;
-    std::vector<std::vector<cv::Point>> approximatedCenterLines;
+    std::vector<std::vector<cv::Point2f>> centerLines;
+    std::vector<std::vector<cv::Point2f>> approximatedCenterLines;
     std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;
 
-    std::vector<std::vector<cv::Point>> outlineContours;
-    std::vector<std::vector<cv::Point>> approximatedOutlineContours;
+    std::vector<std::vector<cv::Point2f>> outlineContours;
+    std::vector<std::vector<cv::Point2f>> approximatedOutlineContours;
     std::vector<cv::Vec4i> outlineHierarchy;
 
     double detail;

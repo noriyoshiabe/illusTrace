@@ -7,10 +7,10 @@ namespace illustrace {
 namespace core {
 
 struct GraphVertex {
-    GraphVertex(cv::Point point) : point(point), removed(false) {};
+    GraphVertex(cv::Point2f point) : point(point), removed(false) {};
 
     std::vector<GraphVertex *> adjacencyList;
-    cv::Point point;
+    cv::Point2f point;
 
     bool removed;
 };
@@ -26,7 +26,7 @@ public:
 
 class GraphBuilder {
 public:
-    void build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoints, Graph &results);
+    void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results);
 };
 
 } // namespace core

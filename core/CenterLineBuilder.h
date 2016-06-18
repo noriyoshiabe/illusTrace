@@ -11,10 +11,10 @@ namespace core {
 
 class CenterLineBuilder {
 public:
-    void build(Graph &graph, std::vector<std::vector<cv::Point>> &results);
+    void build(Graph &graph, std::vector<std::vector<cv::Point2f>> &results);
 
 private:
-    void walk(GraphVertex *vertex, cv::Point *prev, std::list<cv::Point> &line);
+    void walk(GraphVertex *vertex, cv::Point2f *prev, std::list<cv::Point2f> &line);
 };
 
 } // namespace core

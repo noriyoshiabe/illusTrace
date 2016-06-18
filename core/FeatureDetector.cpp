@@ -3,7 +3,7 @@
 using namespace illustrace;
 using namespace core;
 
-void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point> &keyPoints)
+void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point2f> &keyPoints)
 {
     std::vector<cv::KeyPoint> _keyPoints;
 
@@ -14,17 +14,17 @@ void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point> &keyPo
         int x = keyPoint.pt.x;
         int y = keyPoint.pt.y;
         if (0 == image.data[image.cols * y + x]) {
-            keyPoints.push_back(cv::Point(x, y));
+            keyPoints.push_back(cv::Point2f(x, y));
         }
         else {
-            cv::Point point;
+            cv::Point2f point;
             if (correctPoint(image, keyPoint, point)) {
                 keyPoints.push_back(point);
             }
         }
     }
 
-    std::sort(keyPoints.begin(), keyPoints.end(), [](const cv::Point &a, const cv::Point &b) {
+    std::sort(keyPoints.begin(), keyPoints.end(), [](const cv::Point2f &a, const cv::Point2f &b) {
         return a.x == b.x ? a.y < b.y : a.x < b.x;
     });
 
@@ -38,7 +38,7 @@ void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point> &keyPo
     }
 }
 
-bool FeatureDetector::correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point &result)
+bool FeatureDetector::correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point2f &result)
 {
     const int table[24][2] = {
         { 0, -1}, // 0

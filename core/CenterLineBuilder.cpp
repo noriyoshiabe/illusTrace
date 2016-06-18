@@ -4,7 +4,7 @@
 using namespace illustrace;
 using namespace core;
 
-void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point>> &results)
+void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point2f>> &results)
 {
     for (auto *vertex : graph.vertices) {
         if (vertex->removed) {
@@ -12,7 +12,7 @@ void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point>> 
         }
 
         bool hasOpposite = 1 < vertex->adjacencyList.size();
-        std::list<cv::Point> line;
+        std::list<cv::Point2f> line;
         walk(vertex, nullptr, line);
         if (hasOpposite) {
             line.reverse();
@@ -20,11 +20,11 @@ void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point>> 
             walk(vertex, &line.back(), line);
         }
 
-        results.push_back(std::vector<cv::Point>(line.begin(), line.end()));
+        results.push_back(std::vector<cv::Point2f>(line.begin(), line.end()));
     }
 }
 
-void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point *prev, std::list<cv::Point> &line)
+void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point2f *prev, std::list<cv::Point2f> &line)
 {
     line.push_back(vertex->point);
 

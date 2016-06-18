@@ -152,7 +152,7 @@ void View::copyFrom(cv::Mat &image)
     imshow(WindowName, preview);
 }
 
-void View::drawLines(std::vector<std::vector<cv::Point>> &lines, double thickness, bool closePath)
+void View::drawLines(std::vector<std::vector<cv::Point2f>> &lines, double thickness, bool closePath)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);
@@ -220,7 +220,7 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
     imshow(WindowName, preview);
 }
 
-void View::plotPoints(std::vector<cv::Point> &points)
+void View::plotPoints(std::vector<cv::Point2f> &points)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_source_rgb(cr, 1, 0, 0);
@@ -233,7 +233,7 @@ void View::plotPoints(std::vector<cv::Point> &points)
     imshow(WindowName, preview);
 }
 
-void View::plotPoints(std::vector<std::vector<cv::Point>> &lines)
+void View::plotPoints(std::vector<std::vector<cv::Point2f>> &lines)
 {
     for (auto line : lines) {
         plotPoints(line);
