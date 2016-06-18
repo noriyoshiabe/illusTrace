@@ -59,8 +59,8 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoint
     }
 
     for (auto *vertex : results.vertices) {
-        for (int y = vertex->point.y - 1; y <= vertex->point.y + 1; ++y) {
-            for (int x = vertex->point.x - 1; x <= vertex->point.x + 1; ++x) {
+        for (int y = vertex->point.y - 2; y <= vertex->point.y + 2; ++y) {
+            for (int x = vertex->point.x - 2; x <= vertex->point.x + 2; ++x) {
                 if (0 <= y && y < height && 0 <= x && x < width) {
                     vertexMap[y][x] = vertex;
                 }
@@ -110,11 +110,14 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoint
                     x = _x;
                     y = _y;
                     vertexHist[y][x] = vertex;
+                    direction = toScan;
 
                     GraphVertex *pv = vertexMap[y][x];
                     if (pv && vertex != pv) {
-                        vertex->adjacencyList.push_back(pv);
-                        pv->adjacencyList.push_back(vertex);
+                        if (pv->adjacencyList.end() == std::find(pv->adjacencyList.begin(), pv->adjacencyList.end(), vertex)) {
+                            vertex->adjacencyList.push_back(pv);
+                            pv->adjacencyList.push_back(vertex);
+                        }
                         stage = 8;
                     }
 

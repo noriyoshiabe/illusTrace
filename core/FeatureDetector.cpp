@@ -40,45 +40,77 @@ void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point> &keyPo
 
 bool FeatureDetector::correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point &result)
 {
-    for (int i = 0; i < 24; ++i) {
-        int table[24][2] = {
-            { 0, -1}, // 0
-            { 1,  0}, // 1
-            { 0,  1}, // 2
-            {-1,  0}, // 3
-            { 1, -1}, // 4
-            { 1,  1}, // 5
-            {-1,  1}, // 6
-            {-1, -1}, // 7
-            { 0, -2}, // 8
-            { 2,  0}, // 9
-            { 0,  2}, // 10
-            {-2,  0}, // 11
-            { 1, -2}, // 12
-            { 2, -1}, // 13
-            { 2,  1}, // 14
-            { 1,  2}, // 15
-            {-1,  2}, // 16
-            {-2,  1}, // 17
-            {-2, -1}, // 18
-            {-1, -2}, // 19
-            { 2, -2}, // 20
-            { 2,  2}, // 21
-            {-2,  2}, // 22
-            {-2, -2}, // 23
-        };
+    const int table[24][2] = {
+        { 0, -1}, // 0
+        { 1,  0}, // 1
+        { 0,  1}, // 2
+        {-1,  0}, // 3
+        { 1, -1}, // 4
+        { 1,  1}, // 5
+        {-1,  1}, // 6
+        {-1, -1}, // 7
+        { 0, -2}, // 8
+        { 2,  0}, // 9
+        { 0,  2}, // 10
+        {-2,  0}, // 11
+        { 1, -2}, // 12
+        { 2, -1}, // 13
+        { 2,  1}, // 14
+        { 1,  2}, // 15
+        {-1,  2}, // 16
+        {-2,  1}, // 17
+        {-2, -1}, // 18
+        {-1, -2}, // 19
+        { 2, -2}, // 20
+        { 2,  2}, // 21
+        {-2,  2}, // 22
+        {-2, -2}, // 23
+    };
 
+    int maxBlack = 0;
+    int maxBlackIndex = -1;
+
+    for (int i = 0; i < 24; ++i) {
         int x = table[i][0] + keyPoint.pt.x;
         int y = table[i][1] + keyPoint.pt.y;
 
         if (0 <= x && x < image.cols && 0 <= y && y < image.rows) {
             if (0 == image.data[y * image.cols + x]) {
-                result.x = x;
-                result.y = y;
-                return true;
+                int fromX = MAX(0, x - 1);
+                int toX = MIN(image.cols, x + 1);
+                int fromY = MAX(0, y - 1);
+                int toY = MIN(image.rows, y + 1);
+                int black = 0;
+                
+                for (int _y = fromY; _y <= toY; ++_y) {
+                    for (int _x = fromX; _x <= toX; ++_x) {
+                        if (0 == image.data[_y * image.cols + _x]) {
+                            ++black;
+                        }
+                    }
+                }
+
+                if (maxBlack < black) {
+                    maxBlack = black;
+                    maxBlackIndex = i;
+                }
+                else if (maxBlack == black) {
+                    int maxLength = abs(table[maxBlackIndex][0]) + abs(table[maxBlackIndex][1]);
+                    int length = abs(table[i][0]) + abs(table[i][1]);
+                    if (length < maxLength) {
+                        maxBlackIndex = i;
+                    }
+                }
             }
         }
     }
 
-    return false;
+    if (-1 != maxBlackIndex) {
+        result.x = table[maxBlackIndex][0] + keyPoint.pt.x;
+        result.y = table[maxBlackIndex][1] + keyPoint.pt.y;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
