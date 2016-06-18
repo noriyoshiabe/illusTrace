@@ -11,6 +11,8 @@ struct GraphVertex {
 
     std::vector<GraphVertex *> adjacencyList;
     cv::Point point;
+
+    bool removed;
 };
 
 class Graph {

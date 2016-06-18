@@ -41,7 +41,7 @@ void Illustrace::buildCenterLine()
     notify(IllustraceEvent::CenterLineGraphBuilt);
 
     centerLines.clear();
-    centerLineBuilder.build(thinnedImage, centerLines);
+    centerLineBuilder.build(centerLineGraph, centerLines);
     notify(IllustraceEvent::CenterLineBuilt);
 }
 
