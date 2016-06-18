@@ -7,7 +7,7 @@ namespace illustrace {
 namespace core {
 
 struct GraphVertex {
-    GraphVertex(cv::Point point) : point(point) {};
+    GraphVertex(cv::Point point) : point(point), removed(false) {};
 
     std::vector<GraphVertex *> adjacencyList;
     cv::Point point;
@@ -19,6 +19,7 @@ class Graph {
 public:
     ~Graph();
     void clear();
+    void dump();
 
     std::vector<GraphVertex *> vertices;
 };

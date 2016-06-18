@@ -16,6 +16,24 @@ void Graph::clear()
     vertices.clear();
 }
 
+void Graph::dump()
+{
+    for (auto *vertex : vertices) {
+        printf("point=[%d,%d] adjacency=[", vertex->point.x, vertex->point.y);
+        bool needSep = false;
+        for (auto *_vertex : vertex->adjacencyList) {
+            if (needSep) {
+                printf(",");
+            }
+            needSep = true;
+            auto it = std::find(vertices.begin(), vertices.end(), _vertex);
+            size_t index = std::distance(vertices.begin(), it);
+            printf("%lu", index);
+        }
+        printf("] removed=%s\n", vertex->removed ? "true" : "false");
+    }
+}
+
 enum class Direction : int {
     North = 0,
     NorthEast,
@@ -151,4 +169,8 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point> &keyPoint
     delete[] bitmap;
     delete[] vertexMap;
     delete[] vertexHist;
+
+#if 0
+    results.dump();
+#endif
 }
