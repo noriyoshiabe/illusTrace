@@ -51,7 +51,11 @@ void Illustrace::approximateCenterLine()
 
     for (auto line : centerLines) {
         std::vector<cv::Point> approx;
+        bool needAdjust = line.front() == line.back();
         cv::approxPolyDP(cv::Mat(line), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(line, true), false);
+        if (needAdjust && approx.front() != approx.back()) {
+            approx.push_back(approx.front());
+        }
         approximatedCenterLines.push_back(approx);
     }
 
