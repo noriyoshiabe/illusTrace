@@ -5,6 +5,7 @@ set(TARGET_NAME illustrace)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
 find_package(OpenCV)
+find_package(Cario)
 
 add_definitions(-Wall)
 add_definitions(-std=c++11)
@@ -32,3 +33,4 @@ add_executable(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} illustrace-core)
 target_link_libraries(${TARGET_NAME} illustrace-filter)
 target_link_libraries(${TARGET_NAME} ${OpenCV_LIBRARIES})
+target_link_libraries(${TARGET_NAME} ${CAIRO_LIBRARIES})

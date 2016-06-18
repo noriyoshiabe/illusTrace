@@ -1,4 +1,5 @@
 #include "Illustrace.h"
+#include "BezierPath.h"
 
 #include "opencv2/highgui.hpp"
 
@@ -145,8 +146,7 @@ void Illustrace::drawContours(std::vector<std::vector<cv::Point>> contours, std:
 
 void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierLines)
 {
-    bezierPath.thickness = thickness;
-
+    previewImage = cv::Mat(previewImage.rows, previewImage.cols, CV_8UC4);
     previewImage.setTo(cv::Scalar(255, 255, 255));
 
 #if 0
@@ -161,7 +161,9 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
 
     notify(IllustraceEvent::PreviewImageChanged);
     return;
-#endif    
+#endif
+
+    BezierPath bezierPath = BezierPath(previewImage, cv::Scalar(0, 0, 0), thickness);
 
     for (auto bezierLine : bezierLines) {
         bezierPath.moveToPoint(bezierLine[0].pt);
@@ -175,7 +177,7 @@ void Illustrace::drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Poi
             ctl1 = vtx.ctl.next;
         }
 
-        bezierPath.stroke(previewImage);
+        bezierPath.stroke();
         //bezierPath.plotContolPointAndHandles(previewImage);
         notify(IllustraceEvent::PreviewImageChanged);
         //cv::waitKey(0);

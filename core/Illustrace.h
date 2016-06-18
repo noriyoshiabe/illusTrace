@@ -8,7 +8,6 @@
 #include "NegativeFilter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
-#include "BezierPath.h"
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
@@ -46,8 +45,6 @@ public:
 
     CenterLineBuilder centerLineBuilder;
     BezierSplineBuilder bezierSplineBuilder;
-
-    BezierPath bezierPath;
 
     bool plotKeyPoints;
     bool plotLines;

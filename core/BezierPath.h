@@ -1,6 +1,7 @@
 #pragma once
 
 #include "opencv2/opencv.hpp"
+#include "cairo/cairo.h"
 
 #include <vector>
 
@@ -9,22 +10,16 @@ namespace core {
 
 class BezierPath {
 public:
-    BezierPath(int segmentCount = 10, cv::Scalar color = cv::Scalar(0, 0, 0), int thickness = 1);
-    ~BezierPath() {};
+    BezierPath(cv::Mat &image, cv::Scalar color = cv::Scalar(0, 0, 0), float thickness = 1.0f);
+    ~BezierPath();
 
     void moveToPoint(const cv::Point2f &point);
     void curveToPoint(const cv::Point2f &point, const cv::Point2f &control1, const cv::Point2f &control2);
-    void stroke(cv::Mat &image);
-
-    void plotContolPointAndHandles(cv::Mat &image);
-
-    float segmentCount;
-    cv::Scalar color;
-    int thickness;
+    void stroke();
 
 private:
-    std::vector<cv::Point2f> anchors;
-    std::vector<cv::Point2f> controls;
+    cairo_surface_t *surface;
+    cairo_t *cr;
 };
 
 } // namespace core
