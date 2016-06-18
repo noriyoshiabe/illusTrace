@@ -14,7 +14,17 @@ namespace illustrace {
 namespace core {
 
 enum class IllustraceEvent {
-    PreviewImageChanged,
+    SourceImageLoaded,
+    BrightnessFilterApplied,
+    BlurFilterApplied,
+    Binarized,
+    Thinned,
+    CenterLineBuilt,
+    CenterLineApproximated,
+    CenterLineBezierized,
+    OutlineBuilt,
+    OutlineApproximated,
+    // TODO OutlineBezierized,
 };
 
 class Illustrace : public Observable<Illustrace, IllustraceEvent> {
@@ -30,12 +40,7 @@ public:
 
     void buildOutline();
     void approximateOutline();
-
-    void drawCenterLines(std::vector<std::vector<cv::Point>> lines);
-    void drawContours(std::vector<std::vector<cv::Point>> contours, std::vector<cv::Vec4i> hierarchy);
-    void drawBezierizedLine(std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierLines);
-
-    cv::Mat &getPreviewImage();
+    // TODO void buildBezierizedOutline();
 
     filter::BrightnessFilter brightnessFilter;
     filter::BlurFilter blurFilter;
@@ -46,26 +51,20 @@ public:
     CenterLineBuilder centerLineBuilder;
     BezierSplineBuilder bezierSplineBuilder;
 
-    bool plotKeyPoints;
-    bool plotLines;
-    bool step;
-    bool antiAlias;
-
     std::vector<std::vector<cv::Point>> centerLines;
     std::vector<std::vector<cv::Point>> approximatedCenterLines;
-    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLine;
+    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;
 
     std::vector<std::vector<cv::Point>> outlineContours;
     std::vector<std::vector<cv::Point>> approximatedOutlineContours;
     std::vector<cv::Vec4i> outlineHierarchy;
 
     double detail;
-    int thickness;
+    double thickness;
 
-private:
     cv::Mat sourceImage;
     cv::Mat binarizedImage;
-    cv::Mat previewImage;
+    cv::Mat thinnedImage;
 };
 
 } // namespace core

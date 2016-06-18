@@ -20,7 +20,6 @@ int CLI::main(int argc, char **argv)
         {"thickness", required_argument, NULL, 't'},
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 's'},
-        {"anti-alias", no_argument, NULL, 'a'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
 
@@ -28,11 +27,9 @@ int CLI::main(int argc, char **argv)
     };
 
     CLI cli;
-    cli.illustrace.plotKeyPoints = true;
-    cli.illustrace.plotLines = true;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:sahv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:shv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -54,16 +51,13 @@ int CLI::main(int argc, char **argv)
             cli.illustrace.detail = std::stod(optarg);
             break;
         case 't':
-            cli.illustrace.thickness = std::stoi(optarg);
+            cli.illustrace.thickness = std::stod(optarg);
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
             break;
         case 's':
-            cli.illustrace.step = true;
-            break;
-        case 'a':
-            cli.illustrace.antiAlias = true;
+            cli.view.step = true;
             break;
         case 'h':
             cli.help();
@@ -148,9 +142,7 @@ bool CLI::execute(const char *inputFilePath)
         illustrace.buildBezierizedCenterLine();
     }
 
-    if (0 != view.wait) {
-        cv::waitKey(0);
-    }
+    view.waitKey();
 
 ERROR:
     return ret;
