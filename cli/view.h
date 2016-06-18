@@ -16,8 +16,10 @@ public:
 
     int wait;
     bool step;
+    bool plot;
 
     void waitKey();
+    void waitKeyIfNeeded();
 
 private:
     cv::Mat preview;
@@ -31,7 +33,9 @@ private:
     void drawLines(std::vector<std::vector<cv::Point>> &lines, double thickness, bool closePath = false);
     void drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness);
     void plotPoints(std::vector<cv::Point> &points);
+    void plotPoints(std::vector<std::vector<cv::Point>> &lines);
     void plotGraph(core::Graph &graph);
+    void plotBezierHandle(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines);
 };
 
 } // namespace cli

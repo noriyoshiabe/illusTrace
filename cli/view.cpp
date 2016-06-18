@@ -7,7 +7,7 @@ using namespace cli;
 
 static const char WindowName[] = "illustrace CLI";
 
-View::View() : wait(-1)
+View::View() : wait(-1), step(false), plot(false)
 {
     cv::namedWindow(WindowName, cv::WINDOW_AUTOSIZE);
 }
@@ -26,6 +26,13 @@ void View::waitKey()
     }
 }
 
+void View::waitKeyIfNeeded()
+{
+    if (0 <= wait) {
+        cv::waitKey(wait);
+    }
+}
+
 void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList)
 {
     switch (event) {
@@ -35,54 +42,79 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
                 preview.cols, preview.rows, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, preview.cols));
         cr = cairo_create(surface);
         imshow(WindowName, sender->sourceImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::BrightnessFilterApplied:
         imshow(WindowName, sender->binarizedImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::BlurFilterApplied:
         imshow(WindowName, sender->binarizedImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::Binarized:
         imshow(WindowName, sender->binarizedImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::Thinned:
         imshow(WindowName, sender->thinnedImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::NegativeFilterApplied:
         imshow(WindowName, sender->negativeImage);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::CenterLineKeyPointDetected:
-        copyFrom(sender->thinnedImage);
-        plotPoints(sender->centerLineKeyPoints);
+        if (plot) {
+            copyFrom(sender->thinnedImage);
+            plotPoints(sender->centerLineKeyPoints);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::CenterLineGraphBuilt:
-        clearPreview();
-        plotGraph(sender->centerLineGraph);
+        if (plot) {
+            clearPreview();
+            plotGraph(sender->centerLineGraph);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::CenterLineBuilt:
         clearPreview();
         drawLines(sender->centerLines, sender->thickness);
+        waitKeyIfNeeded();
+        if (plot) {
+            plotPoints(sender->centerLines);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::CenterLineApproximated:
         clearPreview();
         drawLines(sender->approximatedCenterLines, sender->thickness);
+        waitKeyIfNeeded();
+        if (plot) {
+            plotPoints(sender->approximatedCenterLines);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::CenterLineBezierized:
         clearPreview();
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
+        waitKeyIfNeeded();
+        if (plot) {
+            plotBezierHandle(sender->bezierizedCenterLines);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::OutlineBuilt:
         clearPreview();
         drawLines(sender->outlineContours, sender->thickness, true);
+        waitKeyIfNeeded();
         break;
     case core::IllustraceEvent::OutlineApproximated:
         clearPreview();
         drawLines(sender->approximatedOutlineContours, sender->thickness, true);
+        waitKeyIfNeeded();
         break;
-    }
-
-    if (0 <= wait) {
-        cv::waitKey(wait);
     }
 }
 
@@ -148,9 +180,7 @@ void View::drawLines(std::vector<std::vector<cv::Point>> &lines, double thicknes
 
         if (step) {
             imshow(WindowName, preview);
-            if (0 <= wait) {
-                cv::waitKey(wait);
-            }
+            waitKeyIfNeeded();
         }
     }
 
@@ -160,8 +190,13 @@ void View::drawLines(std::vector<std::vector<cv::Point>> &lines, double thicknes
 void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness)
 {
     cairo_set_line_width(cr, thickness);
-    cairo_set_source_rgb(cr, 0, 0, 0);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
+    if (plot) {
+        cairo_set_source_rgb(cr, 0.5, 0.5, 0.5);
+    }
+    else {
+        cairo_set_source_rgb(cr, 0, 0, 0);
+    }
 
     for (auto bezierLine : bezierLines) {
         cairo_move_to(cr, bezierLine[0].pt.x, bezierLine[0].pt.y);
@@ -178,9 +213,7 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
 
         if (step) {
             imshow(WindowName, preview);
-            if (0 <= wait) {
-                cv::waitKey(wait);
-            }
+            waitKeyIfNeeded();
         }
     }
 
@@ -200,6 +233,13 @@ void View::plotPoints(std::vector<cv::Point> &points)
     imshow(WindowName, preview);
 }
 
+void View::plotPoints(std::vector<std::vector<cv::Point>> &lines)
+{
+    for (auto line : lines) {
+        plotPoints(line);
+    }
+}
+
 void View::plotGraph(core::Graph &graph)
 {
     cairo_set_line_width(cr, 1);
@@ -217,6 +257,31 @@ void View::plotGraph(core::Graph &graph)
         cairo_set_source_rgb(cr, 1, 0, 0);
         cairo_arc(cr, vertex->point.x, vertex->point.y, 2, 0, 2 * M_PI);
         cairo_stroke(cr);
+    }
+
+    imshow(WindowName, preview);
+}
+
+void View::plotBezierHandle(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines)
+{
+    cairo_set_line_width(cr, 1);
+    cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
+
+    for (auto bezierLine : bezierLines) {
+        for (auto vertex : bezierLine) {
+            cairo_move_to(cr, vertex.ctl.prev.x, vertex.ctl.prev.y);
+            cairo_line_to(cr, vertex.pt.x, vertex.pt.y);
+            cairo_line_to(cr, vertex.ctl.next.x, vertex.ctl.next.y);
+            cairo_stroke(cr);
+
+            cairo_arc(cr, vertex.ctl.prev.x, vertex.ctl.prev.y, 1, 0, 2 * M_PI);
+            cairo_stroke(cr);
+            cairo_arc(cr, vertex.pt.x, vertex.pt.y, 1, 0, 2 * M_PI);
+            cairo_stroke(cr);
+            cairo_arc(cr, vertex.ctl.next.x, vertex.ctl.next.y, 1, 0, 2 * M_PI);
+            cairo_stroke(cr);
+        }
     }
 
     imshow(WindowName, preview);

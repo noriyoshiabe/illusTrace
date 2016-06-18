@@ -21,6 +21,7 @@ int CLI::main(int argc, char **argv)
         {"thickness", required_argument, NULL, 't'},
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 's'},
+        {"plot", no_argument, NULL, 'p'},
         {"trace", no_argument, NULL, 'T'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
@@ -31,7 +32,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:sThv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:spThv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -60,6 +61,9 @@ int CLI::main(int argc, char **argv)
             break;
         case 's':
             cli.view.step = true;
+            break;
+        case 'p':
+            cli.view.plot = true;
             break;
         case 'T':
 #ifdef DEBUG
@@ -119,6 +123,9 @@ void CLI::usage()
         "  -t, --thickness <value>  Adjustment for line thickness. 0 < value.\n"
         "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase.\n"
         "                           0 is infinity and key input is needed for continue.\n"
+        "  -s, --step               Wait with drawing one line.\n"
+        "  -p, --plot               Plot points and handles.\n"
+        "  -T, --trace              Print trace log.\n"
         "  -h, --help               This help text.\n"
         "  -v, --version            Show program version.\n";
 
