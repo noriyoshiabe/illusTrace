@@ -40,8 +40,11 @@ void Illustrace::buildCenterLine()
     graphBuilder.build(thinnedImage, centerLineKeyPoints, centerLineGraph);
     notify(IllustraceEvent::CenterLineGraphBuilt);
 
+    graphBuilder.approximate(centerLineGraph, approximatedCenterLineGraph);
+    notify(IllustraceEvent::CenterLineGraphApproximated);
+
     centerLines.clear();
-    centerLineBuilder.build(centerLineGraph, centerLines);
+    centerLineBuilder.build(approximatedCenterLineGraph, centerLines);
     notify(IllustraceEvent::CenterLineBuilt);
 }
 

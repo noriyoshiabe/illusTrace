@@ -1,5 +1,8 @@
 #include "GraphBuilder.h"
 #include "Vector2D.h"
+#include "Log.h"
+
+#include <queue>
 
 using namespace illustrace;
 using namespace core;
@@ -217,7 +220,7 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
     delete[] vertexMap;
     delete[] vertexHist;
 
-#if 1
+#if 0
     results.dump();
 #endif
 }
@@ -274,4 +277,88 @@ void GraphBuilder::mergeNearCrossPoint(Graph &results)
         }
     }
 
+}
+
+void GraphBuilder::approximate(const Graph &graph, Graph &result)
+{
+    result = graph;
+
+    for (auto *vertex : result.vertices) {
+        if (vertex->flag) {
+            continue;
+        }
+ 
+        std::queue<GraphVertex *> queue;
+
+        vertex->flag = true;
+        queue.push(vertex);
+
+        while (!queue.empty()) {
+            vertex = queue.front();
+            queue.pop();
+
+            int length = vertex->adjacencyList.size();
+            for (int i = 0; i < length; ++i) {
+                auto *adjacency = vertex->adjacencyList[i];
+
+                if (!adjacency->flag) {
+                    adjacency->flag = true;
+
+                    if (10.0 > lib::vectorLength(lib::vector(vertex->point, adjacency->point))) {
+                        int currentAdjacencyCount = vertex->adjacencyList.size();
+                        int nextAdjacencyCount = adjacency->adjacencyList.size();
+                        int currentWeight = 1 == currentAdjacencyCount ? 1
+                                          : 2 == currentAdjacencyCount ? 0 : 2;
+                        int nextWeight = 1 == nextAdjacencyCount ? 1
+                                       : 2 == nextAdjacencyCount ? 0 : 2;
+
+                        GraphVertex *merged, *toMerge;
+
+                        if (currentWeight < nextWeight) {
+                            merged = adjacency;
+                            toMerge = vertex;
+                        }
+                        else {
+                            merged = vertex;
+                            toMerge = adjacency;
+
+                            if (currentWeight == nextWeight) {
+                                vertex->point.x = (vertex->point.x + adjacency->point.x) / 2.0;
+                                vertex->point.y = (vertex->point.y + adjacency->point.y) / 2.0;
+                            }
+                        }
+
+                        vertex->adjacencyList.erase(vertex->adjacencyList.begin() + i);
+                        --i;
+                        --length;
+
+                        auto it = std::remove(adjacency->adjacencyList.begin(), adjacency->adjacencyList.end(), vertex);
+                        adjacency->adjacencyList.erase(it, adjacency->adjacencyList.end());
+
+                        for (auto *_adjacency : toMerge->adjacencyList) {
+                            merged->adjacencyList.push_back(_adjacency);
+                            _adjacency->adjacencyList.push_back(merged);
+
+                            auto _it = std::remove(_adjacency->adjacencyList.begin(), _adjacency->adjacencyList.end(), toMerge);
+                            _adjacency->adjacencyList.erase(_it, _adjacency->adjacencyList.end());
+                        }
+
+                        toMerge->adjacencyList.clear();
+                    }
+
+                    if (!adjacency->adjacencyList.empty()) {
+                        queue.push(adjacency);
+                    }
+                }
+            }
+        }
+    }
+
+    for (auto *vertex : result.vertices) {
+        vertex->flag = false;
+    }
+
+#if 0
+    results.dump();
+#endif
 }

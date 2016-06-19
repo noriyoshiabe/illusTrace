@@ -78,6 +78,13 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
+    case core::IllustraceEvent::CenterLineGraphApproximated:
+        if (plot) {
+            clearPreview();
+            plotGraph(sender->approximatedCenterLineGraph);
+            waitKeyIfNeeded();
+        }
+        break;
     case core::IllustraceEvent::CenterLineBuilt:
         clearPreview();
         drawLines(sender->centerLines, sender->thickness);

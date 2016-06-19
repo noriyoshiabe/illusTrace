@@ -35,6 +35,7 @@ private:
 class GraphBuilder {
 public:
     void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results);
+    void approximate(const Graph &graph, Graph &result);
 
 private:
     void mergeNearCrossPoint(Graph &results);

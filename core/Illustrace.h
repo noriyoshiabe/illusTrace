@@ -25,6 +25,7 @@ enum class IllustraceEvent {
     NegativeFilterApplied,
     CenterLineKeyPointDetected,
     CenterLineGraphBuilt,
+    CenterLineGraphApproximated,
     CenterLineBuilt,
     CenterLineApproximated,
     CenterLineBezierized,
@@ -61,6 +62,7 @@ public:
 
     std::vector<cv::Point2f> centerLineKeyPoints;
     Graph centerLineGraph;
+    Graph approximatedCenterLineGraph;
 
     std::vector<std::vector<cv::Point2f>> centerLines;
     std::vector<std::vector<cv::Point2f>> approximatedCenterLines;
