@@ -161,7 +161,8 @@ void View::copyFrom(cv::Mat &image)
     imshow(WindowName, preview);
 }
 
-void View::drawLines(std::vector<std::vector<cv::Point2f>> &lines, double thickness, bool closePath)
+template <class T>
+void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_source_rgb(cr, 0, 0, 0);

@@ -70,7 +70,7 @@ public:
     std::vector<std::vector<cv::Point2f>> approximatedCenterLines;
     std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;
 
-    std::vector<std::vector<cv::Point2f>> outlineContours;
+    std::vector<std::vector<cv::Point>> outlineContours;
     std::vector<std::vector<cv::Point2f>> approximatedOutlineContours;
     std::vector<cv::Vec4i> outlineHierarchy;
 
