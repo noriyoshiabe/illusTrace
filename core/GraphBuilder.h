@@ -27,6 +27,9 @@ public:
 class GraphBuilder {
 public:
     void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results);
+
+private:
+    void mergeNearCrossPoint(Graph &results);
 };
 
 } // namespace core

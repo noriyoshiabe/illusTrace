@@ -1,4 +1,5 @@
 #include "GraphBuilder.h"
+#include "Vector2D.h"
 
 using namespace illustrace;
 using namespace core;
@@ -162,6 +163,8 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
         }
     }
 
+    mergeNearCrossPoint(results);
+
     for (int y = 0; y < height; ++y) {
         delete bitmap[y];
         delete vertexMap[y];
@@ -175,4 +178,58 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
 #if 0
     results.dump();
 #endif
+}
+
+void GraphBuilder::mergeNearCrossPoint(Graph &results)
+{
+    std::vector<GraphVertex *> crossPoints;
+
+    for (auto *vertex : results.vertices) {
+        if (3 <= vertex->adjacencyList.size()) {
+            crossPoints.push_back(vertex);
+        }
+    }
+
+    for (auto *vertex : crossPoints) {
+        if (vertex->removed) {
+            continue;
+        }
+
+        std::vector<GraphVertex *> toMerge;
+
+        for (auto *_vertex : vertex->adjacencyList) {
+            if (3 <= _vertex->adjacencyList.size()) {
+                if (5.0 > lib::vectorLength(lib::vector(vertex->point, _vertex->point))) {
+                    toMerge.push_back(_vertex);
+                }
+            }
+        }
+
+        if (!toMerge.empty()) {
+            for (auto *_vertex : toMerge) {
+                auto it = std::remove(vertex->adjacencyList.begin(), vertex->adjacencyList.end(), _vertex);
+                vertex->adjacencyList.erase(it, vertex->adjacencyList.end());
+                auto _it = std::remove(_vertex->adjacencyList.begin(), _vertex->adjacencyList.end(), vertex);
+                _vertex->adjacencyList.erase(_it, _vertex->adjacencyList.end());
+
+                vertex->point.x += _vertex->point.x;
+                vertex->point.y += _vertex->point.y;
+
+                for (auto *adjacency : _vertex->adjacencyList) {
+                    vertex->adjacencyList.push_back(adjacency);
+                    adjacency->adjacencyList.push_back(vertex);
+
+                    auto __it = std::remove(adjacency->adjacencyList.begin(), adjacency->adjacencyList.end(), _vertex);
+                    adjacency->adjacencyList.erase(__it, adjacency->adjacencyList.end());
+                }
+
+                _vertex->removed = true;
+            }
+
+            int division = toMerge.size() + 1;
+            vertex->point.x /= division;
+            vertex->point.y /= division;
+        }
+    }
+
 }
