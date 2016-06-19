@@ -7,7 +7,7 @@ using namespace cli;
 
 static const char WindowName[] = "illustrace CLI";
 
-View::View() : wait(-1), step(false), plot(false)
+View::View() : wait(-1), step(false), plot(false), hierarchyDepth(0)
 {
     cv::namedWindow(WindowName, cv::WINDOW_AUTOSIZE);
 }
@@ -134,7 +134,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         break;
     case core::IllustraceEvent::OutlineBezierized:
         clearPreview();
-        drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, 0, sender->thickness);
+        drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, sender->thickness);
         waitKeyIfNeeded();
         if (plot) {
             clearPreview();
@@ -254,16 +254,57 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index, double thickness)
+void View::drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness)
+{
+    cairo_set_line_width(cr, thickness);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
+    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_source_rgb(cr, 0, 0, 0);
+
+    drawBezierLineContours2(contours, hierarchy, 0);
+    
+    cairo_fill_preserve(cr);
+    cairo_stroke(cr);
+
+    imshow(WindowName, preview);
+}
+
+void View::drawBezierLineContours2(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index)
 {
     for (; -1 != index; index = hierarchy[index][0]) {
-        drawBezierLine(contours[index], thickness);
+        fillBezierLineContour(contours[index]);
         int childIndex = hierarchy[index][2];
         if (-1 != childIndex) {
-            drawBezierLineContours(contours, hierarchy, childIndex, thickness);
+            ++hierarchyDepth;
+            drawBezierLineContours2(contours, hierarchy, childIndex);
+            --hierarchyDepth;
+        }
+
+        if (step && 0 == hierarchyDepth) {
+            cairo_fill_preserve(cr);
+            cairo_stroke(cr);
+
+            imshow(WindowName, preview);
+            waitKeyIfNeeded();
         }
     }
-    imshow(WindowName, preview);
+}
+
+void View::fillBezierLineContour(std::vector<core::BezierVertex<cv::Point2f>> &contour)
+{
+    cairo_new_sub_path(cr);
+
+    cairo_move_to(cr, contour[0].pt.x, contour[0].pt.y);
+    auto ctl1 = contour[0].ctl.next;
+
+    int length = contour.size();
+    for (int i = 1; i < length; ++i) {
+        auto vtx = contour[i];
+        cairo_curve_to(cr, ctl1.x, ctl1.y, vtx.ctl.prev.x, vtx.ctl.prev.y, vtx.pt.x, vtx.pt.y); 
+        ctl1 = vtx.ctl.next;
+    }
+
+    cairo_close_path(cr);
 }
 
 template <class T>
