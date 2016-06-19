@@ -7,7 +7,7 @@ using namespace core;
 void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point2f>> &results)
 {
     for (auto *vertex : graph.vertices) {
-        if (vertex->flag) {
+        if (vertex->removed) {
             continue;
         }
 
@@ -65,10 +65,10 @@ void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point2f *prev, std::list<c
         _vertex->adjacencyList.erase(_it, _vertex->adjacencyList.end());
         
         if (vertex->adjacencyList.empty()) {
-            vertex->flag = true;
+            vertex->removed = true;
         }
         if (_vertex->adjacencyList.empty()) {
-            _vertex->flag = true;
+            _vertex->removed = true;
         }
 
         line.push_back(_vertex->point);

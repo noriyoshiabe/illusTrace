@@ -7,13 +7,16 @@ namespace illustrace {
 namespace core {
 
 struct GraphVertex {
-    GraphVertex(cv::Point2f point) : point(point), flag(false) {};
+    GraphVertex(cv::Point2f point)
+        : point(point), index(0), removed(false), flag(false), weight(0.f) {};
 
     std::vector<GraphVertex *> adjacencyList;
     cv::Point2f point;
 
-    bool flag;
     int index;
+    bool removed;
+    bool flag;
+    float weight;
 };
 
 class Graph {
@@ -34,11 +37,11 @@ private:
 
 class GraphBuilder {
 public:
-    void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results);
-    void approximate(const Graph &graph, Graph &result);
+    void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &result);
+    void approximate(const Graph &graph, Graph &resul);
 
 private:
-    void mergeNearCrossPoint(Graph &results);
+    void mergeNearCrossPoint(Graph &result);
 };
 
 } // namespace core

@@ -34,7 +34,8 @@ inline double cornerRadian(const T &p1, const T &p2, const T &p3)
     T v2 = vector(p2, p3);
     double lv1 = vectorLength(v1);
     double lv2 = vectorLength(v2);
-    return acos(dotProduct(v1, v2) / (lv1 * lv2));
+    double t = acos(dotProduct(v1, v2) / (lv1 * lv2));
+    return std::isnan(t) ? 0.0 : t;
 }
 
 } // namespace lib

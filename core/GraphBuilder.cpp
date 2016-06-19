@@ -26,6 +26,7 @@ void Graph::copyFrom(const Graph &graph)
 {
     for (auto *vertex : graph.vertices) {
         GraphVertex *_vertex = new GraphVertex(vertex->point);
+        _vertex->removed = vertex->removed;
         _vertex->flag = vertex->flag;
         _vertex->index = vertex->index;
         vertices.push_back(_vertex);
@@ -64,7 +65,8 @@ void Graph::dump()
             needSep = true;
             printf("%d", _vertex->index);
         }
-        printf("] flag=%s\n", vertex->flag ? "true" : "false");
+        printf("] removed=%d", vertex->removed);
+        printf(" flag=%d\n", vertex->flag);
     }
 }
 
@@ -99,9 +101,9 @@ inline Direction directionToScan(Direction current, int stage) {
     return static_cast<Direction>(direction);
 }
 
-void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &results)
+void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &result)
 {
-    results.clear();
+    result.clear();
 
     int width = thinnedImage.cols;
     int height = thinnedImage.rows;
@@ -124,10 +126,10 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
     }
 
     for (auto &keyPoint : keyPoints) {
-        results.vertices.push_back(new GraphVertex(keyPoint));
+        result.vertices.push_back(new GraphVertex(keyPoint));
     }
 
-    for (auto *vertex : results.vertices) {
+    for (auto *vertex : result.vertices) {
         for (int y = vertex->point.y - 2; y <= vertex->point.y + 2; ++y) {
             for (int x = vertex->point.x - 2; x <= vertex->point.x + 2; ++x) {
                 if (0 <= y && y < height && 0 <= x && x < width) {
@@ -137,7 +139,7 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
         }
     }
 
-    for (auto *vertex : results.vertices) {
+    for (auto *vertex : result.vertices) {
         const struct {
             int x;
             int y;
@@ -196,17 +198,17 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
         }
     }
 
-    mergeNearCrossPoint(results);
+    mergeNearCrossPoint(result);
 
-    int length = results.vertices.size();
+    int length = result.vertices.size();
     for (int i = 0; i < length; ++i) {
-        if (results.vertices[i]->flag) {
-            results.vertices.erase(results.vertices.begin() + i);
+        if (result.vertices[i]->removed) {
+            result.vertices.erase(result.vertices.begin() + i);
             --i;
             --length;
         }
         else {
-            results.vertices[i]->index = i;
+            result.vertices[i]->index = i;
         }
     }
 
@@ -221,22 +223,22 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
     delete[] vertexHist;
 
 #if 0
-    results.dump();
+    result.dump();
 #endif
 }
 
-void GraphBuilder::mergeNearCrossPoint(Graph &results)
+void GraphBuilder::mergeNearCrossPoint(Graph &result)
 {
     std::vector<GraphVertex *> crossPoints;
 
-    for (auto *vertex : results.vertices) {
+    for (auto *vertex : result.vertices) {
         if (3 <= vertex->adjacencyList.size()) {
             crossPoints.push_back(vertex);
         }
     }
 
     for (auto *vertex : crossPoints) {
-        if (vertex->flag) {
+        if (vertex->removed) {
             continue;
         }
 
@@ -268,7 +270,7 @@ void GraphBuilder::mergeNearCrossPoint(Graph &results)
                     adjacency->adjacencyList.erase(__it, adjacency->adjacencyList.end());
                 }
 
-                _vertex->flag = true;
+                _vertex->removed = true;
             }
 
             int division = toMerge.size() + 1;
@@ -284,10 +286,28 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
     result = graph;
 
     for (auto *vertex : result.vertices) {
-        if (vertex->flag) {
+        switch (vertex->adjacencyList.size()) {
+        case 1:
+            vertex->weight = 1.f;
+            break;
+        case 2:
+            {
+                auto *adj1 = vertex->adjacencyList[0];
+                auto *adj2 = vertex->adjacencyList[1];
+                vertex->weight = lib::cornerRadian(adj1->point, vertex->point, adj2->point) / (M_PI / 3.0);
+            }
+            break;
+        default:
+            vertex->weight = 1.f;
+            break;
+        }
+    }
+
+    for (auto *vertex : result.vertices) {
+        if (vertex->removed) {
             continue;
         }
- 
+
         std::queue<GraphVertex *> queue;
 
         vertex->flag = true;
@@ -304,29 +324,32 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
                 if (!adjacency->flag) {
                     adjacency->flag = true;
 
-                    if (10.0 > lib::vectorLength(lib::vector(vertex->point, adjacency->point))) {
-                        int currentAdjacencyCount = vertex->adjacencyList.size();
-                        int nextAdjacencyCount = adjacency->adjacencyList.size();
-                        int currentWeight = 1 == currentAdjacencyCount ? 1
-                                          : 2 == currentAdjacencyCount ? 0 : 2;
-                        int nextWeight = 1 == nextAdjacencyCount ? 1
-                                       : 2 == nextAdjacencyCount ? 0 : 2;
+                    float totalWeight = vertex->weight + adjacency->weight;
+                    if (7.5 > lib::vectorLength(lib::vector(vertex->point, adjacency->point)) && 2.f > totalWeight) {
 
-                        GraphVertex *merged, *toMerge;
-
-                        if (currentWeight < nextWeight) {
-                            merged = adjacency;
-                            toMerge = vertex;
+                        if (1.f <= vertex->weight) {
+                            ;
+                        }
+                        else if (1.f <= adjacency->weight) {
+                            vertex->point.x = adjacency->point.x;
+                            vertex->point.y = adjacency->point.y;
                         }
                         else {
-                            merged = vertex;
-                            toMerge = adjacency;
+                            float vtxf, adjf;
 
-                            if (currentWeight == nextWeight) {
-                                vertex->point.x = (vertex->point.x + adjacency->point.x) / 2.0;
-                                vertex->point.y = (vertex->point.y + adjacency->point.y) / 2.0;
+                            if (0.f == totalWeight) {
+                                vtxf = adjf = 0.5f;
                             }
+                            else {
+                                vtxf = vertex->weight / totalWeight;
+                                adjf = adjacency->weight / totalWeight;
+                            }
+
+                            vertex->point.x = vertex->point.x * vtxf + adjacency->point.x * adjf;
+                            vertex->point.y = vertex->point.y * vtxf + adjacency->point.y * adjf;
                         }
+
+                        vertex->weight += adjacency->weight;
 
                         vertex->adjacencyList.erase(vertex->adjacencyList.begin() + i);
                         --i;
@@ -335,18 +358,18 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
                         auto it = std::remove(adjacency->adjacencyList.begin(), adjacency->adjacencyList.end(), vertex);
                         adjacency->adjacencyList.erase(it, adjacency->adjacencyList.end());
 
-                        for (auto *_adjacency : toMerge->adjacencyList) {
-                            merged->adjacencyList.push_back(_adjacency);
-                            _adjacency->adjacencyList.push_back(merged);
+                        adjacency->removed = true;
 
-                            auto _it = std::remove(_adjacency->adjacencyList.begin(), _adjacency->adjacencyList.end(), toMerge);
+                        for (auto *_adjacency : adjacency->adjacencyList) {
+                            vertex->adjacencyList.push_back(_adjacency);
+                            ++length;
+                            _adjacency->adjacencyList.push_back(vertex);
+
+                            auto _it = std::remove(_adjacency->adjacencyList.begin(), _adjacency->adjacencyList.end(), adjacency);
                             _adjacency->adjacencyList.erase(_it, _adjacency->adjacencyList.end());
                         }
-
-                        toMerge->adjacencyList.clear();
                     }
-
-                    if (!adjacency->adjacencyList.empty()) {
+                    else {
                         queue.push(adjacency);
                     }
                 }
@@ -354,11 +377,19 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
         }
     }
 
-    for (auto *vertex : result.vertices) {
-        vertex->flag = false;
+    int length = result.vertices.size();
+    for (int i = 0; i < length; ++i) {
+        if (result.vertices[i]->removed) {
+            result.vertices.erase(result.vertices.begin() + i);
+            --i;
+            --length;
+        }
+        else {
+            result.vertices[i]->index = i;
+        }
     }
 
 #if 0
-    results.dump();
+    result.dump();
 #endif
 }
