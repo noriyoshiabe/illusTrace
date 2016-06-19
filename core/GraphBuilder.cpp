@@ -4,6 +4,38 @@
 using namespace illustrace;
 using namespace core;
 
+Graph::Graph()
+{
+}
+
+Graph Graph::operator = (const Graph &graph)
+{
+    copyFrom(graph);
+    return *this;
+}
+
+Graph::Graph(const Graph &graph)
+{
+    copyFrom(graph);
+}
+
+void Graph::copyFrom(const Graph &graph)
+{
+    for (auto *vertex : graph.vertices) {
+        GraphVertex *_vertex = new GraphVertex(vertex->point);
+        _vertex->flag = vertex->flag;
+        _vertex->index = vertex->index;
+        vertices.push_back(_vertex);
+    }
+
+    for (auto *vertex : graph.vertices) {
+        GraphVertex *_vertex = vertices[vertex->index];
+        for (auto *adjacency : vertex->adjacencyList) {
+            _vertex->adjacencyList.push_back(vertices[adjacency->index]);
+        }
+    }
+}
+
 Graph::~Graph()
 {
     clear();
@@ -20,18 +52,16 @@ void Graph::clear()
 void Graph::dump()
 {
     for (auto *vertex : vertices) {
-        printf("point=[%f,%f] adjacency=[", vertex->point.x, vertex->point.y);
+        printf("%d: point=[%f,%f] adjacency=[", vertex->index, vertex->point.x, vertex->point.y);
         bool needSep = false;
         for (auto *_vertex : vertex->adjacencyList) {
             if (needSep) {
                 printf(",");
             }
             needSep = true;
-            auto it = std::find(vertices.begin(), vertices.end(), _vertex);
-            size_t index = std::distance(vertices.begin(), it);
-            printf("%lu", index);
+            printf("%d", _vertex->index);
         }
-        printf("] removed=%s\n", vertex->removed ? "true" : "false");
+        printf("] flag=%s\n", vertex->flag ? "true" : "false");
     }
 }
 
@@ -165,6 +195,18 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
 
     mergeNearCrossPoint(results);
 
+    int length = results.vertices.size();
+    for (int i = 0; i < length; ++i) {
+        if (results.vertices[i]->flag) {
+            results.vertices.erase(results.vertices.begin() + i);
+            --i;
+            --length;
+        }
+        else {
+            results.vertices[i]->index = i;
+        }
+    }
+
     for (int y = 0; y < height; ++y) {
         delete bitmap[y];
         delete vertexMap[y];
@@ -175,7 +217,7 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
     delete[] vertexMap;
     delete[] vertexHist;
 
-#if 0
+#if 1
     results.dump();
 #endif
 }
@@ -191,7 +233,7 @@ void GraphBuilder::mergeNearCrossPoint(Graph &results)
     }
 
     for (auto *vertex : crossPoints) {
-        if (vertex->removed) {
+        if (vertex->flag) {
             continue;
         }
 
@@ -223,7 +265,7 @@ void GraphBuilder::mergeNearCrossPoint(Graph &results)
                     adjacency->adjacencyList.erase(__it, adjacency->adjacencyList.end());
                 }
 
-                _vertex->removed = true;
+                _vertex->flag = true;
             }
 
             int division = toMerge.size() + 1;
