@@ -25,6 +25,12 @@ void Illustrace::binarize()
 
     binaryThresholdFilter.apply(binarizedImage);
     notify(IllustraceEvent::Binarized);
+
+    negativeImage = binarizedImage.clone();
+    negativeFilter.apply(negativeImage);
+    notify(IllustraceEvent::NegativeFilterApplied);
+
+    boundingRect = cv::boundingRect(negativeImage);
 }
 
 void Illustrace::buildCenterLine()
@@ -55,7 +61,7 @@ void Illustrace::approximateCenterLine()
     for (auto line : centerLines) {
         std::vector<cv::Point2f> approx;
         bool needAdjust = line.front() == line.back();
-        cv::approxPolyDP(cv::Mat(line), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(line, true), false);
+        cv::approxPolyDP(cv::Mat(line), approx, epsilon(), false);
         if (needAdjust && approx.front() != approx.back()) {
             approx.push_back(approx.front());
         }
@@ -82,12 +88,7 @@ void Illustrace::buildBezierizedCenterLine()
 
 void Illustrace::buildOutline()
 {
-    negativeImage = binarizedImage.clone();
-    negativeFilter.apply(negativeImage);
-    notify(IllustraceEvent::NegativeFilterApplied);
-
     cv::findContours(negativeImage, outlineContours, outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-
     notify(IllustraceEvent::OutlineBuilt);
 }
 
@@ -97,9 +98,15 @@ void Illustrace::approximateOutline()
 
     for (auto line : outlineContours) {
         std::vector<cv::Point2f> approx;
-        cv::approxPolyDP(cv::Mat(line), approx, MAX(0.0, 1.0 - detail) * 0.005 * cv::arcLength(line, true), false);
+        cv::approxPolyDP(cv::Mat(line), approx, epsilon(), false);
         approximatedOutlineContours.push_back(approx);
     }
 
     notify(IllustraceEvent::OutlineApproximated);
+}
+
+double Illustrace::epsilon()
+{
+    double shortSide = MIN(boundingRect.width, boundingRect.height);
+    return shortSide * (0.006250 / detail); // Inverse proportion. 0.5 to 1.25%
 }

@@ -49,6 +49,8 @@ public:
     void approximateOutline();
     // TODO void buildBezierizedOutline();
 
+    double epsilon();
+
     filter::BrightnessFilter brightnessFilter;
     filter::BlurFilter blurFilter;
     filter::BinaryThresholdFilter binaryThresholdFilter;
