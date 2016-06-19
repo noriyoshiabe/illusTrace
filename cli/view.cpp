@@ -134,7 +134,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         break;
     case core::IllustraceEvent::OutlineBezierized:
         clearPreview();
-        drawBezierLines(sender->bezierizedOutlineContours, sender->thickness);
+        drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, 0, sender->thickness);
         waitKeyIfNeeded();
         if (plot) {
             clearPreview();
@@ -216,7 +216,7 @@ void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool 
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
+void View::drawBezierLine(std::vector<core::BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
@@ -227,25 +227,42 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
         cairo_set_source_rgb(cr, 0, 0, 0);
     }
 
-    for (auto bezierLine : bezierLines) {
-        cairo_move_to(cr, bezierLine[0].pt.x, bezierLine[0].pt.y);
-        auto ctl1 = bezierLine[0].ctl.next;
+    cairo_move_to(cr, bezierLine[0].pt.x, bezierLine[0].pt.y);
+    auto ctl1 = bezierLine[0].ctl.next;
 
-        int length = bezierLine.size();
-        for (int i = 1; i < length; ++i) {
-            auto vtx = bezierLine[i];
-            cairo_curve_to(cr, ctl1.x, ctl1.y, vtx.ctl.prev.x, vtx.ctl.prev.y, vtx.pt.x, vtx.pt.y); 
-            ctl1 = vtx.ctl.next;
-        }
-
-        cairo_stroke(cr);
-
-        if (step) {
-            imshow(WindowName, preview);
-            waitKeyIfNeeded();
-        }
+    int length = bezierLine.size();
+    for (int i = 1; i < length; ++i) {
+        auto vtx = bezierLine[i];
+        cairo_curve_to(cr, ctl1.x, ctl1.y, vtx.ctl.prev.x, vtx.ctl.prev.y, vtx.pt.x, vtx.pt.y); 
+        ctl1 = vtx.ctl.next;
     }
 
+    cairo_stroke(cr);
+
+    if (step) {
+        imshow(WindowName, preview);
+        waitKeyIfNeeded();
+    }
+}
+
+void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
+{
+    for (auto bezierLine : bezierLines) {
+        drawBezierLine(bezierLine, thickness, withPlot);
+    }
+
+    imshow(WindowName, preview);
+}
+
+void View::drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index, double thickness)
+{
+    for (; -1 != index; index = hierarchy[index][0]) {
+        drawBezierLine(contours[index], thickness);
+        int childIndex = hierarchy[index][2];
+        if (-1 != childIndex) {
+            drawBezierLineContours(contours, hierarchy, childIndex, thickness);
+        }
+    }
     imshow(WindowName, preview);
 }
 

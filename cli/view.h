@@ -32,7 +32,9 @@ private:
     void copyFrom(cv::Mat &image);
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);
+    void drawBezierLine(std::vector<core::BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot = false);
     void drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot = false);
+    void drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index, double thickness);
     template <class T>
     void plotPoints(std::vector<T> &points);
     template <class T>
