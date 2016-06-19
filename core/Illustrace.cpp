@@ -105,6 +105,21 @@ void Illustrace::approximateOutline()
     notify(IllustraceEvent::OutlineApproximated);
 }
 
+void Illustrace::buildBezierizedOutline()
+{
+    bezierizedOutlineContours.clear();
+
+    std::vector<BezierVertex<cv::Point2f>> bezierLine;
+
+    for (auto line : approximatedOutlineContours) {
+        bezierSplineBuilder.build(line, bezierLine, true);
+        bezierizedOutlineContours.push_back(bezierLine);
+        bezierLine = std::vector<BezierVertex<cv::Point2f>>();
+    }
+
+    notify(IllustraceEvent::OutlineBezierized);
+}
+
 double Illustrace::epsilon()
 {
     double shortSide = MIN(boundingRect.width, boundingRect.height);

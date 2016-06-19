@@ -118,11 +118,30 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         clearPreview();
         drawLines(sender->outlineContours, sender->thickness, true);
         waitKeyIfNeeded();
+        if (plot) {
+            plotPoints(sender->outlineContours);
+            waitKeyIfNeeded();
+        }
         break;
     case core::IllustraceEvent::OutlineApproximated:
         clearPreview();
         drawLines(sender->approximatedOutlineContours, sender->thickness, true);
         waitKeyIfNeeded();
+        if (plot) {
+            plotPoints(sender->approximatedOutlineContours);
+            waitKeyIfNeeded();
+        }
+        break;
+    case core::IllustraceEvent::OutlineBezierized:
+        clearPreview();
+        drawBezierLines(sender->bezierizedOutlineContours, sender->thickness);
+        waitKeyIfNeeded();
+        if (plot) {
+            clearPreview();
+            drawBezierLines(sender->bezierizedOutlineContours, sender->thickness, true);
+            plotBezierHandle(sender->bezierizedOutlineContours);
+            waitKeyIfNeeded();
+        }
         break;
     }
 }
@@ -230,7 +249,8 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
     imshow(WindowName, preview);
 }
 
-void View::plotPoints(std::vector<cv::Point2f> &points)
+template <class T>
+void View::plotPoints(std::vector<T> &points)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_source_rgb(cr, 1, 0, 0);
@@ -243,7 +263,8 @@ void View::plotPoints(std::vector<cv::Point2f> &points)
     imshow(WindowName, preview);
 }
 
-void View::plotPoints(std::vector<std::vector<cv::Point2f>> &lines)
+template <class T>
+void View::plotPoints(std::vector<std::vector<T>> &lines)
 {
     for (auto line : lines) {
         plotPoints(line);

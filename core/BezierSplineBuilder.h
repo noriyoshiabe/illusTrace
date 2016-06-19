@@ -10,13 +10,15 @@ namespace core {
 
 class BezierSplineBuilder {
 public:
-    BezierSplineBuilder(double smoothing = 1.0, bool closePath = false)
-        : smoothing(smoothing), closePath(closePath) {};
+    BezierSplineBuilder(double smoothing = 1.0) : smoothing(smoothing) {};
 
-    void build(std::vector<cv::Point2f> &line, std::vector<BezierVertex<cv::Point2f>> &results);
+    void build(std::vector<cv::Point2f> &line, std::vector<BezierVertex<cv::Point2f>> &results, bool closePath = false);
     
     double smoothing;
-    bool closePath;
+
+private:
+    void calcControlPoint(BezierVertex<cv::Point2f> &prev, BezierVertex<cv::Point2f> &next,
+            BezierVertex<cv::Point2f> &current);
 };
 
 } // namespace core

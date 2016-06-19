@@ -31,7 +31,7 @@ enum class IllustraceEvent {
     CenterLineBezierized,
     OutlineBuilt,
     OutlineApproximated,
-    // TODO OutlineBezierized,
+    OutlineBezierized,
 };
 
 class Illustrace : public lib::Observable<Illustrace, IllustraceEvent> {
@@ -47,7 +47,7 @@ public:
 
     void buildOutline();
     void approximateOutline();
-    // TODO void buildBezierizedOutline();
+    void buildBezierizedOutline();
 
     double epsilon();
 
@@ -75,6 +75,7 @@ public:
     std::vector<std::vector<cv::Point>> outlineContours;
     std::vector<std::vector<cv::Point2f>> approximatedOutlineContours;
     std::vector<cv::Vec4i> outlineHierarchy;
+    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedOutlineContours;
 
     double detail;
     double thickness;

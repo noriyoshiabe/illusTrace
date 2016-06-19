@@ -159,6 +159,8 @@ bool CLI::execute(const char *inputFilePath)
         illustrace.buildOutline();
         __Trace__
         illustrace.approximateOutline();
+        __Trace__
+        illustrace.buildBezierizedOutline();
     }
     else {
         __Trace__
