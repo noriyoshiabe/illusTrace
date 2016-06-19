@@ -47,7 +47,7 @@ void BezierSplineBuilder::calcControlPoint(BezierVertex<cv::Point2f> &prev, Bezi
     cv::Point v2 = lib::vector(current.pt, next.pt);
 
     double t = -atan2(lib::crossProduct(v1, v2), lib::dotProduct(v1, v2));
-    double f = (M_PI - fabs(t)) / M_PI * 0.8;
+    double f = std::pow((fabs(t) / M_PI) - 0.8, 2.0) + 0.16; // degree of 0 to 0.8, 60 to 0.37, 90 to 0.25, 180 to 0.2
 
     t /= 2.0;
 
