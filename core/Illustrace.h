@@ -60,6 +60,8 @@ public:
     BezierSplineBuilder bezierSplineBuilder;
     GraphBuilder graphBuilder;
 
+    cv::Rect boundingRect;
+
     std::vector<cv::Point2f> centerLineKeyPoints;
     Graph centerLineGraph;
     Graph approximatedCenterLineGraph;

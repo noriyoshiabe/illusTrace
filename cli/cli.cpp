@@ -19,8 +19,9 @@ int CLI::main(int argc, char **argv)
         {"blur", required_argument, NULL, 'B'},
         {"detail", required_argument, NULL, 'd'},
         {"thickness", required_argument, NULL, 't'},
+        {"smoothing", required_argument, NULL, 's'},
         {"wait", required_argument, NULL, 'w'},
-        {"step", no_argument, NULL, 's'},
+        {"step", no_argument, NULL, 'S'},
         {"plot", no_argument, NULL, 'p'},
         {"trace", no_argument, NULL, 'T'},
         {"help", no_argument, NULL, 'h'},
@@ -32,7 +33,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:w:spThv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:w:SpThv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.outline = true;
@@ -56,10 +57,13 @@ int CLI::main(int argc, char **argv)
         case 't':
             cli.illustrace.thickness = std::stod(optarg);
             break;
+        case 's':
+            cli.illustrace.bezierSplineBuilder.smoothing = std::stod(optarg);
+            break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
             break;
-        case 's':
+        case 'S':
             cli.view.step = true;
             break;
         case 'p':
@@ -121,9 +125,10 @@ void CLI::usage()
         "  -B, --blur <size>        Blur size of the preprocess for binarize.\n"
         "  -d, --detail <value>     Adjustment for line detail. 0.0 to 1.0.\n"
         "  -t, --thickness <value>  Adjustment for line thickness. 0 < value.\n"
+        "  -s, --smooth <value>     Adjustment for bezier smoothness. 0 < value.\n"
         "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase.\n"
         "                           0 is infinity and key input is needed for continue.\n"
-        "  -s, --step               Wait with drawing one line.\n"
+        "  -S, --step               Wait with drawing one line.\n"
         "  -p, --plot               Plot points and handles.\n"
         "  -T, --trace              Print trace log.\n"
         "  -h, --help               This help text.\n"

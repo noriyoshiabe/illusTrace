@@ -108,6 +108,8 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
         waitKeyIfNeeded();
         if (plot) {
+            clearPreview();
+            drawBezierLines(sender->bezierizedCenterLines, sender->thickness, true);
             plotBezierHandle(sender->bezierizedCenterLines);
             waitKeyIfNeeded();
         }
@@ -194,11 +196,11 @@ void View::drawLines(std::vector<std::vector<cv::Point2f>> &lines, double thickn
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness)
+void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
-    if (plot) {
+    if (withPlot) {
         cairo_set_source_rgb(cr, 0.5, 0.5, 0.5);
     }
     else {
@@ -272,22 +274,25 @@ void View::plotGraph(core::Graph &graph)
 void View::plotBezierHandle(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines)
 {
     cairo_set_line_width(cr, 1);
-    cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
     for (auto bezierLine : bezierLines) {
         for (auto vertex : bezierLine) {
+            cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
             cairo_move_to(cr, vertex.ctl.prev.x, vertex.ctl.prev.y);
             cairo_line_to(cr, vertex.pt.x, vertex.pt.y);
             cairo_line_to(cr, vertex.ctl.next.x, vertex.ctl.next.y);
             cairo_stroke(cr);
 
-            cairo_arc(cr, vertex.ctl.prev.x, vertex.ctl.prev.y, 1, 0, 2 * M_PI);
+            cairo_arc(cr, vertex.ctl.prev.x, vertex.ctl.prev.y, 2, 0, 2 * M_PI);
             cairo_stroke(cr);
             cairo_arc(cr, vertex.pt.x, vertex.pt.y, 1, 0, 2 * M_PI);
             cairo_stroke(cr);
-            cairo_arc(cr, vertex.ctl.next.x, vertex.ctl.next.y, 1, 0, 2 * M_PI);
+            cairo_arc(cr, vertex.ctl.next.x, vertex.ctl.next.y, 2, 0, 2 * M_PI);
             cairo_stroke(cr);
+            cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
+            cairo_arc(cr, vertex.pt.x, vertex.pt.y, 2, 0, 2 * M_PI);
+            cairo_fill(cr);
         }
     }
 

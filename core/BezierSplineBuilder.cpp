@@ -35,7 +35,7 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, std::vector<Bezi
             cv::Point v2 = lib::vector(current.pt, next.pt);
 
             double t = -atan2(lib::crossProduct(v1, v2), lib::dotProduct(v1, v2));
-            double f = (M_PI - fabs(t)) / M_PI;
+            double f = (M_PI - fabs(t)) / M_PI * 0.8;
 
             t /= 2.0;
 
