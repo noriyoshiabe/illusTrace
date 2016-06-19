@@ -7,7 +7,7 @@ void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point2f> &key
 {
     std::vector<cv::KeyPoint> _keyPoints;
 
-    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.01, 5);
+    cv::Ptr<cv::GFTTDetector> detector = cv::GFTTDetector::create(0, 0.00001, 4);
     detector->detect(image, _keyPoints);
 
     for (auto keyPoint : _keyPoints) {
