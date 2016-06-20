@@ -9,11 +9,11 @@ set(SOURCES
   BezierSplineBuilder.cpp
   FeatureDetector.cpp
   GraphBuilder.cpp
+  Log.cpp
 )
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ../lib
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})
