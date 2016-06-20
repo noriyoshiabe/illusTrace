@@ -32,17 +32,26 @@ struct Path {
 class Document : public Observable<Document> {
 public:
     enum Event : int {
+        Mode,
         Brightness,
+        Blur,
         Detail,
+        Smoothing,
         Thickness,
         Scale,
         Rotation,
         CorrectionLayer,
         ClippingRect,
-        SourceImage,
-        BinarizedImage,
         BoundingRect,
         Paths,
+        SourceImage,
+        BinarizedImage,
+        NegativeImage,
+        CenterLines,
+        ApproximatedCenterLines,
+        OutlineContours,
+        ApproximatedOutlineContours,
+        OutlineHierarchy,
     };
 
     Document();
@@ -50,6 +59,7 @@ public:
 
     LineMode mode();
     double brightness();
+    double blur();
     double detail();
     double smoothing();
     double thickness();
@@ -61,29 +71,37 @@ public:
     std::vector<Path *> *paths();
     cv::Mat &sourceImage();
     cv::Mat &binarizedImage();
-    std::vector<std::vector<cv::Point2f>> &centerLines();
-    std::vector<std::vector<cv::Point>> &outlineContours();
-    std::vector<cv::Vec4i> &outlineHierarchy();
+    cv::Mat &negativeImage();
+    std::vector<std::vector<cv::Point2f>> *centerLines();
+    std::vector<std::vector<cv::Point2f>> *approximatedCenterLines();
+    std::vector<std::vector<cv::Point>> *outlineContours();
+    std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours();
+    std::vector<cv::Vec4i> *outlineHierarchy();
 
     void mode(LineMode mode);
     void brightness(double brightness);
+    void blur(double blur);
     void detail(double detail);
-    void smoothing(double detail);
+    void smoothing(double smoothing);
     void thickness(double thickness);
     void scale(double scale);
     void rotation(double rotation);
     void correctionLayer(cv::Mat &layer);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
-    void path(std::vector<Path *> *path);
+    void paths(std::vector<Path *> *paths);
     void sourceImage(cv::Mat &sourceImage);
     void binarizedImage(cv::Mat &binarizedImage);
-    void centerLines(std::vector<std::vector<cv::Point2f>> &centerLines);
-    void outlineContours(std::vector<std::vector<cv::Point>> &outlineContours);
-    void outlineHierarchy(std::vector<cv::Vec4i> &outlineHierarchy);
+    void negativeImage(cv::Mat &negativeImage);
+    void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
+    void approximatedCenterLines(std::vector<std::vector<cv::Point2f>> *approximatedCenterLines);
+    void outlineContours(std::vector<std::vector<cv::Point>> *outlineContours);
+    void approximatedOutlineContours(std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours);
+    void outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy);
 
 private:
     double _brightness;
+    double _blur;
     double _detail;
     double _smoothing;
     double _thickness;
@@ -96,10 +114,13 @@ private:
 
     cv::Mat _sourceImage;
     cv::Mat _binarizedImage;
+    cv::Mat _negativeImage;
 
-    std::vector<std::vector<cv::Point2f>> _centerLines;
-    std::vector<std::vector<cv::Point>> _outlineContours;
-    std::vector<cv::Vec4i> _outlineHierarchy;
+    std::vector<std::vector<cv::Point2f>> *_centerLines;
+    std::vector<std::vector<cv::Point2f>> *_approximatedCenterLines;
+    std::vector<std::vector<cv::Point>> *_outlineContours;
+    std::vector<std::vector<cv::Point2f>> *_approximatedOutlineContours;
+    std::vector<cv::Vec4i> *_outlineHierarchy;
 };
 
 } // namespace illustrace

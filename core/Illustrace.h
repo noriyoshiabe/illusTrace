@@ -32,60 +32,15 @@ public:
         OutlineBezierized,
     };
 
-    Illustrace();
+    bool traceFromFile(const char *filepath, Document *document);
+    void binarize(Document *document);
+    void buildLines(Document *document);
+    void approximateLines(Document *document);
+    void buildPaths(Document *document);
 
-    ///
- 
-    Document *traceFromFile(const char *filepath, LineMode mode);
-
-    void binarize(const cv::Mat &sourceImage, Document *document);
-    void buildLines(const cv::Mat &binarizedImage, Document *document);
-    void buildPaths(const cv::Mat &binarizedImage, Document *document);
-    
-    ///
-
-    bool loadSourceImage(const char *filepath);
-    void binarize();
-
-    void buildCenterLine();
-    void approximateCenterLine();
-    void buildBezierizedCenterLine();
-
-    void buildOutline();
-    void approximateOutline();
-    void buildBezierizedOutline();
-
-    double epsilon();
-
-    FeatureDetector featureDetector;
-    CenterLineBuilder centerLineBuilder;
-    BezierSplineBuilder bezierSplineBuilder;
-    GraphBuilder graphBuilder;
-
-    cv::Rect boundingRect;
-
-    std::vector<cv::Point2f> centerLineKeyPoints;
-    Graph centerLineGraph;
-    Graph approximatedCenterLineGraph;
-
-    std::vector<std::vector<cv::Point2f>> centerLines;
-    std::vector<std::vector<cv::Point2f>> approximatedCenterLines;
-    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedCenterLines;
-
-    std::vector<std::vector<cv::Point>> outlineContours;
-    std::vector<std::vector<cv::Point2f>> approximatedOutlineContours;
-    std::vector<cv::Vec4i> outlineHierarchy;
-    std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedOutlineContours;
-
-    double brightness;
-    double blur;
-    double detail;
-    double thickness;
-
-    cv::Mat sourceImage;
-    cv::Mat binarizedImage;
-    cv::Mat thinnedImage;
-    cv::Mat negativeImage;
+private:
+    int blur(Document *document);
+    double epsilon(Document *document);
 };
 
 } // namespace illustrace

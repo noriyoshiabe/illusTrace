@@ -6,10 +6,10 @@ namespace illustrace {
 
 class FeatureDetector {
 public:
-    void detect(const cv::Mat &image, std::vector<cv::Point2f> &keyPoints);
+    static void detect(const cv::Mat &image, std::vector<cv::Point2f> &keyPoints);
 
 private:
-    bool correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point2f &result);
+    static bool correctPoint(const cv::Mat &image, const cv::KeyPoint &keyPoint, cv::Point2f &result);
 };
 
 } // namespace illustrace

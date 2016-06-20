@@ -36,11 +36,11 @@ private:
 
 class GraphBuilder {
 public:
-    void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &result);
-    void approximate(const Graph &graph, Graph &resul);
+    static void build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoints, Graph &result);
+    static void approximate(const Graph &graph, Graph &resul);
 
 private:
-    void mergeNearCrossPoint(Graph &result);
+    static void mergeNearCrossPoint(Graph &result);
 };
 
 } // namespace illustrace
