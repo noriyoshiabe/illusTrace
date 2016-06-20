@@ -59,7 +59,7 @@ void Illustrace::buildLines(Document *document)
 
         Graph graph;
         GraphBuilder::build(thinnedImage, keyPoints, graph);
-        notify(this, Illustrace::Event::CenterLineGraphBuilt, &graph);
+        notify(this, Illustrace::Event::CenterLineGraphBuilt, document, &graph);
 
         Graph approximatedGraph;
         GraphBuilder::approximate(graph, approximatedGraph);
@@ -143,8 +143,8 @@ void Illustrace::buildPaths(Document *document)
 
 int Illustrace::blur(Document *document)
 {
-    cv::Rect boundingRect = document->boundingRect();
-    double shortSide = MIN(boundingRect.width, boundingRect.height);
+    cv::Mat sourceImage = document->sourceImage();
+    double shortSide = MIN(sourceImage.cols, sourceImage.rows);
     int blur = shortSide * document->blur();
     return 0 == blur % 2 ? blur + 1 : blur;
 }

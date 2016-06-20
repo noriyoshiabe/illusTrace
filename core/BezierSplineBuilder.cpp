@@ -10,6 +10,7 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, do
 
     if (1 == length) {
         result->vertices.push_back(Vertex(line[0], line[0], line[0]));
+        result->vertices.push_back(Vertex(line[0], line[0], line[0]));
         return;
     }
 

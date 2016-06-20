@@ -38,6 +38,31 @@ public:
     void approximateLines(Document *document);
     void buildPaths(Document *document);
 
+    static inline const char *Event2CString(Event event)
+    {
+#define CASE(event) case event: return #event
+        switch (event) {
+        CASE(SourceImageLoaded);
+        CASE(BrightnessFilterApplied);
+        CASE(BlurFilterApplied);
+        CASE(Binarized);
+        CASE(Thinned);
+        CASE(NegativeFilterApplied);
+        CASE(CenterLineKeyPointDetected);
+        CASE(CenterLineGraphBuilt);
+        CASE(CenterLineGraphApproximated);
+        CASE(CenterLineBuilt);
+        CASE(CenterLineApproximated);
+        CASE(CenterLineBezierized);
+        CASE(OutlineBuilt);
+        CASE(OutlineApproximated);
+        CASE(OutlineBezierized);
+        }
+        return "Unknown repeat state";
+#undef CASE
+    }
+
+
 private:
     int blur(Document *document);
     double epsilon(Document *document);

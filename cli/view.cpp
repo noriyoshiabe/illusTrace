@@ -1,4 +1,5 @@
 #include "View.h"
+#include "Log.h"
 
 #include <iostream>
 
@@ -36,6 +37,12 @@ void View::notify(Illustrace *sender, va_list argList)
 {
     Illustrace::Event event = static_cast<Illustrace::Event>(va_arg(argList, int));
     Document *document = va_arg(argList, Document *);
+
+#ifdef DEBUG
+    if (__IsTrace__) {
+        printf("%s: %s\n", __func__, Illustrace::Event2CString(event));
+    }
+#endif
 
     switch (event) {
     case Illustrace::Event::SourceImageLoaded:
@@ -91,12 +98,15 @@ void View::notify(Illustrace *sender, va_list argList)
         }
         break;
     case Illustrace::Event::CenterLineBuilt:
-        clearPreview();
-        drawLines(*va_arg(argList, std::vector<std::vector<cv::Point2f>> *), 1);
-        waitKeyIfNeeded();
-        if (plot) {
-            plotPoints(*va_arg(argList, std::vector<cv::Point2f> *) );
+        {
+            auto *centerLines = va_arg(argList, std::vector<std::vector<cv::Point2f>> *);
+            clearPreview();
+            drawLines(*centerLines, 1);
             waitKeyIfNeeded();
+            if (plot) {
+                plotPoints(*centerLines);
+                waitKeyIfNeeded();
+            }
         }
         break;
     case Illustrace::Event::CenterLineApproximated:
@@ -253,8 +263,6 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePat
     for (auto *path : *paths) {
         Path *_path = path;
         while (_path) {
-            _path = _path->child;
-
             cairo_new_sub_path(cr);
 
             Vertex vtx = _path->vertices[0];
@@ -265,11 +273,14 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePat
             for (int i = 1; i < length; ++i) {
                 vtx = _path->vertices[i];
                 cairo_curve_to(cr, c1.x, c1.y, vtx.c.prev.x, vtx.c.prev.y, vtx.p.x, vtx.p.y); 
+                c1 = vtx.c.next;
             }
 
             if (_path->closed) {
                 cairo_close_path(cr);
             }
+
+            _path = _path->child;
         }
 
         if (path->child) {
@@ -340,8 +351,6 @@ void View::plotPathHandle(std::vector<Path *> *paths)
         Path *_path = path;
 
         while (_path) {
-            _path = _path->child;
-
             for (Vertex vtx : _path->vertices) {
                 cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
                 cairo_move_to(cr, vtx.c.prev.x, vtx.c.prev.y);
@@ -359,6 +368,8 @@ void View::plotPathHandle(std::vector<Path *> *paths)
                 cairo_arc(cr, vtx.p.x, vtx.p.y, 2, 0, 2 * M_PI);
                 cairo_fill(cr);
             }
+
+            _path = _path->child;
         }
     }
 
