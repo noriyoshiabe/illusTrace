@@ -34,6 +34,16 @@ class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     Illustrace();
 
+    ///
+ 
+    Document *traceFromFile(const char *filepath, LineMode mode);
+
+    void binarize(const cv::Mat &sourceImage, Document *document);
+    void buildLines(const cv::Mat &binarizedImage, Document *document);
+    void buildPaths(const cv::Mat &binarizedImage, Document *document);
+    
+    ///
+
     bool loadSourceImage(const char *filepath);
     void binarize();
 

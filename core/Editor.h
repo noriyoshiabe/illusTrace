@@ -21,6 +21,8 @@ public:
 
     void mode(LineMode mode);
     void brightness(double brightness);
+    void detail(double detail);
+    void smoothing(double smoothing);
     void thickness(double thickness);
     void scale(double scale);
     void rotation(double rotation);
