@@ -6,6 +6,7 @@
 #include "BezierSplineBuilder.h"
 #include "FeatureDetector.h"
 #include "GraphBuilder.h"
+#include "Document.h"
 
 #include "opencv2/imgproc.hpp"
 
