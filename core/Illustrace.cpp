@@ -128,16 +128,40 @@ void Illustrace::buildPaths(Document *document)
         }
 
         notify(this, Illustrace::Event::CenterLineBezierized, document, paths);
+        document->paths(paths);
     }
     else {
-        auto *paths = new std::vector<Path *>();
+        std::vector<Path *> paths;
         for (auto line : *document->approximatedOutlineContours()) {
             auto *path = new Path();
             BezierSplineBuilder::build(line, path, document->smoothing(), true);
-            paths->push_back(path);
+            paths.push_back(path);
         }
 
-        notify(this, Illustrace::Event::OutlineBezierized, document, paths);
+        auto &outlineHierarchy = *document->outlineHierarchy();
+        auto *hierarchyPaths = new std::vector<Path *>();
+        buildOutlinePathsHierarchy(paths, nullptr, outlineHierarchy, 0, *hierarchyPaths);
+
+        notify(this, Illustrace::Event::OutlineBezierized, document, hierarchyPaths);
+        document->paths(hierarchyPaths);
+    }
+}
+
+void Illustrace::buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &outlineHierarchy, int index, std::vector<Path *> &results)
+{
+    for (; -1 != index; index = outlineHierarchy[index][0]) {
+        Path *path = paths[index];
+        if (parent) {
+            parent->children.push_back(path);
+        }
+        else {
+            results.push_back(path);
+        }
+
+        int childIndex = outlineHierarchy[index][2];
+        if (-1 != childIndex) {
+            buildOutlinePathsHierarchy(paths, path, outlineHierarchy, childIndex, results);
+        }
     }
 }
 

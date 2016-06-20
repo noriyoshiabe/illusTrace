@@ -30,9 +30,9 @@ struct Vertex {
 struct Path {
     std::vector<Vertex> vertices;
     bool closed;
-    Path *child;
+    std::vector<Path *> children;
 
-    Path() : closed(false), child(nullptr) {};
+    Path() : closed(false) {};
 };
 
 class Document : public Observable<Document> {

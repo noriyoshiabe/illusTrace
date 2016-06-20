@@ -64,6 +64,7 @@ public:
 
 
 private:
+    void buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &outlineHierarchy, int index, std::vector<Path *> &results);
     int blur(Document *document);
     double epsilon(Document *document);
 };

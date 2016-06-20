@@ -31,13 +31,15 @@ private:
     void copyFrom(cv::Mat &image);
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);
-    void drawPaths(std::vector<Path *> *paths, double thickness, bool closePath = false);
+    void drawPaths(std::vector<Path *> *paths, double thickness);
+    void drawPath(Path *path, double thickness);
     template <class T>
     void plotPoints(std::vector<T> &points);
     template <class T>
     void plotPoints(std::vector<std::vector<T>> &lines);
     void plotGraph(Graph &graph);
-    void plotPathHandle(std::vector<Path *> *paths);
+    void plotPathsHandle(std::vector<Path *> *paths);
+    void plotPathHandle(Path *path);
 };
 
 } // namespace illustrace

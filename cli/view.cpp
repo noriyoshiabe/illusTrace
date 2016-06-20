@@ -130,7 +130,7 @@ void View::notify(Illustrace *sender, va_list argList)
             if (plot) {
                 clearPreview();
                 drawPaths(paths, 1);
-                plotPathHandle(paths);
+                plotPathsHandle(paths);
                 waitKeyIfNeeded();
             }
         }
@@ -168,7 +168,7 @@ void View::notify(Illustrace *sender, va_list argList)
             if (plot) {
                 clearPreview();
                 drawPaths(paths, 1);
-                plotPathHandle(paths);
+                plotPathsHandle(paths);
                 waitKeyIfNeeded();
             }
         }
@@ -246,7 +246,7 @@ void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool 
     imshow(WindowName, preview);
 }
 
-void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePath)
+void View::drawPaths(std::vector<Path *> *paths, double thickness)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
@@ -261,29 +261,9 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePat
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
 
     for (auto *path : *paths) {
-        Path *_path = path;
-        while (_path) {
-            cairo_new_sub_path(cr);
+        drawPath(path, thickness);
 
-            Vertex vtx = _path->vertices[0];
-            cairo_move_to(cr, vtx.p.x, vtx.p.y);
-            auto c1 = vtx.c.next;
-            
-            int length = _path->vertices.size();
-            for (int i = 1; i < length; ++i) {
-                vtx = _path->vertices[i];
-                cairo_curve_to(cr, c1.x, c1.y, vtx.c.prev.x, vtx.c.prev.y, vtx.p.x, vtx.p.y); 
-                c1 = vtx.c.next;
-            }
-
-            if (_path->closed) {
-                cairo_close_path(cr);
-            }
-
-            _path = _path->child;
-        }
-
-        if (path->child) {
+        if (path->closed) {
             cairo_fill_preserve(cr);
         }
 
@@ -296,6 +276,30 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePat
     }
 
     imshow(WindowName, preview);
+}
+
+void View::drawPath(Path *path, double thickness)
+{
+    cairo_new_sub_path(cr);
+
+    Vertex vtx = path->vertices[0];
+    cairo_move_to(cr, vtx.p.x, vtx.p.y);
+    auto c1 = vtx.c.next;
+
+    int length = path->vertices.size();
+    for (int i = 1; i < length; ++i) {
+        vtx = path->vertices[i];
+        cairo_curve_to(cr, c1.x, c1.y, vtx.c.prev.x, vtx.c.prev.y, vtx.p.x, vtx.p.y); 
+        c1 = vtx.c.next;
+    }
+
+    if (path->closed) {
+        cairo_close_path(cr);
+    }
+
+    for (Path *child : path->children) {
+        drawPath(child, thickness);
+    }
 }
 
 template <class T>
@@ -342,36 +346,39 @@ void View::plotGraph(Graph &graph)
     imshow(WindowName, preview);
 }
 
-void View::plotPathHandle(std::vector<Path *> *paths)
+void View::plotPathsHandle(std::vector<Path *> *paths)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
     for (auto *path : *paths) {
-        Path *_path = path;
-
-        while (_path) {
-            for (Vertex vtx : _path->vertices) {
-                cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
-                cairo_move_to(cr, vtx.c.prev.x, vtx.c.prev.y);
-                cairo_line_to(cr, vtx.p.x, vtx.p.y);
-                cairo_line_to(cr, vtx.c.next.x, vtx.c.next.y);
-                cairo_stroke(cr);
-
-                cairo_arc(cr, vtx.c.prev.x, vtx.c.prev.y, 2, 0, 2 * M_PI);
-                cairo_stroke(cr);
-                cairo_arc(cr, vtx.p.x, vtx.p.y, 1, 0, 2 * M_PI);
-                cairo_stroke(cr);
-                cairo_arc(cr, vtx.c.next.x, vtx.c.next.y, 2, 0, 2 * M_PI);
-                cairo_stroke(cr);
-                cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
-                cairo_arc(cr, vtx.p.x, vtx.p.y, 2, 0, 2 * M_PI);
-                cairo_fill(cr);
-            }
-
-            _path = _path->child;
-        }
+        plotPathHandle(path);
     }
 
     imshow(WindowName, preview);
+}
+
+void View::plotPathHandle(Path *path)
+{
+    for (Vertex vtx : path->vertices) {
+        cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
+        cairo_move_to(cr, vtx.c.prev.x, vtx.c.prev.y);
+        cairo_line_to(cr, vtx.p.x, vtx.p.y);
+        cairo_line_to(cr, vtx.c.next.x, vtx.c.next.y);
+        cairo_stroke(cr);
+
+        cairo_arc(cr, vtx.c.prev.x, vtx.c.prev.y, 2, 0, 2 * M_PI);
+        cairo_stroke(cr);
+        cairo_arc(cr, vtx.p.x, vtx.p.y, 1, 0, 2 * M_PI);
+        cairo_stroke(cr);
+        cairo_arc(cr, vtx.c.next.x, vtx.c.next.y, 2, 0, 2 * M_PI);
+        cairo_stroke(cr);
+        cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
+        cairo_arc(cr, vtx.p.x, vtx.p.y, 2, 0, 2 * M_PI);
+        cairo_fill(cr);
+    }
+
+    for (auto *child : path->children) {
+        plotPathHandle(child);
+    }
 }
