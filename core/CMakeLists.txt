@@ -4,6 +4,7 @@ project(illustrace-core)
 
 set(SOURCES
   Illustrace.cpp
+  Filter.cpp
   CenterLineBuilder.cpp
   BezierSplineBuilder.cpp
   FeatureDetector.cpp
@@ -12,7 +13,6 @@ set(SOURCES
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ../filter
   ../lib
 )
 

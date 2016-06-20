@@ -1,11 +1,37 @@
-#include "ThinningFilter.h" 
-
-#include <cstring>
+#include "Filter.h" 
 
 using namespace illustrace;
-using namespace filter;
+using namespace core;
 
-void ThinningFilter::apply(cv::Mat &image)
+void Filter::brightness(cv::Mat &image, double brightness, double contrast)
+{
+    brightness *= 255.0;
+
+    int length = image.rows * image.cols;
+    for (int i = 0; i < length; ++i) {
+        image.data[i] = cv::saturate_cast<uchar>(contrast * image.data[i] + brightness);
+    }
+}
+
+void Filter::blur(cv::Mat &image, int blur)
+{
+    cv::GaussianBlur(image, image, cv::Size(blur, blur), 0, 0);
+}
+
+void Filter::threshold(cv::Mat &image)
+{
+    cv::threshold(image, image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+}
+
+void Filter::negative(cv::Mat &image)
+{
+    int length = image.rows * image.cols;
+    for (int i = 0; i < length; ++i) {
+        image.data[i] = 255 - image.data[i];
+    }
+}
+
+void Filter::thinning(cv::Mat &image)
 {
     // Based on `A note on the Nagendraprasad-Wang-Gupta thinning algorithm`
     // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.2.6996&rep=rep1&type=pdf

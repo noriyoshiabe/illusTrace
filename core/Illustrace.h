@@ -1,11 +1,7 @@
 #pragma once
 
 #include "Observable.h"
-#include "BrightnessFilter.h"
-#include "BlurFilter.h"
-#include "BinaryThresholdFilter.h"
-#include "ThinningFilter.h"
-#include "NegativeFilter.h"
+#include "Filter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
 #include "FeatureDetector.h"
@@ -36,7 +32,7 @@ enum class IllustraceEvent {
 
 class Illustrace : public lib::Observable<Illustrace, IllustraceEvent> {
 public:
-    Illustrace() : detail(1.0), thickness(1) {};
+    Illustrace();
 
     bool loadSourceImage(const char *filepath);
     void binarize();
@@ -50,12 +46,6 @@ public:
     void buildBezierizedOutline();
 
     double epsilon();
-
-    filter::BrightnessFilter brightnessFilter;
-    filter::BlurFilter blurFilter;
-    filter::BinaryThresholdFilter binaryThresholdFilter;
-    filter::ThinningFilter thinningFilter;
-    filter::NegativeFilter negativeFilter;
 
     FeatureDetector featureDetector;
     CenterLineBuilder centerLineBuilder;
@@ -77,6 +67,8 @@ public:
     std::vector<cv::Vec4i> outlineHierarchy;
     std::vector<std::vector<BezierVertex<cv::Point2f>>> bezierizedOutlineContours;
 
+    double brightness;
+    double blur;
     double detail;
     double thickness;
 

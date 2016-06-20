@@ -3,6 +3,10 @@
 using namespace illustrace;
 using namespace core;
 
+Illustrace::Illustrace() : brightness(0.0), blur(5), detail(1.0), thickness(1.0)
+{
+}
+
 bool Illustrace::loadSourceImage(const char *filepath)
 {
     sourceImage = imread(filepath, cv::IMREAD_GRAYSCALE);
@@ -17,17 +21,17 @@ bool Illustrace::loadSourceImage(const char *filepath)
 void Illustrace::binarize()
 {
     binarizedImage = sourceImage.clone();
-    brightnessFilter.apply(binarizedImage);
+    Filter::brightness(binarizedImage, brightness);
     notify(IllustraceEvent::BrightnessFilterApplied);
 
-    blurFilter.apply(binarizedImage);
+    Filter::blur(binarizedImage, blur);
     notify(IllustraceEvent::BlurFilterApplied);
 
-    binaryThresholdFilter.apply(binarizedImage);
+    Filter::threshold(binarizedImage);
     notify(IllustraceEvent::Binarized);
 
     negativeImage = binarizedImage.clone();
-    negativeFilter.apply(negativeImage);
+    Filter::negative(negativeImage);
     notify(IllustraceEvent::NegativeFilterApplied);
 
     boundingRect = cv::boundingRect(negativeImage);
@@ -36,7 +40,7 @@ void Illustrace::binarize()
 void Illustrace::buildCenterLine()
 {
     thinnedImage = binarizedImage.clone();
-    thinningFilter.apply(thinnedImage);
+    Filter::thinning(thinnedImage);
     notify(IllustraceEvent::Thinned);
 
     centerLineKeyPoints.clear();

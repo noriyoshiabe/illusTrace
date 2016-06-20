@@ -39,7 +39,7 @@ int CLI::main(int argc, char **argv)
             cli.outline = true;
             break;
         case 'b':
-            cli.illustrace.brightnessFilter.brightness = std::stod(optarg);
+            cli.illustrace.brightness = std::stod(optarg);
             break;
         case 'B':
             {
@@ -48,7 +48,7 @@ int CLI::main(int argc, char **argv)
                     std::cout << "-B <blur> must be sined odd number." << std::endl;
                     return EXIT_SUCCESS;
                 }
-                cli.illustrace.blurFilter.blur = blur;
+                cli.illustrace.blur = blur;
             }
             break;
         case 'd':
