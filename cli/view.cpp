@@ -32,10 +32,12 @@ void View::waitKeyIfNeeded()
     }
 }
 
-void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
+void View::notify(Illustrace *sender, va_list argList)
 {
+    Illustrace::Event event = static_cast<Illustrace::Event>(va_arg(argList, int));
+
     switch (event) {
-    case IllustraceEvent::SourceImageLoaded:
+    case Illustrace::Event::SourceImageLoaded:
         preview = cv::Mat(sender->sourceImage.rows, sender->sourceImage.cols, CV_8UC4);
         surface = cairo_image_surface_create_for_data(preview.data, CAIRO_FORMAT_ARGB32,
                 preview.cols, preview.rows, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, preview.cols));
@@ -43,48 +45,48 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
         imshow(WindowName, sender->sourceImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::BrightnessFilterApplied:
+    case Illustrace::Event::BrightnessFilterApplied:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::BlurFilterApplied:
+    case Illustrace::Event::BlurFilterApplied:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::Binarized:
+    case Illustrace::Event::Binarized:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::Thinned:
+    case Illustrace::Event::Thinned:
         imshow(WindowName, sender->thinnedImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::NegativeFilterApplied:
+    case Illustrace::Event::NegativeFilterApplied:
         imshow(WindowName, sender->negativeImage);
         waitKeyIfNeeded();
         break;
-    case IllustraceEvent::CenterLineKeyPointDetected:
+    case Illustrace::Event::CenterLineKeyPointDetected:
         if (plot) {
             copyFrom(sender->thinnedImage);
             plotPoints(sender->centerLineKeyPoints);
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::CenterLineGraphBuilt:
+    case Illustrace::Event::CenterLineGraphBuilt:
         if (plot) {
             clearPreview();
             plotGraph(sender->centerLineGraph);
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::CenterLineGraphApproximated:
+    case Illustrace::Event::CenterLineGraphApproximated:
         if (plot) {
             clearPreview();
             plotGraph(sender->approximatedCenterLineGraph);
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::CenterLineBuilt:
+    case Illustrace::Event::CenterLineBuilt:
         clearPreview();
         drawLines(sender->centerLines, sender->thickness);
         waitKeyIfNeeded();
@@ -93,7 +95,7 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::CenterLineApproximated:
+    case Illustrace::Event::CenterLineApproximated:
         clearPreview();
         drawLines(sender->approximatedCenterLines, sender->thickness);
         waitKeyIfNeeded();
@@ -102,7 +104,7 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::CenterLineBezierized:
+    case Illustrace::Event::CenterLineBezierized:
         clearPreview();
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
         waitKeyIfNeeded();
@@ -113,7 +115,7 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::OutlineBuilt:
+    case Illustrace::Event::OutlineBuilt:
         clearPreview();
         drawLines(sender->outlineContours, sender->thickness, true);
         waitKeyIfNeeded();
@@ -122,7 +124,7 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::OutlineApproximated:
+    case Illustrace::Event::OutlineApproximated:
         clearPreview();
         drawLines(sender->approximatedOutlineContours, sender->thickness, true);
         waitKeyIfNeeded();
@@ -131,7 +133,7 @@ void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
             waitKeyIfNeeded();
         }
         break;
-    case IllustraceEvent::OutlineBezierized:
+    case Illustrace::Event::OutlineBezierized:
         clearPreview();
         drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, sender->thickness);
         waitKeyIfNeeded();

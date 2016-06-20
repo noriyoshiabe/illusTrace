@@ -8,7 +8,7 @@
 
 namespace illustrace {
 
-class View : public Observer<Illustrace, IllustraceEvent> {
+class View : public Observer<Illustrace> {
 public:
     View();
     ~View();
@@ -26,7 +26,7 @@ private:
     cairo_t *cr;
     int hierarchyDepth;
 
-    void notify(Illustrace *sender, IllustraceEvent event, va_list argList);
+    void notify(Illustrace *sender, va_list argList);
 
     void clearPreview();
     void copyFrom(cv::Mat &image);

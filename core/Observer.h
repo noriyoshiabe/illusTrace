@@ -4,12 +4,12 @@
 
 namespace illustrace {
 
-template <class C, typename E>
+template <class C>
 class Observer {
 public:
     Observer() {};
     virtual ~Observer() {};
-    virtual void notify(C *sender, E event, va_list argList) = 0;
+    virtual void notify(C *sender, va_list argList) = 0;
 };
 
 } // namespace illustrace

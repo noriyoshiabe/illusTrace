@@ -12,26 +12,26 @@
 
 namespace illustrace {
 
-enum class IllustraceEvent {
-    SourceImageLoaded,
-    BrightnessFilterApplied,
-    BlurFilterApplied,
-    Binarized,
-    Thinned,
-    NegativeFilterApplied,
-    CenterLineKeyPointDetected,
-    CenterLineGraphBuilt,
-    CenterLineGraphApproximated,
-    CenterLineBuilt,
-    CenterLineApproximated,
-    CenterLineBezierized,
-    OutlineBuilt,
-    OutlineApproximated,
-    OutlineBezierized,
-};
-
-class Illustrace : public Observable<Illustrace, IllustraceEvent> {
+class Illustrace : public Observable<Illustrace> {
 public:
+    enum Event : int {
+        SourceImageLoaded,
+        BrightnessFilterApplied,
+        BlurFilterApplied,
+        Binarized,
+        Thinned,
+        NegativeFilterApplied,
+        CenterLineKeyPointDetected,
+        CenterLineGraphBuilt,
+        CenterLineGraphApproximated,
+        CenterLineBuilt,
+        CenterLineApproximated,
+        CenterLineBezierized,
+        OutlineBuilt,
+        OutlineApproximated,
+        OutlineBezierized,
+    };
+
     Illustrace();
 
     ///

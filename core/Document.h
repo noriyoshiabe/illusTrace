@@ -29,22 +29,22 @@ struct Path {
     Path *child;
 };
 
-enum class DocumentEvent {
-    Brightness,
-    Detail,
-    Thickness,
-    Scale,
-    Rotation,
-    CorrectionLayer,
-    ClippingRect,
-    SourceImage,
-    BinarizedImage,
-    BoundingRect,
-    Paths,
-};
-
-class Document : public Observable<Document, DocumentEvent> {
+class Document : public Observable<Document> {
 public:
+    enum Event : int {
+        Brightness,
+        Detail,
+        Thickness,
+        Scale,
+        Rotation,
+        CorrectionLayer,
+        ClippingRect,
+        SourceImage,
+        BinarizedImage,
+        BoundingRect,
+        Paths,
+    };
+
     Document();
     ~Document();
 

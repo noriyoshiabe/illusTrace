@@ -5,31 +5,31 @@
 
 namespace illustrace {
 
-template <class C, typename E>
+template <class C>
 class Observable {
 public:
-    void addObserver(Observer<C, E> *observer) {
+    void addObserver(Observer<C> *observer) {
         observers.push_back(observer);
     }
 
-    void removeObserver(Observer<C, E> *observer) {
+    void removeObserver(Observer<C> *observer) {
         auto it = std::find(observers.begin(), observers.end(), observer);
         if (it != observers.end()) {
             observers.erase(it);
         }
     }
 
-    void notify(E event, ...) {
+    void notify(C *sender, ...) {
         va_list argList;
         for (auto *observer : observers) {
-            va_start(argList, event);
-            observer->notify(static_cast<C *>(this), event, argList);
+            va_start(argList, sender);
+            observer->notify(sender, argList);
             va_end(argList);
         }
     }
 
 private:
-    std::vector<Observer<C, E> *> observers;
+    std::vector<Observer<C> *> observers;
 };
 
 } // namespace illustrace

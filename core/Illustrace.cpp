@@ -13,7 +13,7 @@ bool Illustrace::loadSourceImage(const char *filepath)
         return false;
     }
 
-    notify(IllustraceEvent::SourceImageLoaded);
+    notify(this, Illustrace::Event::SourceImageLoaded);
     return true;
 }
 
@@ -21,17 +21,17 @@ void Illustrace::binarize()
 {
     binarizedImage = sourceImage.clone();
     Filter::brightness(binarizedImage, brightness);
-    notify(IllustraceEvent::BrightnessFilterApplied);
+    notify(this, Illustrace::Event::BrightnessFilterApplied);
 
     Filter::blur(binarizedImage, blur);
-    notify(IllustraceEvent::BlurFilterApplied);
+    notify(this, Illustrace::Event::BlurFilterApplied);
 
     Filter::threshold(binarizedImage);
-    notify(IllustraceEvent::Binarized);
+    notify(this, Illustrace::Event::Binarized);
 
     negativeImage = binarizedImage.clone();
     Filter::negative(negativeImage);
-    notify(IllustraceEvent::NegativeFilterApplied);
+    notify(this, Illustrace::Event::NegativeFilterApplied);
 
     boundingRect = cv::boundingRect(negativeImage);
 }
@@ -40,21 +40,21 @@ void Illustrace::buildCenterLine()
 {
     thinnedImage = binarizedImage.clone();
     Filter::thinning(thinnedImage);
-    notify(IllustraceEvent::Thinned);
+    notify(this, Illustrace::Event::Thinned);
 
     centerLineKeyPoints.clear();
     featureDetector.detect(thinnedImage, centerLineKeyPoints);
-    notify(IllustraceEvent::CenterLineKeyPointDetected);
+    notify(this, Illustrace::Event::CenterLineKeyPointDetected);
 
     graphBuilder.build(thinnedImage, centerLineKeyPoints, centerLineGraph);
-    notify(IllustraceEvent::CenterLineGraphBuilt);
+    notify(this, Illustrace::Event::CenterLineGraphBuilt);
 
     graphBuilder.approximate(centerLineGraph, approximatedCenterLineGraph);
-    notify(IllustraceEvent::CenterLineGraphApproximated);
+    notify(this, Illustrace::Event::CenterLineGraphApproximated);
 
     centerLines.clear();
     centerLineBuilder.build(approximatedCenterLineGraph, centerLines);
-    notify(IllustraceEvent::CenterLineBuilt);
+    notify(this, Illustrace::Event::CenterLineBuilt);
 }
 
 void Illustrace::approximateCenterLine()
@@ -71,7 +71,7 @@ void Illustrace::approximateCenterLine()
         approximatedCenterLines.push_back(approx);
     }
 
-    notify(IllustraceEvent::CenterLineApproximated);
+    notify(this, Illustrace::Event::CenterLineApproximated);
 }
 
 void Illustrace::buildBezierizedCenterLine()
@@ -86,13 +86,13 @@ void Illustrace::buildBezierizedCenterLine()
         bezierLine = std::vector<BezierVertex<cv::Point2f>>();
     }
 
-    notify(IllustraceEvent::CenterLineBezierized);
+    notify(this, Illustrace::Event::CenterLineBezierized);
 }
 
 void Illustrace::buildOutline()
 {
     cv::findContours(negativeImage, outlineContours, outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-    notify(IllustraceEvent::OutlineBuilt);
+    notify(this, Illustrace::Event::OutlineBuilt);
 }
 
 void Illustrace::approximateOutline()
@@ -105,7 +105,7 @@ void Illustrace::approximateOutline()
         approximatedOutlineContours.push_back(approx);
     }
 
-    notify(IllustraceEvent::OutlineApproximated);
+    notify(this, Illustrace::Event::OutlineApproximated);
 }
 
 void Illustrace::buildBezierizedOutline()
@@ -120,7 +120,7 @@ void Illustrace::buildBezierizedOutline()
         bezierLine = std::vector<BezierVertex<cv::Point2f>>();
     }
 
-    notify(IllustraceEvent::OutlineBezierized);
+    notify(this, Illustrace::Event::OutlineBezierized);
 }
 
 double Illustrace::epsilon()
