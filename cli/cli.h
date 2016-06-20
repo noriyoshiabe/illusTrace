@@ -12,12 +12,14 @@ public:
     static const std::string VERSION;
 
     CLI();
+    ~CLI();
 
     void help();
     void usage();
     void version();
     bool execute(const char *inputFilePath);
 
+    Document *document;
     View view;
     Illustrace illustrace;
     bool outline;

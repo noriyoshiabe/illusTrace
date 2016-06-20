@@ -35,29 +35,22 @@ int CLI::main(int argc, char **argv)
     while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:w:SpThv", _options, NULL))) {
         switch (opt) {
         case 'O':
-            cli.outline = true;
+            cli.document->mode(LineMode::Outline);
             break;
         case 'b':
-            cli.illustrace.brightness = std::stod(optarg);
+            cli.document->brightness(std::stod(optarg));
             break;
         case 'B':
-            {
-                int blur = std::stoi(optarg);
-                if (0 > blur || 0 == blur % 2) {
-                    std::cout << "-B <blur> must be sined odd number." << std::endl;
-                    return EXIT_SUCCESS;
-                }
-                cli.illustrace.blur = blur;
-            }
+            cli.document->blur(std::stod(optarg));
             break;
         case 'd':
-            cli.illustrace.detail = std::stod(optarg);
+            cli.document->detail(std::stod(optarg));
             break;
         case 't':
-            cli.illustrace.thickness = std::stod(optarg);
+            cli.document->thickness(std::stod(optarg));
             break;
         case 's':
-            cli.illustrace.bezierSplineBuilder.smoothing = std::stod(optarg);
+            cli.document->smoothing(std::stod(optarg));
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
@@ -99,6 +92,12 @@ int CLI::main(int argc, char **argv)
 CLI::CLI()
 {
     illustrace.addObserver(&view);
+    document = new Document();
+}
+
+CLI::~CLI()
+{
+    delete document;
 }
 
 void CLI::help()
@@ -121,7 +120,7 @@ void CLI::usage()
         "Options:\n"
         "  -O, --outline            Outline trace mode. Default is center line mode.\n"
         "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0.\n"
-        "  -B, --blur <size>        Blur size of the preprocess for binarize.\n"
+        "  -B, --blur <value>       Blur size (%% of short side) of the preprocess for binarize. 0.0 to 1.0\n"
         "  -d, --detail <value>     Adjustment for line detail. 0.0 to 1.0.\n"
         "  -t, --thickness <value>  Adjustment for line thickness. 0 < value.\n"
         "  -s, --smooth <value>     Adjustment for bezier smoothness. 0 < value.\n"
@@ -144,35 +143,13 @@ void CLI::version()
 
 bool CLI::execute(const char *inputFilePath)
 {
-    bool ret = illustrace.loadSourceImage(inputFilePath);
+    bool ret = illustrace.traceFromFile(inputFilePath, document);
     if (!ret) {
         std::cout << "Could not load source image." << std::endl;
-        goto ERROR;
-    }
-
-    __Trace__
-    illustrace.binarize();
-
-    if (outline) {
-        __Trace__
-        illustrace.buildOutline();
-        __Trace__
-        illustrace.approximateOutline();
-        __Trace__
-        illustrace.buildBezierizedOutline();
     }
     else {
-        __Trace__
-        illustrace.buildCenterLine();
-        __Trace__
-        illustrace.approximateCenterLine();
-        __Trace__
-        illustrace.buildBezierizedCenterLine();
+        view.waitKey();
     }
 
-    __Trace__
-    view.waitKey();
-
-ERROR:
-    return ret;
+    return ret ? EXIT_SUCCESS : EXIT_FAILURE;
 }

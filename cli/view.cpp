@@ -6,7 +6,7 @@ using namespace illustrace;
 
 static const char WindowName[] = "illustrace CLI";
 
-View::View() : wait(-1), step(false), plot(false), hierarchyDepth(0)
+View::View() : wait(-1), step(false), plot(false)
 {
     cv::namedWindow(WindowName, cv::WINDOW_AUTOSIZE);
 }
@@ -35,113 +35,132 @@ void View::waitKeyIfNeeded()
 void View::notify(Illustrace *sender, va_list argList)
 {
     Illustrace::Event event = static_cast<Illustrace::Event>(va_arg(argList, int));
+    Document *document = va_arg(argList, Document *);
 
     switch (event) {
     case Illustrace::Event::SourceImageLoaded:
-        preview = cv::Mat(sender->sourceImage.rows, sender->sourceImage.cols, CV_8UC4);
-        surface = cairo_image_surface_create_for_data(preview.data, CAIRO_FORMAT_ARGB32,
-                preview.cols, preview.rows, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, preview.cols));
-        cr = cairo_create(surface);
-        imshow(WindowName, sender->sourceImage);
-        waitKeyIfNeeded();
+        {
+            cv::Mat *sourceImage = va_arg(argList, cv::Mat *);
+            preview = cv::Mat(sourceImage->rows, sourceImage->cols, CV_8UC4);
+            surface = cairo_image_surface_create_for_data(preview.data, CAIRO_FORMAT_ARGB32,
+                    preview.cols, preview.rows, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, preview.cols));
+            cr = cairo_create(surface);
+            imshow(WindowName, *sourceImage);
+            waitKeyIfNeeded();
+        }
         break;
     case Illustrace::Event::BrightnessFilterApplied:
-        imshow(WindowName, sender->binarizedImage);
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
     case Illustrace::Event::BlurFilterApplied:
-        imshow(WindowName, sender->binarizedImage);
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
     case Illustrace::Event::Binarized:
-        imshow(WindowName, sender->binarizedImage);
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
     case Illustrace::Event::Thinned:
-        imshow(WindowName, sender->thinnedImage);
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
     case Illustrace::Event::NegativeFilterApplied:
-        imshow(WindowName, sender->negativeImage);
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
     case Illustrace::Event::CenterLineKeyPointDetected:
         if (plot) {
-            copyFrom(sender->thinnedImage);
-            plotPoints(sender->centerLineKeyPoints);
+            copyFrom(*va_arg(argList, cv::Mat *));
+            plotPoints(*va_arg(argList, std::vector<cv::Point2f> *));
             waitKeyIfNeeded();
         }
         break;
     case Illustrace::Event::CenterLineGraphBuilt:
         if (plot) {
             clearPreview();
-            plotGraph(sender->centerLineGraph);
+            plotGraph(*va_arg(argList, Graph *));
             waitKeyIfNeeded();
         }
         break;
     case Illustrace::Event::CenterLineGraphApproximated:
         if (plot) {
             clearPreview();
-            plotGraph(sender->approximatedCenterLineGraph);
+            plotGraph(*va_arg(argList, Graph *));
             waitKeyIfNeeded();
         }
         break;
     case Illustrace::Event::CenterLineBuilt:
         clearPreview();
-        drawLines(sender->centerLines, sender->thickness);
+        drawLines(*va_arg(argList, std::vector<std::vector<cv::Point2f>> *), 1);
         waitKeyIfNeeded();
         if (plot) {
-            plotPoints(sender->centerLines);
+            plotPoints(*va_arg(argList, std::vector<cv::Point2f> *) );
             waitKeyIfNeeded();
         }
         break;
     case Illustrace::Event::CenterLineApproximated:
-        clearPreview();
-        drawLines(sender->approximatedCenterLines, sender->thickness);
-        waitKeyIfNeeded();
-        if (plot) {
-            plotPoints(sender->approximatedCenterLines);
+        {
+            auto *approximatedCenterLines = va_arg(argList, std::vector<std::vector<cv::Point2f>> *);
+            clearPreview();
+            drawLines(*approximatedCenterLines, 1);
             waitKeyIfNeeded();
+            if (plot) {
+                plotPoints(*approximatedCenterLines);
+                waitKeyIfNeeded();
+            }
         }
         break;
     case Illustrace::Event::CenterLineBezierized:
-        clearPreview();
-        drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
-        waitKeyIfNeeded();
-        if (plot) {
+        {
+            auto *paths = va_arg(argList, std::vector<Path *> *);
             clearPreview();
-            drawBezierLines(sender->bezierizedCenterLines, sender->thickness, true);
-            plotBezierHandle(sender->bezierizedCenterLines);
+            drawPaths(paths, document->thickness());
             waitKeyIfNeeded();
+            if (plot) {
+                clearPreview();
+                drawPaths(paths, 1);
+                plotPathHandle(paths);
+                waitKeyIfNeeded();
+            }
         }
         break;
     case Illustrace::Event::OutlineBuilt:
-        clearPreview();
-        drawLines(sender->outlineContours, sender->thickness, true);
-        waitKeyIfNeeded();
-        if (plot) {
-            plotPoints(sender->outlineContours);
+        {
+            auto *outlineContours = va_arg(argList, std::vector<std::vector<cv::Point>> *);
+            clearPreview();
+            drawLines(*outlineContours, 1, true);
             waitKeyIfNeeded();
+            if (plot) {
+                plotPoints(*outlineContours);
+                waitKeyIfNeeded();
+            }
         }
         break;
     case Illustrace::Event::OutlineApproximated:
-        clearPreview();
-        drawLines(sender->approximatedOutlineContours, sender->thickness, true);
-        waitKeyIfNeeded();
-        if (plot) {
-            plotPoints(sender->approximatedOutlineContours);
+        {
+            auto *approximatedOutlineContours = va_arg(argList, std::vector<std::vector<cv::Point2f>> *);
+            clearPreview();
+            drawLines(*approximatedOutlineContours, 1, true);
             waitKeyIfNeeded();
+            if (plot) {
+                plotPoints(*approximatedOutlineContours);
+                waitKeyIfNeeded();
+            }
         }
         break;
     case Illustrace::Event::OutlineBezierized:
-        clearPreview();
-        drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, sender->thickness);
-        waitKeyIfNeeded();
-        if (plot) {
+        {
+            auto *paths = va_arg(argList, std::vector<Path *> *);
             clearPreview();
-            drawBezierLines(sender->bezierizedOutlineContours, sender->thickness, true);
-            plotBezierHandle(sender->bezierizedOutlineContours);
+            drawPaths(paths, document->thickness());
             waitKeyIfNeeded();
+            if (plot) {
+                clearPreview();
+                drawPaths(paths, 1);
+                plotPathHandle(paths);
+                waitKeyIfNeeded();
+            }
         }
         break;
     }
@@ -217,95 +236,55 @@ void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool 
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLine(std::vector<BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot)
+void View::drawPaths(std::vector<Path *> *paths, double thickness, bool closePath)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
-    if (withPlot) {
+
+    if (plot) {
         cairo_set_source_rgb(cr, 0.5, 0.5, 0.5);
     }
     else {
         cairo_set_source_rgb(cr, 0, 0, 0);
     }
 
-    cairo_move_to(cr, bezierLine[0].pt.x, bezierLine[0].pt.y);
-    auto ctl1 = bezierLine[0].ctl.next;
-
-    int length = bezierLine.size();
-    for (int i = 1; i < length; ++i) {
-        auto vtx = bezierLine[i];
-        cairo_curve_to(cr, ctl1.x, ctl1.y, vtx.ctl.prev.x, vtx.ctl.prev.y, vtx.pt.x, vtx.pt.y); 
-        ctl1 = vtx.ctl.next;
-    }
-
-    cairo_stroke(cr);
-
-    if (step) {
-        imshow(WindowName, preview);
-        waitKeyIfNeeded();
-    }
-}
-
-void View::drawBezierLines(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
-{
-    for (auto bezierLine : bezierLines) {
-        drawBezierLine(bezierLine, thickness, withPlot);
-    }
-
-    imshow(WindowName, preview);
-}
-
-void View::drawBezierLineContours(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness)
-{
-    cairo_set_line_width(cr, thickness);
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
-    cairo_set_source_rgb(cr, 0, 0, 0);
 
-    drawBezierLineContours2(contours, hierarchy, 0);
-    
-    cairo_fill_preserve(cr);
-    cairo_stroke(cr);
+    for (auto *path : *paths) {
+        Path *_path = path;
+        while (_path) {
+            _path = _path->child;
 
-    imshow(WindowName, preview);
-}
+            cairo_new_sub_path(cr);
 
-void View::drawBezierLineContours2(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index)
-{
-    for (; -1 != index; index = hierarchy[index][0]) {
-        fillBezierLineContour(contours[index]);
-        int childIndex = hierarchy[index][2];
-        if (-1 != childIndex) {
-            ++hierarchyDepth;
-            drawBezierLineContours2(contours, hierarchy, childIndex);
-            --hierarchyDepth;
+            Vertex vtx = _path->vertices[0];
+            cairo_move_to(cr, vtx.p.x, vtx.p.y);
+            auto c1 = vtx.c.next;
+            
+            int length = _path->vertices.size();
+            for (int i = 1; i < length; ++i) {
+                vtx = _path->vertices[i];
+                cairo_curve_to(cr, c1.x, c1.y, vtx.c.prev.x, vtx.c.prev.y, vtx.p.x, vtx.p.y); 
+            }
+
+            if (_path->closed) {
+                cairo_close_path(cr);
+            }
         }
 
-        if (step && 0 == hierarchyDepth) {
+        if (path->child) {
             cairo_fill_preserve(cr);
-            cairo_stroke(cr);
+        }
 
+        cairo_stroke(cr);
+
+        if (step) {
             imshow(WindowName, preview);
             waitKeyIfNeeded();
         }
     }
-}
 
-void View::fillBezierLineContour(std::vector<BezierVertex<cv::Point2f>> &contour)
-{
-    cairo_new_sub_path(cr);
-
-    cairo_move_to(cr, contour[0].pt.x, contour[0].pt.y);
-    auto ctl1 = contour[0].ctl.next;
-
-    int length = contour.size();
-    for (int i = 1; i < length; ++i) {
-        auto vtx = contour[i];
-        cairo_curve_to(cr, ctl1.x, ctl1.y, vtx.ctl.prev.x, vtx.ctl.prev.y, vtx.pt.x, vtx.pt.y); 
-        ctl1 = vtx.ctl.next;
-    }
-
-    cairo_close_path(cr);
+    imshow(WindowName, preview);
 }
 
 template <class T>
@@ -352,28 +331,34 @@ void View::plotGraph(Graph &graph)
     imshow(WindowName, preview);
 }
 
-void View::plotBezierHandle(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines)
+void View::plotPathHandle(std::vector<Path *> *paths)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
-    for (auto bezierLine : bezierLines) {
-        for (auto vertex : bezierLine) {
-            cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
-            cairo_move_to(cr, vertex.ctl.prev.x, vertex.ctl.prev.y);
-            cairo_line_to(cr, vertex.pt.x, vertex.pt.y);
-            cairo_line_to(cr, vertex.ctl.next.x, vertex.ctl.next.y);
-            cairo_stroke(cr);
+    for (auto *path : *paths) {
+        Path *_path = path;
 
-            cairo_arc(cr, vertex.ctl.prev.x, vertex.ctl.prev.y, 2, 0, 2 * M_PI);
-            cairo_stroke(cr);
-            cairo_arc(cr, vertex.pt.x, vertex.pt.y, 1, 0, 2 * M_PI);
-            cairo_stroke(cr);
-            cairo_arc(cr, vertex.ctl.next.x, vertex.ctl.next.y, 2, 0, 2 * M_PI);
-            cairo_stroke(cr);
-            cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
-            cairo_arc(cr, vertex.pt.x, vertex.pt.y, 2, 0, 2 * M_PI);
-            cairo_fill(cr);
+        while (_path) {
+            _path = _path->child;
+
+            for (Vertex vtx : _path->vertices) {
+                cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
+                cairo_move_to(cr, vtx.c.prev.x, vtx.c.prev.y);
+                cairo_line_to(cr, vtx.p.x, vtx.p.y);
+                cairo_line_to(cr, vtx.c.next.x, vtx.c.next.y);
+                cairo_stroke(cr);
+
+                cairo_arc(cr, vtx.c.prev.x, vtx.c.prev.y, 2, 0, 2 * M_PI);
+                cairo_stroke(cr);
+                cairo_arc(cr, vtx.p.x, vtx.p.y, 1, 0, 2 * M_PI);
+                cairo_stroke(cr);
+                cairo_arc(cr, vtx.c.next.x, vtx.c.next.y, 2, 0, 2 * M_PI);
+                cairo_stroke(cr);
+                cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
+                cairo_arc(cr, vtx.p.x, vtx.p.y, 2, 0, 2 * M_PI);
+                cairo_fill(cr);
+            }
         }
     }
 

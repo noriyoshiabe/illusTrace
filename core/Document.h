@@ -12,39 +12,23 @@ enum class LineMode {
     Outline,
 };
 
-struct Segment {
-    enum class Type {
-        Point,
-        Line,
-        Curve,
-    };
+struct Vertex {
+    cv::Point2f p;
 
-    Type type;
-    cv::Point2f p1;
-    cv::Point2f p2;
-    cv::Point2f p3;
+    struct {
+        cv::Point2f next;
+        cv::Point2f prev;
+    } c;
 
-    Segment(cv::Point2f p1) {
-        this->type = Type::Point;
-        this->p1 = p1;
-    }
-
-    Segment(cv::Point2f p1, cv::Point2f p2) {
-        this->type = Type::Line;
-        this->p1 = p1;
-        this->p2 = p2;
-    }
-
-    Segment(cv::Point2f p1, cv::Point2f p2, cv::Point2f) {
-        this->type = Type::Curve;
-        this->p1 = p1;
-        this->p2 = p2;
-        this->p3 = p3;
+    Vertex(cv::Point2f p, cv::Point2f ctlNext, cv::Point2f ctlPrev) {
+        this->p = p;
+        this->c.next = ctlNext;
+        this->c.prev = ctlPrev;
     }
 };
 
 struct Path {
-    std::vector<Segment> segments;
+    std::vector<Vertex> vertices;
     bool closed;
     Path *child;
 
@@ -122,6 +106,7 @@ public:
     void outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy);
 
 private:
+    LineMode _mode;
     double _brightness;
     double _blur;
     double _detail;

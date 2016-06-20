@@ -4,6 +4,7 @@ project(illustrace-core)
 
 set(SOURCES
   Illustrace.cpp
+  Document.cpp
   Filter.cpp
   CenterLineBuilder.cpp
   BezierSplineBuilder.cpp

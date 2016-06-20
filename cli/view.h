@@ -24,7 +24,6 @@ private:
     cv::Mat preview;
     cairo_surface_t *surface;
     cairo_t *cr;
-    int hierarchyDepth;
 
     void notify(Illustrace *sender, va_list argList);
 
@@ -32,17 +31,13 @@ private:
     void copyFrom(cv::Mat &image);
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);
-    void drawBezierLine(std::vector<BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot = false);
-    void drawBezierLines(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot = false);
-    void drawBezierLineContours(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness);
-    void drawBezierLineContours2(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index);
-    void fillBezierLineContour(std::vector<BezierVertex<cv::Point2f>> &contour);
+    void drawPaths(std::vector<Path *> *paths, double thickness, bool closePath = false);
     template <class T>
     void plotPoints(std::vector<T> &points);
     template <class T>
     void plotPoints(std::vector<std::vector<T>> &lines);
     void plotGraph(Graph &graph);
-    void plotBezierHandle(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines);
+    void plotPathHandle(std::vector<Path *> *paths);
 };
 
 } // namespace illustrace

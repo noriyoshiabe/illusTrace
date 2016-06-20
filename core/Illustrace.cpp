@@ -9,12 +9,13 @@ bool Illustrace::traceFromFile(const char *filepath, Document *document)
         return false;
     }
 
-    notify(this, Illustrace::Event::SourceImageLoaded, &sourceImage);
+    notify(this, Illustrace::Event::SourceImageLoaded, document, &sourceImage);
     
     document->sourceImage(sourceImage);
 
     binarize(document);
     buildLines(document);
+    approximateLines(document);
     buildPaths(document);
 
     return true;
@@ -25,19 +26,19 @@ void Illustrace::binarize(Document *document)
     cv::Mat binarizedImage = document->sourceImage().clone();
 
     Filter::brightness(binarizedImage, document->brightness());
-    notify(this, Illustrace::Event::BrightnessFilterApplied, &binarizedImage);
+    notify(this, Illustrace::Event::BrightnessFilterApplied, document, &binarizedImage);
 
     Filter::blur(binarizedImage, blur(document));
-    notify(this, Illustrace::Event::BlurFilterApplied, &binarizedImage);
+    notify(this, Illustrace::Event::BlurFilterApplied, document, &binarizedImage);
 
     Filter::threshold(binarizedImage);
-    notify(this, Illustrace::Event::Binarized, &binarizedImage);
+    notify(this, Illustrace::Event::Binarized, document, &binarizedImage);
 
     document->binarizedImage(binarizedImage);
 
     cv::Mat negativeImage = binarizedImage.clone();
     Filter::negative(negativeImage);
-    notify(this, Illustrace::Event::NegativeFilterApplied, &negativeImage);
+    notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
 
     document->negativeImage(negativeImage);
 
@@ -50,11 +51,11 @@ void Illustrace::buildLines(Document *document)
     if (LineMode::Center == document->mode()) {
         cv::Mat thinnedImage = document->binarizedImage().clone();
         Filter::thinning(thinnedImage);
-        notify(this, Illustrace::Event::Thinned, &thinnedImage);
+        notify(this, Illustrace::Event::Thinned, document, &thinnedImage);
 
         std::vector<cv::Point2f> keyPoints;
         FeatureDetector::detect(thinnedImage, keyPoints);
-        notify(this, Illustrace::Event::CenterLineKeyPointDetected, &keyPoints);
+        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &thinnedImage, &keyPoints);
 
         Graph graph;
         GraphBuilder::build(thinnedImage, keyPoints, graph);
@@ -62,11 +63,11 @@ void Illustrace::buildLines(Document *document)
 
         Graph approximatedGraph;
         GraphBuilder::approximate(graph, approximatedGraph);
-        notify(this, Illustrace::Event::CenterLineGraphApproximated, &approximatedGraph);
+        notify(this, Illustrace::Event::CenterLineGraphApproximated, document, &approximatedGraph);
 
         auto *centerLines = new std::vector<std::vector<cv::Point2f>>();
         CenterLineBuilder::build(approximatedGraph, *centerLines);
-        notify(this, Illustrace::Event::CenterLineBuilt, centerLines);
+        notify(this, Illustrace::Event::CenterLineBuilt, document, centerLines);
 
         document->centerLines(centerLines);
     }
@@ -74,7 +75,7 @@ void Illustrace::buildLines(Document *document)
         auto *outlineContours = new std::vector<std::vector<cv::Point>>();
         auto *outlineHierarchy = new std::vector<cv::Vec4i>();
         cv::findContours(document->negativeImage(), *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-        notify(this, Illustrace::Event::OutlineBuilt, outlineContours, outlineHierarchy);
+        notify(this, Illustrace::Event::OutlineBuilt, document, outlineContours, outlineHierarchy);
 
         document->outlineContours(outlineContours);
         document->outlineHierarchy(outlineHierarchy);
@@ -98,7 +99,7 @@ void Illustrace::approximateLines(Document *document)
             approximatedCenterLines->push_back(approx);
         }
 
-        notify(this, Illustrace::Event::CenterLineApproximated, approximatedCenterLines);
+        notify(this, Illustrace::Event::CenterLineApproximated, document, approximatedCenterLines);
         document->approximatedCenterLines(approximatedCenterLines);
     }
     else {
@@ -110,7 +111,7 @@ void Illustrace::approximateLines(Document *document)
             approximatedOutlineContours->push_back(approx);
         }
 
-        notify(this, Illustrace::Event::OutlineApproximated, approximatedOutlineContours);
+        notify(this, Illustrace::Event::OutlineApproximated, document, approximatedOutlineContours);
         document->approximatedOutlineContours(approximatedOutlineContours);
     }
 }
@@ -126,7 +127,7 @@ void Illustrace::buildPaths(Document *document)
             paths->push_back(path);
         }
 
-        notify(this, Illustrace::Event::CenterLineBezierized, paths);
+        notify(this, Illustrace::Event::CenterLineBezierized, document, paths);
     }
     else {
         auto *paths = new std::vector<Path *>();
@@ -136,7 +137,7 @@ void Illustrace::buildPaths(Document *document)
             paths->push_back(path);
         }
 
-        notify(this, Illustrace::Event::OutlineBezierized, paths);
+        notify(this, Illustrace::Event::OutlineBezierized, document, paths);
     }
 }
 

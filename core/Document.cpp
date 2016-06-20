@@ -1,8 +1,9 @@
-#include "Document"
+#include "Document.h"
 
 using namespace illustrace;
 
 Document::Document() :
+    _mode(LineMode::Center),
     _brightness(1.0),
     _blur(0.01),
     _detail(1.0),
@@ -22,7 +23,7 @@ Document::Document() :
 Document::~Document()
 {
     if (_paths) {
-        for (auto *path : _paths) {
+        for (auto *path : *_paths) {
             delete path;
         }
     }
@@ -97,7 +98,7 @@ cv::Rect &Document::boundingRect()
     return _boundingRect;
 }
 
-std::vector<Path Document::*> *paths()
+std::vector<Path *> *Document::paths()
 {
     return _paths;
 }
@@ -144,7 +145,7 @@ std::vector<cv::Vec4i> *Document::outlineHierarchy()
 
 void Document::mode(LineMode mode)
 {
-    _mdde = mode;
+    _mode = mode;
     notify(this, Document::Event::Mode);
 }
 
@@ -208,10 +209,10 @@ void Document::boundingRect(cv::Rect &rect)
     notify(this, Document::Event::BoundingRect);
 }
 
-void Document::path(std::vector<Path *> *paths)
+void Document::paths(std::vector<Path *> *paths)
 {
     if (_paths) {
-        for (auto *path : _paths) {
+        for (auto *path : *_paths) {
             delete path;
         }
     }
