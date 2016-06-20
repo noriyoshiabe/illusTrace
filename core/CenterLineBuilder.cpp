@@ -1,8 +1,7 @@
 #include "CenterLineBuilder.h"
-#include "Vector2D.h"
+#include "Util.h"
 
 using namespace illustrace;
-using namespace core;
 
 void CenterLineBuilder::build(Graph &graph, std::vector<std::vector<cv::Point2f>> &results)
 {
@@ -37,7 +36,7 @@ void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point2f *prev, std::list<c
             int minIndex = 0;
             
             for (int i = 0; i < length; ++i) {
-                double radian = lib::cornerRadian(*prev, vertex->point, vertex->adjacencyList[i]->point);
+                double radian = util::cornerRadian(*prev, vertex->point, vertex->adjacencyList[i]->point);
                 if (minRadian > radian) {
                     minRadian = radian;
                     minIndex = i;
@@ -46,7 +45,7 @@ void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point2f *prev, std::list<c
 
             for (int i = 0; i < length; ++i) {
                 for (int j = i + 1; j < length; ++j) {
-                    double radian = lib::cornerRadian(vertex->adjacencyList[i]->point, vertex->point, vertex->adjacencyList[j]->point);
+                    double radian = util::cornerRadian(vertex->adjacencyList[i]->point, vertex->point, vertex->adjacencyList[j]->point);
                     if (minRadian > radian) {
                         return;
                     }

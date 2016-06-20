@@ -1,11 +1,10 @@
 #include "GraphBuilder.h"
-#include "Vector2D.h"
+#include "Util.h"
 #include "Log.h"
 
 #include <queue>
 
 using namespace illustrace;
-using namespace core;
 
 Graph::Graph()
 {
@@ -246,7 +245,7 @@ void GraphBuilder::mergeNearCrossPoint(Graph &result)
 
         for (auto *_vertex : vertex->adjacencyList) {
             if (3 <= _vertex->adjacencyList.size()) {
-                if (5.0 > lib::vectorLength(lib::vector(vertex->point, _vertex->point))) {
+                if (5.0 > util::vectorLength(util::vector(vertex->point, _vertex->point))) {
                     toMerge.push_back(_vertex);
                 }
             }
@@ -294,7 +293,7 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
             {
                 auto *adj1 = vertex->adjacencyList[0];
                 auto *adj2 = vertex->adjacencyList[1];
-                vertex->weight = lib::cornerRadian(adj1->point, vertex->point, adj2->point) / (M_PI / 4.0);
+                vertex->weight = util::cornerRadian(adj1->point, vertex->point, adj2->point) / (M_PI / 4.0);
             }
             break;
         default:
@@ -325,7 +324,7 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
                     adjacency->flag = true;
 
                     float totalWeight = vertex->weight + adjacency->weight;
-                    if (10.0 > lib::vectorLength(lib::vector(vertex->point, adjacency->point)) && 2.f > totalWeight) {
+                    if (10.0 > util::vectorLength(util::vector(vertex->point, adjacency->point)) && 2.f > totalWeight) {
 
                         if (1.f <= vertex->weight) {
                             ;

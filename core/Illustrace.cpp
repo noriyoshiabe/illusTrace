@@ -1,7 +1,6 @@
 #include "Illustrace.h"
 
 using namespace illustrace;
-using namespace core;
 
 Illustrace::Illustrace() : brightness(0.0), blur(5), detail(1.0), thickness(1.0)
 {

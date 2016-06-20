@@ -1,7 +1,6 @@
 #include "Filter.h" 
 
 using namespace illustrace;
-using namespace core;
 
 void Filter::brightness(cv::Mat &image, double brightness, double contrast)
 {

@@ -4,7 +4,6 @@
 #include "Observer.h"
 
 namespace illustrace {
-namespace lib {
 
 template <class C, typename E>
 class Observable {
@@ -33,5 +32,4 @@ private:
     std::vector<Observer<C, E> *> observers;
 };
 
-} // namespace lib
 } // namespace illustrace

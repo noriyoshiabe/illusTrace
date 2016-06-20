@@ -7,7 +7,6 @@
 #include "Log.h"
 
 using namespace illustrace;
-using namespace cli;
 
 const std::string CLI::VERSION = "0.1.0";
 

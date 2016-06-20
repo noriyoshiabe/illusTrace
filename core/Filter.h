@@ -3,7 +3,6 @@
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
-namespace core {
 
 class Filter {
 public:
@@ -14,5 +13,4 @@ public:
     static void thinning(cv::Mat &image);
 };
 
-} // namespace core
 } // namespace illustrace

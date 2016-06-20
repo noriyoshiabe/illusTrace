@@ -1,8 +1,7 @@
 #include "BezierSplineBuilder.h"
-#include "Vector2D.h"
+#include "Util.h"
 
 using namespace illustrace;
-using namespace core;
 
 void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, std::vector<BezierVertex<cv::Point2f>> &results, bool closePath)
 {
@@ -43,10 +42,10 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, std::vector<Bezi
 void BezierSplineBuilder::calcControlPoint(BezierVertex<cv::Point2f> &prev, BezierVertex<cv::Point2f> &next,
         BezierVertex<cv::Point2f> &current)
 {
-    cv::Point v1 = lib::vector(prev.pt, current.pt);
-    cv::Point v2 = lib::vector(current.pt, next.pt);
+    cv::Point v1 = util::vector(prev.pt, current.pt);
+    cv::Point v2 = util::vector(current.pt, next.pt);
 
-    double t = -atan2(lib::crossProduct(v1, v2), lib::dotProduct(v1, v2));
+    double t = -atan2(util::crossProduct(v1, v2), util::dotProduct(v1, v2));
     double f = std::pow((fabs(t) / M_PI) - 0.8, 2.0) + 0.16; // degree of 0 to 0.8, 60 to 0.37, 90 to 0.25, 180 to 0.2
 
     t /= 2.0;
@@ -59,7 +58,7 @@ void BezierSplineBuilder::calcControlPoint(BezierVertex<cv::Point2f> &prev, Bezi
     current.ctl.next.x = ctlNextVX + current.pt.x;
     current.ctl.next.y = ctlNextVY + current.pt.y;
 
-    double scale = lib::vectorLength(v1) / lib::vectorLength(v2);
+    double scale = util::vectorLength(v1) / util::vectorLength(v2);
     current.ctl.prev.x = current.pt.x - (ctlNextVX * scale);
     current.ctl.prev.y = current.pt.y - (ctlNextVY * scale);
 }

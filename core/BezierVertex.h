@@ -1,7 +1,6 @@
 #pragma once
 
 namespace illustrace {
-namespace core {
 
 template <class T>
 struct BezierVertex {
@@ -15,5 +14,4 @@ struct BezierVertex {
     BezierVertex(T pt, T ctlNext, T ctlPrev) : pt(pt), ctl({ctlNext, ctlPrev}) {};
 };
 
-} // namespace core
 } // namespace illustrace

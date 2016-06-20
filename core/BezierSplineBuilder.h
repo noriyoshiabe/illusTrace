@@ -6,7 +6,6 @@
 #include <vector>
 
 namespace illustrace {
-namespace core {
 
 class BezierSplineBuilder {
 public:
@@ -21,5 +20,4 @@ private:
             BezierVertex<cv::Point2f> &current);
 };
 
-} // namespace core
 } // namespace illustrace

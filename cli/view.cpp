@@ -3,7 +3,6 @@
 #include <iostream>
 
 using namespace illustrace;
-using namespace cli;
 
 static const char WindowName[] = "illustrace CLI";
 
@@ -33,10 +32,10 @@ void View::waitKeyIfNeeded()
     }
 }
 
-void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList)
+void View::notify(Illustrace *sender, IllustraceEvent event, va_list argList)
 {
     switch (event) {
-    case core::IllustraceEvent::SourceImageLoaded:
+    case IllustraceEvent::SourceImageLoaded:
         preview = cv::Mat(sender->sourceImage.rows, sender->sourceImage.cols, CV_8UC4);
         surface = cairo_image_surface_create_for_data(preview.data, CAIRO_FORMAT_ARGB32,
                 preview.cols, preview.rows, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, preview.cols));
@@ -44,48 +43,48 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
         imshow(WindowName, sender->sourceImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::BrightnessFilterApplied:
+    case IllustraceEvent::BrightnessFilterApplied:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::BlurFilterApplied:
+    case IllustraceEvent::BlurFilterApplied:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::Binarized:
+    case IllustraceEvent::Binarized:
         imshow(WindowName, sender->binarizedImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::Thinned:
+    case IllustraceEvent::Thinned:
         imshow(WindowName, sender->thinnedImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::NegativeFilterApplied:
+    case IllustraceEvent::NegativeFilterApplied:
         imshow(WindowName, sender->negativeImage);
         waitKeyIfNeeded();
         break;
-    case core::IllustraceEvent::CenterLineKeyPointDetected:
+    case IllustraceEvent::CenterLineKeyPointDetected:
         if (plot) {
             copyFrom(sender->thinnedImage);
             plotPoints(sender->centerLineKeyPoints);
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::CenterLineGraphBuilt:
+    case IllustraceEvent::CenterLineGraphBuilt:
         if (plot) {
             clearPreview();
             plotGraph(sender->centerLineGraph);
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::CenterLineGraphApproximated:
+    case IllustraceEvent::CenterLineGraphApproximated:
         if (plot) {
             clearPreview();
             plotGraph(sender->approximatedCenterLineGraph);
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::CenterLineBuilt:
+    case IllustraceEvent::CenterLineBuilt:
         clearPreview();
         drawLines(sender->centerLines, sender->thickness);
         waitKeyIfNeeded();
@@ -94,7 +93,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::CenterLineApproximated:
+    case IllustraceEvent::CenterLineApproximated:
         clearPreview();
         drawLines(sender->approximatedCenterLines, sender->thickness);
         waitKeyIfNeeded();
@@ -103,7 +102,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::CenterLineBezierized:
+    case IllustraceEvent::CenterLineBezierized:
         clearPreview();
         drawBezierLines(sender->bezierizedCenterLines, sender->thickness);
         waitKeyIfNeeded();
@@ -114,7 +113,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::OutlineBuilt:
+    case IllustraceEvent::OutlineBuilt:
         clearPreview();
         drawLines(sender->outlineContours, sender->thickness, true);
         waitKeyIfNeeded();
@@ -123,7 +122,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::OutlineApproximated:
+    case IllustraceEvent::OutlineApproximated:
         clearPreview();
         drawLines(sender->approximatedOutlineContours, sender->thickness, true);
         waitKeyIfNeeded();
@@ -132,7 +131,7 @@ void View::notify(core::Illustrace *sender, core::IllustraceEvent event, va_list
             waitKeyIfNeeded();
         }
         break;
-    case core::IllustraceEvent::OutlineBezierized:
+    case IllustraceEvent::OutlineBezierized:
         clearPreview();
         drawBezierLineContours(sender->bezierizedOutlineContours, sender->outlineHierarchy, sender->thickness);
         waitKeyIfNeeded();
@@ -216,7 +215,7 @@ void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool 
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLine(std::vector<core::BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot)
+void View::drawBezierLine(std::vector<BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
@@ -245,7 +244,7 @@ void View::drawBezierLine(std::vector<core::BezierVertex<cv::Point2f>> &bezierLi
     }
 }
 
-void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
+void View::drawBezierLines(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot)
 {
     for (auto bezierLine : bezierLines) {
         drawBezierLine(bezierLine, thickness, withPlot);
@@ -254,7 +253,7 @@ void View::drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness)
+void View::drawBezierLineContours(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness)
 {
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
@@ -269,7 +268,7 @@ void View::drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv:
     imshow(WindowName, preview);
 }
 
-void View::drawBezierLineContours2(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index)
+void View::drawBezierLineContours2(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index)
 {
     for (; -1 != index; index = hierarchy[index][0]) {
         fillBezierLineContour(contours[index]);
@@ -290,7 +289,7 @@ void View::drawBezierLineContours2(std::vector<std::vector<core::BezierVertex<cv
     }
 }
 
-void View::fillBezierLineContour(std::vector<core::BezierVertex<cv::Point2f>> &contour)
+void View::fillBezierLineContour(std::vector<BezierVertex<cv::Point2f>> &contour)
 {
     cairo_new_sub_path(cr);
 
@@ -329,7 +328,7 @@ void View::plotPoints(std::vector<std::vector<T>> &lines)
     }
 }
 
-void View::plotGraph(core::Graph &graph)
+void View::plotGraph(Graph &graph)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
@@ -351,7 +350,7 @@ void View::plotGraph(core::Graph &graph)
     imshow(WindowName, preview);
 }
 
-void View::plotBezierHandle(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines)
+void View::plotBezierHandle(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines)
 {
     cairo_set_line_width(cr, 1);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);

@@ -5,7 +5,6 @@
 #include "Illustrace.h"
 
 namespace illustrace {
-namespace cli {
 
 class CLI {
 public:
@@ -20,9 +19,8 @@ public:
     bool execute(const char *inputFilePath);
 
     View view;
-    core::Illustrace illustrace;
+    Illustrace illustrace;
     bool outline;
 };
 
-} // namespace cli
 } // namespace illustrace

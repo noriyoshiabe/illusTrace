@@ -4,7 +4,6 @@
 #include <vector>
 
 namespace illustrace {
-namespace core {
 
 struct GraphVertex {
     GraphVertex(cv::Point2f point)
@@ -44,5 +43,4 @@ private:
     void mergeNearCrossPoint(Graph &result);
 };
 
-} // namespace core
 } // namespace illustrace

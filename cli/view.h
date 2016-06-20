@@ -7,9 +7,8 @@
 #include "cairo/cairo.h"
 
 namespace illustrace {
-namespace cli {
 
-class View : public lib::Observer<core::Illustrace, core::IllustraceEvent> {
+class View : public Observer<Illustrace, IllustraceEvent> {
 public:
     View();
     ~View();
@@ -27,24 +26,23 @@ private:
     cairo_t *cr;
     int hierarchyDepth;
 
-    void notify(core::Illustrace *sender, core::IllustraceEvent event, va_list argList);
+    void notify(Illustrace *sender, IllustraceEvent event, va_list argList);
 
     void clearPreview();
     void copyFrom(cv::Mat &image);
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);
-    void drawBezierLine(std::vector<core::BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot = false);
-    void drawBezierLines(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot = false);
-    void drawBezierLineContours(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness);
-    void drawBezierLineContours2(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index);
-    void fillBezierLineContour(std::vector<core::BezierVertex<cv::Point2f>> &contour);
+    void drawBezierLine(std::vector<BezierVertex<cv::Point2f>> &bezierLine, double thickness, bool withPlot = false);
+    void drawBezierLines(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines, double thickness, bool withPlot = false);
+    void drawBezierLineContours(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, double thickness);
+    void drawBezierLineContours2(std::vector<std::vector<BezierVertex<cv::Point2f>>> &contours, std::vector<cv::Vec4i> &hierarchy, int index);
+    void fillBezierLineContour(std::vector<BezierVertex<cv::Point2f>> &contour);
     template <class T>
     void plotPoints(std::vector<T> &points);
     template <class T>
     void plotPoints(std::vector<std::vector<T>> &lines);
-    void plotGraph(core::Graph &graph);
-    void plotBezierHandle(std::vector<std::vector<core::BezierVertex<cv::Point2f>>> &bezierLines);
+    void plotGraph(Graph &graph);
+    void plotBezierHandle(std::vector<std::vector<BezierVertex<cv::Point2f>>> &bezierLines);
 };
 
-} // namespace cli
 } // namespace illustrace

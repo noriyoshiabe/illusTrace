@@ -7,7 +7,6 @@
 #include <vector>
 
 namespace illustrace {
-namespace core {
 
 class CenterLineBuilder {
 public:
@@ -17,5 +16,4 @@ private:
     void walk(GraphVertex *vertex, cv::Point2f *prev, std::list<cv::Point2f> &line);
 };
 
-} // namespace core
 } // namespace illustrace

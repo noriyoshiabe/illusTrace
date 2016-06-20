@@ -10,7 +10,6 @@
 #include "opencv2/imgproc.hpp"
 
 namespace illustrace {
-namespace core {
 
 enum class IllustraceEvent {
     SourceImageLoaded,
@@ -30,7 +29,7 @@ enum class IllustraceEvent {
     OutlineBezierized,
 };
 
-class Illustrace : public lib::Observable<Illustrace, IllustraceEvent> {
+class Illustrace : public Observable<Illustrace, IllustraceEvent> {
 public:
     Illustrace();
 
@@ -78,5 +77,4 @@ public:
     cv::Mat negativeImage;
 };
 
-} // namespace core
 } // namespace illustrace

@@ -1,7 +1,6 @@
 #include "FeatureDetector.h"
 
 using namespace illustrace;
-using namespace core;
 
 void FeatureDetector::detect(const cv::Mat &image, std::vector<cv::Point2f> &keyPoints)
 {
