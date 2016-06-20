@@ -12,21 +12,43 @@ enum class LineMode {
     Outline,
 };
 
-enum class SegmentType {
-    Point,
-    Line,
-    Curve,
-};
-
 struct Segment {
-    SegmentType type;
-    cv::Point2f p[3];
+    enum class Type {
+        Point,
+        Line,
+        Curve,
+    };
+
+    Type type;
+    cv::Point2f p1;
+    cv::Point2f p2;
+    cv::Point2f p3;
+
+    Segment(cv::Point2f p1) {
+        this->type = Type::Point;
+        this->p1 = p1;
+    }
+
+    Segment(cv::Point2f p1, cv::Point2f p2) {
+        this->type = Type::Line;
+        this->p1 = p1;
+        this->p2 = p2;
+    }
+
+    Segment(cv::Point2f p1, cv::Point2f p2, cv::Point2f) {
+        this->type = Type::Curve;
+        this->p1 = p1;
+        this->p2 = p2;
+        this->p3 = p3;
+    }
 };
 
 struct Path {
     std::vector<Segment> segments;
     bool closed;
     Path *child;
+
+    Path() : closed(false), child(nullptr) {};
 };
 
 class Document : public Observable<Document> {

@@ -3,47 +3,44 @@
 
 using namespace illustrace;
 
-void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, std::vector<BezierVertex<cv::Point2f>> &results, bool closePath)
+void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, double smoothing, bool closePath)
 {
     int length = line.size();
     int lengthMinus1 = length - 1;
 
     if (1 == length) {
-        results.push_back(BezierVertex<cv::Point2f>(line[0], line[0], line[0]));
-        results.push_back(BezierVertex<cv::Point2f>(line[0], line[0], line[0]));
+        result->segments.push_back(Segment(line[0]));
         return;
     }
 
     if (2 == length) {
-        results.push_back(BezierVertex<cv::Point2f>(line[0], line[0], line[0]));
-        results.push_back(BezierVertex<cv::Point2f>(line[1], line[1], line[1]));
+        result->segments.push_back(Segment(line[0], line[1]));
         return;
     }
 
 
     for (int i = 0; i < length; ++i) {
-        auto current = BezierVertex<cv::Point2f>(line[i], line[i], line[i]);
+        auto current = Segment(line[i], line[i], line[i]);
 
         if (0 < i && i < lengthMinus1) {
-            auto prev = BezierVertex<cv::Point2f>(line[i-1], line[i-1], line[i-1]);
-            auto next = BezierVertex<cv::Point2f>(line[i+1], line[i+1], line[i+1]); 
-            calcControlPoint(prev, next, current);
+            auto prev = Segment(line[i-1], line[i-1], line[i-1]);
+            auto next = Segment(line[i+1], line[i+1], line[i+1]);
+            calcControlPoint(prev, current, next, smoothing);
         }
 
-        results.push_back(current);
+        result->segments.push_back(current);
     }
 
     if (closePath && 3 <= length) {
-        calcControlPoint(results.back(), results[1], results[0]);
-        results.push_back(results[0]);
+        calcControlPoint(result->segments.back(), result->segments[0], result->segments[1], smoothing);
+        result->closed = true;
     }
 }
 
-void BezierSplineBuilder::calcControlPoint(BezierVertex<cv::Point2f> &prev, BezierVertex<cv::Point2f> &next,
-        BezierVertex<cv::Point2f> &current)
+void BezierSplineBuilder::calcControlPoint(Segment &prev, Segment &current, Segment &next, double smoothing)
 {
-    cv::Point v1 = util::vector(prev.pt, current.pt);
-    cv::Point v2 = util::vector(current.pt, next.pt);
+    cv::Point2f v1 = util::vector(prev.p1, current.p1);
+    cv::Point2f v2 = util::vector(current.p1, next.p1);
 
     double t = -atan2(util::crossProduct(v1, v2), util::dotProduct(v1, v2));
     double f = std::pow((fabs(t) / M_PI) - 0.8, 2.0) + 0.16; // degree of 0 to 0.8, 60 to 0.37, 90 to 0.25, 180 to 0.2
@@ -55,10 +52,10 @@ void BezierSplineBuilder::calcControlPoint(BezierVertex<cv::Point2f> &prev, Bezi
     ctlNextVX = ctlNextVX * cos(t) - ctlNextVY * sin(t);
     ctlNextVY = ctlNextVX * sin(t) + ctlNextVY * cos(t);
 
-    current.ctl.next.x = ctlNextVX + current.pt.x;
-    current.ctl.next.y = ctlNextVY + current.pt.y;
+    current.p2.x = ctlNextVX + current.p1.x;
+    current.p2.y = ctlNextVY + current.p1.y;
 
     double scale = util::vectorLength(v1) / util::vectorLength(v2);
-    current.ctl.prev.x = current.pt.x - (ctlNextVX * scale);
-    current.ctl.prev.y = current.pt.y - (ctlNextVY * scale);
+    prev.p3.x = current.p1.x - (ctlNextVX * scale);
+    prev.p3.y = current.p1.y - (ctlNextVY * scale);
 }
