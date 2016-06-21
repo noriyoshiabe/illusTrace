@@ -282,15 +282,18 @@ void View::drawPath(Path *path, double thickness)
 {
     cairo_new_sub_path(cr);
 
-    Vertex vtx = path->vertices[0];
-    cairo_move_to(cr, vtx.p.x, vtx.p.y);
-    auto c1 = vtx.c.next;
-
-    int length = path->vertices.size();
-    for (int i = 1; i < length; ++i) {
-        vtx = path->vertices[i];
-        cairo_curve_to(cr, c1.x, c1.y, vtx.c.prev.x, vtx.c.prev.y, vtx.p.x, vtx.p.y); 
-        c1 = vtx.c.next;
+    for (Segment &s : path->segments) {
+        switch (s.type) {
+        case Segment::Type::Move:
+            cairo_move_to(cr, s[2].x, s[2].y);
+            break;
+        case Segment::Type::Line:
+            cairo_line_to(cr, s[2].x, s[2].y);
+            break;
+        case Segment::Type::Curve:
+            cairo_curve_to(cr, s[0].x, s[0].y, s[1].x, s[1].y, s[2].x, s[2].y); 
+            break;
+        }
     }
 
     if (path->closed) {
@@ -360,21 +363,30 @@ void View::plotPathsHandle(std::vector<Path *> *paths)
 
 void View::plotPathHandle(Path *path)
 {
-    for (Vertex vtx : path->vertices) {
-        cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
-        cairo_move_to(cr, vtx.c.prev.x, vtx.c.prev.y);
-        cairo_line_to(cr, vtx.p.x, vtx.p.y);
-        cairo_line_to(cr, vtx.c.next.x, vtx.c.next.y);
-        cairo_stroke(cr);
+    int length = path->segments.size();
+    for (int i = 0; i < length; ++i) {
+        Segment &s = path->segments[i];
 
-        cairo_arc(cr, vtx.c.prev.x, vtx.c.prev.y, 2, 0, 2 * M_PI);
-        cairo_stroke(cr);
-        cairo_arc(cr, vtx.p.x, vtx.p.y, 1, 0, 2 * M_PI);
-        cairo_stroke(cr);
-        cairo_arc(cr, vtx.c.next.x, vtx.c.next.y, 2, 0, 2 * M_PI);
-        cairo_stroke(cr);
+        if (Segment::Type::Curve == s.type) {
+            Segment &prev = path->segments[i - 1];
+
+            cairo_set_source_rgba(cr, 0, 0, 1, 0.5);
+            cairo_move_to(cr, prev[2].x, prev[2].y);
+            cairo_line_to(cr, s[0].x, s[0].y);
+            cairo_stroke(cr);
+
+            cairo_move_to(cr, s[1].x, s[1].y);
+            cairo_line_to(cr, s[2].x, s[2].y);
+            cairo_stroke(cr);
+
+            cairo_arc(cr, s[0].x, s[0].y, 2, 0, 2 * M_PI);
+            cairo_stroke(cr);
+            cairo_arc(cr, s[1].x, s[1].y, 2, 0, 2 * M_PI);
+            cairo_stroke(cr);
+        }
+
         cairo_set_source_rgba(cr, 1, 0, 0, 0.5);
-        cairo_arc(cr, vtx.p.x, vtx.p.y, 2, 0, 2 * M_PI);
+        cairo_arc(cr, s[2].x, s[2].y, 2, 0, 2 * M_PI);
         cairo_fill(cr);
     }
 

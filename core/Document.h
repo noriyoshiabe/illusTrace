@@ -12,23 +12,56 @@ enum class LineMode {
     Outline,
 };
 
-struct Vertex {
-    cv::Point2f p;
+struct Segment {
+    enum Type {
+        Move,
+        Line,
+        Curve
+    };
 
-    struct {
-        cv::Point2f next;
-        cv::Point2f prev;
-    } c;
+    Type type;
+    cv::Point2f p[3];
 
-    Vertex(cv::Point2f p, cv::Point2f ctlNext, cv::Point2f ctlPrev) {
-        this->p = p;
-        this->c.next = ctlNext;
-        this->c.prev = ctlPrev;
+    cv::Point2f& operator[] (const int index) {
+        return p[index];
+    }
+
+    static Segment M(cv::Point2f p) {
+        return (Segment){
+            Type::Move,
+            {
+                {0.0, 0.0},
+                {0.0, 0.0},
+                {p.x, p.y},
+            }
+        };
+    }
+
+    static Segment L(cv::Point2f p) {
+        return (Segment){
+            Type::Line,
+            {
+                {0.0, 0.0},
+                {0.0, 0.0},
+                {p.x, p.y},
+            }
+        };
+    }
+
+    static Segment C(cv::Point2f p1, cv::Point2f p2, cv::Point2f p3) {
+        return (Segment){
+            Type::Curve,
+            {
+                {p1.x, p1.y},
+                {p2.x, p2.y},
+                {p3.x, p3.y},
+            }
+        };
     }
 };
 
 struct Path {
-    std::vector<Vertex> vertices;
+    std::vector<Segment> segments;
     bool closed;
     std::vector<Path *> children;
 
