@@ -4,6 +4,7 @@
 #include <string>
 #include <getopt.h>
 #include "opencv2/highgui.hpp"
+#include "SVGWriter.h"
 #include "Log.h"
 
 using namespace illustrace;
@@ -22,6 +23,7 @@ int CLI::main(int argc, char **argv)
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 'S'},
         {"plot", no_argument, NULL, 'p'},
+        {"output", required_argument, NULL, 'o'},
         {"trace", no_argument, NULL, 'T'},
         {"help", no_argument, NULL, 'h'},
         {"version", no_argument, NULL, 'v'},
@@ -32,7 +34,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:w:SpThv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:w:SpTo:hv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.document->mode(LineMode::Outline);
@@ -60,6 +62,9 @@ int CLI::main(int argc, char **argv)
             break;
         case 'p':
             cli.view.plot = true;
+            break;
+        case 'o':
+            cli.outputFilepath = optarg;
             break;
         case 'T':
 #ifdef DEBUG
@@ -91,7 +96,6 @@ int CLI::main(int argc, char **argv)
 
 CLI::CLI()
 {
-    illustrace.addObserver(&view);
     document = new Document();
 }
 
@@ -116,7 +120,7 @@ void CLI::usage()
     std::cout << std::endl;
 
     const std::string USAGE =
-        "Usage: illustrace [options] file\n"
+        "Usage: illustrace [options] <file>\n"
         "Options:\n"
         "  -O, --outline            Outline trace mode. Default is center line mode.\n"
         "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0.\n"
@@ -128,6 +132,7 @@ void CLI::usage()
         "                           0 is infinity and key input is needed for continue.\n"
         "  -S, --step               Wait with drawing one line.\n"
         "  -p, --plot               Plot points and handles.\n"
+        "  -o, --output <file>      Output result to file. Currently, .svg only.\n"
         "  -T, --trace              Print trace log.\n"
         "  -h, --help               This help text.\n"
         "  -v, --version            Show program version.\n";
@@ -143,12 +148,21 @@ void CLI::version()
 
 bool CLI::execute(const char *inputFilePath)
 {
+    if (!outputFilepath) {
+        illustrace.addObserver(&view);
+    }
+
     bool ret = illustrace.traceFromFile(inputFilePath, document);
     if (!ret) {
         std::cout << "Could not load source image." << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (!outputFilepath) {
+        view.waitKey();
     }
     else {
-        view.waitKey();
+        ret = SVGWriter::write(outputFilepath, document);
     }
 
     return ret ? EXIT_SUCCESS : EXIT_FAILURE;

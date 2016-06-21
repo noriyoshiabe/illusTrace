@@ -10,11 +10,13 @@ set(SOURCES
   BezierSplineBuilder.cpp
   FeatureDetector.cpp
   GraphBuilder.cpp
+  SVGWriter.cpp
   Log.cpp
 )
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${LIBXML2_INCLUDE_DIR}
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})

@@ -13,6 +13,9 @@ bool Illustrace::traceFromFile(const char *filepath, Document *document)
     
     document->sourceImage(sourceImage);
 
+    cv::Rect clippingRect = cv::Rect(0, 0, sourceImage.cols, sourceImage.rows);
+    document->clippingRect(clippingRect);
+
     binarize(document);
     buildLines(document);
     approximateLines(document);

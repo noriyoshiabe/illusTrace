@@ -23,6 +23,7 @@ public:
     View view;
     Illustrace illustrace;
     bool outline;
+    const char *outputFilepath;
 };
 
 } // namespace illustrace
