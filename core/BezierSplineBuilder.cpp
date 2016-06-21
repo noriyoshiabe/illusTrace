@@ -35,6 +35,10 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, do
 
     result->segments.push_back(current);
     result->closed = closePath;
+
+    if (3 <= length && result->segments[0][2] == result->segments[length - 1][2]) {
+        calcControlPoint(result->segments[length - 2], result->segments[length - 1], result->segments[1], smoothing);
+    }
 }
 
 void BezierSplineBuilder::calcControlPoint(Segment &prev, Segment &current, Segment &next, double smoothing)
