@@ -79,6 +79,8 @@ public:
         Thickness,
         Scale,
         Rotation,
+        Stroke,
+        Fill,
         CorrectionLayer,
         ClippingRect,
         BoundingRect,
@@ -104,6 +106,8 @@ public:
     double thickness();
     double scale();
     double rotation();
+    cv::Scalar &stroke();
+    cv::Scalar &fill();
     cv::Mat &correctionLayer();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
@@ -125,6 +129,8 @@ public:
     void thickness(double thickness);
     void scale(double scale);
     void rotation(double rotation);
+    void stroke(cv::Scalar &stroke);
+    void fill(cv::Scalar &fill);
     void correctionLayer(cv::Mat &layer);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
@@ -147,6 +153,8 @@ private:
     double _thickness;
     double _scale;
     double _rotation;
+    cv::Scalar _stroke;
+    cv::Scalar _fill;
     cv::Mat _correctionLayer;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;

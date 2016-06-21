@@ -81,7 +81,10 @@ bool SVGWriter::write(const char *filepath, Document *document)
 
         ret = xmlTextWriterStartElement(writer, BAD_CAST "g");
         CHECK_AND_ABORT;
-        ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "stroke", BAD_CAST "#000000");
+
+        cv::Scalar &stroke = document->stroke();
+        sprintf(str, "#%02X%02X%02X", (int)stroke[2], (int)stroke[1], (int)stroke[0]);
+        ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "stroke", BAD_CAST str);
         CHECK_AND_ABORT;
 
         if (0.1 > fabs(round(document->thickness()) - document->thickness())) {
@@ -99,7 +102,10 @@ bool SVGWriter::write(const char *filepath, Document *document)
         if (LineMode::Outline == document->mode()) {
             ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill-rule", BAD_CAST "evenodd");
             CHECK_AND_ABORT;
-            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST "#000000");
+
+            cv::Scalar &fill = document->fill();
+            sprintf(str, "#%02X%02X%02X", (int)fill[2], (int)fill[1], (int)fill[0]);
+            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST str);
             CHECK_AND_ABORT;
         }
         else {

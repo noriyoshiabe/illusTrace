@@ -11,6 +11,8 @@ Document::Document() :
     _thickness(1.0),
     _scale(1.0),
     _rotation(0.0),
+    _stroke(cv::Scalar(0, 0, 0)),
+    _fill(cv::Scalar(0, 0, 0)),
     _paths(nullptr),
     _centerLines(nullptr),
     _approximatedCenterLines(nullptr),
@@ -81,6 +83,16 @@ double Document::scale()
 double Document::rotation()
 {
     return _rotation;
+}
+
+cv::Scalar &Document::stroke()
+{
+    return _stroke;
+}
+
+cv::Scalar &Document::fill()
+{
+    return _fill;
 }
 
 cv::Mat &Document::correctionLayer()
@@ -189,6 +201,18 @@ void Document::rotation(double rotation)
 {
     _rotation = rotation;
     notify(this, Document::Event::Rotation);
+}
+
+void Document::stroke(cv::Scalar &stroke)
+{
+    _stroke = stroke;
+    notify(this, Document::Event::Stroke);
+}
+
+void Document::fill(cv::Scalar &fill)
+{
+    _fill = fill;
+    notify(this, Document::Event::Fill);
 }
 
 void Document::correctionLayer(cv::Mat &layer)

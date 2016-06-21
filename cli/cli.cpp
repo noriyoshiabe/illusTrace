@@ -20,6 +20,7 @@ int CLI::main(int argc, char **argv)
         {"detail", required_argument, NULL, 'd'},
         {"thickness", required_argument, NULL, 't'},
         {"smoothing", required_argument, NULL, 's'},
+        {"color", required_argument, NULL, 'c'},
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 'S'},
         {"plot", no_argument, NULL, 'p'},
@@ -34,7 +35,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:w:SpTo:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:c:w:SpTo:hv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.document->mode(LineMode::Outline);
@@ -53,6 +54,26 @@ int CLI::main(int argc, char **argv)
             break;
         case 's':
             cli.document->smoothing(std::stod(optarg));
+            break;
+        case 'c':
+            {
+                char *fill = strchr(optarg, ',');
+                if (fill) {
+                    *fill++ = '\0';
+                    int hex = std::stoi(optarg, nullptr, 16);
+                    auto color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
+                    cli.document->stroke(color);
+                    hex = std::stoi(fill, nullptr, 16);
+                    color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
+                    cli.document->fill(color);
+                }
+                else {
+                    int hex = std::stoi(optarg, nullptr, 16);
+                    auto color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
+                    cli.document->stroke(color);
+                    cli.document->fill(color);
+                }
+            }
             break;
         case 'w':
             cli.view.wait = std::stoi(optarg);
