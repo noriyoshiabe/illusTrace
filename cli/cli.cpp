@@ -183,7 +183,7 @@ bool CLI::execute(const char *inputFilePath)
         view.waitKey();
     }
     else {
-        ret = SVGWriter::write(outputFilepath, document);
+        ret = SVGWriter::write(outputFilepath, document, "Generator: illusTrace CLI 0.1.0");
     }
 
     return ret ? EXIT_SUCCESS : EXIT_FAILURE;

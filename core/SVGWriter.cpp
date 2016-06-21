@@ -33,7 +33,7 @@ static void writePathToStringStream(Path *path, std::stringstream &ss)
     }
 }
 
-bool SVGWriter::write(const char *filepath, Document *document)
+bool SVGWriter::write(const char *filepath, Document *document, const char *comment)
 {
     int ret = 0;
     char str[128];
@@ -76,8 +76,11 @@ bool SVGWriter::write(const char *filepath, Document *document)
     CHECK_AND_ABORT;
 
     {
-        ret = xmlTextWriterWriteComment(writer, BAD_CAST " Generator: illusTrace CLI 0.1.0 ");
-        CHECK_AND_ABORT;
+        if (comment) {
+            sprintf(str, " %s ", comment);
+            ret = xmlTextWriterWriteComment(writer, BAD_CAST str);
+            CHECK_AND_ABORT;
+        }
 
         ret = xmlTextWriterStartElement(writer, BAD_CAST "g");
         CHECK_AND_ABORT;
