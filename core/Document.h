@@ -141,6 +141,8 @@ public:
     void approximatedOutlineContours(std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours);
     void outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy);
 
+    cv::Size scaledSize();
+
 private:
     LineMode _mode;
     double _brightness;

@@ -304,3 +304,7 @@ void Document::outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy)
     notify(this, Document::Event::OutlineHierarchy);
 }
 
+cv::Size Document::scaledSize()
+{
+    return (cv::Size){(int)round(_clippingRect.width * _scale), (int)round(_clippingRect.height * _scale)};
+}
