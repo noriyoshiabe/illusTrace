@@ -11,6 +11,7 @@ set(SOURCES
   FeatureDetector.cpp
   GraphBuilder.cpp
   SVGWriter.cpp
+  Editor.cpp
   Log.cpp
 )
 

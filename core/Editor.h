@@ -7,7 +7,7 @@ namespace illustrace {
 
 class Editor {
 public:
-    Editor(Illustrace &illustrace, Document &document);
+    Editor(Illustrace *illustrace, Document *document);
     ~Editor();
 
     void detail(double detail);
@@ -17,6 +17,10 @@ public:
     void clippingRect(cv::Rect &rect);
     void stroke(cv::Scalar &stroke);
     void fill(cv::Scalar &fill);
+
+private:
+    Illustrace *illustrace;
+    Document *document;
 };
 
 } // namespace illustrace
