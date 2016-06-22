@@ -33,6 +33,7 @@ public:
     };
 
     bool traceFromFile(const char *filepath, Document *document);
+    void traceFromImage(cv::Mat &sourceImage, Document *document);
     void binarize(Document *document);
     void buildLines(Document *document);
     void approximateLines(Document *document);

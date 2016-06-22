@@ -10,7 +10,13 @@ bool Illustrace::traceFromFile(const char *filepath, Document *document)
     }
 
     notify(this, Illustrace::Event::SourceImageLoaded, document, &sourceImage);
-    
+
+    traceFromImage(sourceImage, document);   
+    return true;
+}
+
+void Illustrace::traceFromImage(cv::Mat &sourceImage, Document *document)
+{
     document->sourceImage(sourceImage);
 
     cv::Rect clippingRect = cv::Rect(0, 0, sourceImage.cols, sourceImage.rows);
@@ -20,8 +26,6 @@ bool Illustrace::traceFromFile(const char *filepath, Document *document)
     buildLines(document);
     approximateLines(document);
     buildPaths(document);
-
-    return true;
 }
 
 void Illustrace::binarize(Document *document)
