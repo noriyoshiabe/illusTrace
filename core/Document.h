@@ -81,7 +81,6 @@ public:
         Rotation,
         Stroke,
         Fill,
-        CorrectionLayer,
         ClippingRect,
         BoundingRect,
         Paths,
@@ -108,7 +107,6 @@ public:
     double rotation();
     cv::Scalar &stroke();
     cv::Scalar &fill();
-    cv::Mat &correctionLayer();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
@@ -131,7 +129,6 @@ public:
     void rotation(double rotation);
     void stroke(cv::Scalar &stroke);
     void fill(cv::Scalar &fill);
-    void correctionLayer(cv::Mat &layer);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
@@ -155,7 +152,6 @@ private:
     double _rotation;
     cv::Scalar _stroke;
     cv::Scalar _fill;
-    cv::Mat _correctionLayer;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;

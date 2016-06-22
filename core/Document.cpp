@@ -95,11 +95,6 @@ cv::Scalar &Document::fill()
     return _fill;
 }
 
-cv::Mat &Document::correctionLayer()
-{
-    return _correctionLayer;
-}
-
 cv::Rect &Document::clippingRect()
 {
     return _clippingRect;
@@ -213,12 +208,6 @@ void Document::fill(cv::Scalar &fill)
 {
     _fill = fill;
     notify(this, Document::Event::Fill);
-}
-
-void Document::correctionLayer(cv::Mat &layer)
-{
-    _correctionLayer = layer;
-    notify(this, Document::Event::CorrectionLayer);
 }
 
 void Document::clippingRect(cv::Rect &rect)
