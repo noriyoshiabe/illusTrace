@@ -36,8 +36,16 @@ Document::~Document()
         delete _centerLines;
     }
 
+    if (_approximatedCenterLines) {
+        delete _approximatedCenterLines;
+    }
+
     if (_outlineContours) {
         delete _outlineContours;
+    }
+
+    if (_approximatedOutlineContours) {
+        delete _approximatedOutlineContours;
     }
 
     if (_outlineHierarchy) {
