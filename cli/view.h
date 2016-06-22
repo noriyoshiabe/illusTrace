@@ -28,6 +28,7 @@ private:
     void notify(Illustrace *sender, va_list argList);
 
     void clearPreview();
+    void fillBackground(cv::Scalar &color);
     void copyFrom(cv::Mat &image);
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);

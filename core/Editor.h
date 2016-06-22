@@ -15,8 +15,8 @@ public:
     void scale(double scale);
     void rotation(double rotation);
     void clippingRect(cv::Rect &rect);
-    void stroke(cv::Scalar &stroke);
-    void fill(cv::Scalar &fill);
+    void color(cv::Scalar &color);
+    void backgroundColor(cv::Scalar &backgroundColor);
 
 private:
     Illustrace *illustrace;

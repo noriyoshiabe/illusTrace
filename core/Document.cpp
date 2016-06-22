@@ -11,8 +11,8 @@ Document::Document() :
     _thickness(1.0),
     _scale(1.0),
     _rotation(0.0),
-    _stroke(cv::Scalar(0, 0, 0)),
-    _fill(cv::Scalar(0, 0, 0)),
+    _color(cv::Scalar(0, 0, 0, 255)),
+    _backgroundColor(cv::Scalar(0, 0, 0, 0)),
     _paths(nullptr),
     _centerLines(nullptr),
     _approximatedCenterLines(nullptr),
@@ -93,14 +93,14 @@ double Document::rotation()
     return _rotation;
 }
 
-cv::Scalar &Document::stroke()
+cv::Scalar &Document::color()
 {
-    return _stroke;
+    return _color;
 }
 
-cv::Scalar &Document::fill()
+cv::Scalar &Document::backgroundColor()
 {
-    return _fill;
+    return _backgroundColor;
 }
 
 cv::Rect &Document::clippingRect()
@@ -206,16 +206,16 @@ void Document::rotation(double rotation)
     notify(this, Document::Event::Rotation);
 }
 
-void Document::stroke(cv::Scalar &stroke)
+void Document::color(cv::Scalar &color)
 {
-    _stroke = stroke;
-    notify(this, Document::Event::Stroke);
+    _color = color;
+    notify(this, Document::Event::Color);
 }
 
-void Document::fill(cv::Scalar &fill)
+void Document::backgroundColor(cv::Scalar &backgroundColor)
 {
-    _fill = fill;
-    notify(this, Document::Event::Fill);
+    _backgroundColor = backgroundColor;
+    notify(this, Document::Event::BackgroundColor);
 }
 
 void Document::clippingRect(cv::Rect &rect)

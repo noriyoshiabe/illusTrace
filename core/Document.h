@@ -79,8 +79,8 @@ public:
         Thickness,
         Scale,
         Rotation,
-        Stroke,
-        Fill,
+        Color,
+        BackgroundColor,
         ClippingRect,
         BoundingRect,
         Paths,
@@ -105,8 +105,8 @@ public:
     double thickness();
     double scale();
     double rotation();
-    cv::Scalar &stroke();
-    cv::Scalar &fill();
+    cv::Scalar &color();
+    cv::Scalar &backgroundColor();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
@@ -127,8 +127,8 @@ public:
     void thickness(double thickness);
     void scale(double scale);
     void rotation(double rotation);
-    void stroke(cv::Scalar &stroke);
-    void fill(cv::Scalar &fill);
+    void color(cv::Scalar &color);
+    void backgroundColor(cv::Scalar &backgroundColor);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
@@ -152,8 +152,8 @@ private:
     double _thickness;
     double _scale;
     double _rotation;
-    cv::Scalar _stroke;
-    cv::Scalar _fill;
+    cv::Scalar _color;
+    cv::Scalar _backgroundColor;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;

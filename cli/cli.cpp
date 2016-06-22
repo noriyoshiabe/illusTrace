@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <regex>
 #include <getopt.h>
 #include "opencv2/highgui.hpp"
 #include "SVGWriter.h"
@@ -57,22 +58,26 @@ int CLI::main(int argc, char **argv)
             break;
         case 'c':
             {
-                char *fill = strchr(optarg, ',');
-                if (fill) {
-                    *fill++ = '\0';
-                    int hex = std::stoi(optarg, nullptr, 16);
-                    auto color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
-                    cli.document->stroke(color);
-                    hex = std::stoi(fill, nullptr, 16);
-                    color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
-                    cli.document->fill(color);
+                std::string s = optarg;
+                std::regex re("[0-9a-fA-F]{8}(,[0-9a-fA-F]{8})?");
+
+                if (!std::regex_match(s.begin(), s.end(), re)) {
+                    std::cout << "Color format is invalid." << std::endl;
+                    cli.usage();
+                    return EXIT_FAILURE;
                 }
-                else {
-                    int hex = std::stoi(optarg, nullptr, 16);
-                    auto color = cv::Scalar(hex & 0XFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF);
-                    cli.document->stroke(color);
-                    cli.document->fill(color);
+
+                char *background = strchr(optarg, ',');
+                if (background) {
+                    *background++ = '\0';
+                    long hex = std::stol(background, nullptr, 16);
+                    auto backgroundColor = cv::Scalar((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                    cli.document->backgroundColor(backgroundColor);
                 }
+
+                long hex = std::stol(optarg, nullptr, 16);
+                auto color = cv::Scalar((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                cli.document->color(color);
             }
             break;
         case 'w':
@@ -143,20 +148,22 @@ void CLI::usage()
     const std::string USAGE =
         "Usage: illustrace [options] <file>\n"
         "Options:\n"
-        "  -O, --outline            Outline trace mode. Default is center line mode.\n"
-        "  -b, --brightness <value> Adjustment for brightness. -1.0 to 1.0.\n"
-        "  -B, --blur <value>       Blur size (%% of short side) of the preprocess for binarize. 0.0 to 1.0\n"
-        "  -d, --detail <value>     Adjustment for line detail. 0.0 to 1.0.\n"
-        "  -t, --thickness <value>  Adjustment for line thickness. 0 < value.\n"
-        "  -s, --smooth <value>     Adjustment for bezier smoothness. 0 < value.\n"
-        "  -w, --wait <msec>        Wait milli seconds for each of image proccessing phase.\n"
-        "                           0 is infinity and key input is needed for continue.\n"
-        "  -S, --step               Wait with drawing one line.\n"
-        "  -p, --plot               Plot points and handles.\n"
-        "  -o, --output <file>      Output result to file. Currently, .svg only.\n"
-        "  -T, --trace              Print trace log.\n"
-        "  -h, --help               This help text.\n"
-        "  -v, --version            Show program version.\n";
+        "  -O, --outline               Outline trace mode. Default is center line mode.\n"
+        "  -b, --brightness <value>    Adjustment for brightness. -1.0 to 1.0.\n"
+        "  -B, --blur <value>          Blur size (%% of short side) of the preprocess for binarize. 0.0 to 1.0\n"
+        "  -d, --detail <value>        Adjustment for line detail. 0.0 to 1.0.\n"
+        "  -t, --thickness <value>     Adjustment for line thickness. 0 < value.\n"
+        "  -s, --smooth <value>        Adjustment for bezier smoothness. 0 < value.\n"
+        "  -c, --color <color[,color]> Color for line and background(optional).\n"
+        "                              Color format is HEX RGBA. ex) FF0000FF,000000FF\n"
+        "  -w, --wait <msec>           Wait milli seconds for each of image proccessing phase.\n"
+        "                              0 is infinity and key input is needed for continue.\n"
+        "  -S, --step                  Wait with drawing one line.\n"
+        "  -p, --plot                  Plot points and handles.\n"
+        "  -o, --output <file>         Output result to file. Currently, .svg only.\n"
+        "  -T, --trace                 Print trace log.\n"
+        "  -h, --help                  This help text.\n"
+        "  -v, --version               Show program version.\n";
 
     std::cout << USAGE;
     std::cout << std::endl;

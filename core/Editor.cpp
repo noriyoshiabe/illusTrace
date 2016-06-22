@@ -38,12 +38,12 @@ void Editor::clippingRect(cv::Rect &rect)
     document->clippingRect(rect);
 }
 
-void Editor::stroke(cv::Scalar &stroke)
+void Editor::color(cv::Scalar &color)
 {
-    document->stroke(stroke);
+    document->color(color);
 }
 
-void Editor::fill(cv::Scalar &fill)
+void Editor::backgroundColor(cv::Scalar &backgroundColor)
 {
-    document->fill(fill);
+    document->backgroundColor(backgroundColor);
 }
