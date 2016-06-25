@@ -112,11 +112,6 @@ std::vector<Path *> *Document::paths()
     return _paths;
 }
 
-cv::Mat &Document::sourceImage()
-{
-    return _sourceImage;
-}
-
 cv::Mat &Document::binarizedImage()
 {
     return _binarizedImage;
@@ -227,12 +222,6 @@ void Document::paths(std::vector<Path *> *paths)
     }
     _paths = paths;
     notify(this, Document::Event::Paths);
-}
-
-void Document::sourceImage(cv::Mat &sourceImage)
-{
-    _sourceImage = sourceImage;
-    notify(this, Document::Event::SourceImage);
 }
 
 void Document::binarizedImage(cv::Mat &binarizedImage)

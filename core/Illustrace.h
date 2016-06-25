@@ -34,7 +34,7 @@ public:
 
     bool traceFromFile(const char *filepath, Document *document);
     void traceFromImage(cv::Mat &sourceImage, Document *document);
-    void binarize(Document *document);
+    void binarize(cv::Mat &sourceImage, Document *document);
     void buildLines(Document *document);
     void approximateLines(Document *document);
     void buildPaths(Document *document);
@@ -66,7 +66,7 @@ public:
 
 private:
     void buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &outlineHierarchy, int index, std::vector<Path *> &results);
-    int blur(Document *document);
+    int blur(cv::Mat &sourceImage, Document *document);
     double epsilon(Document *document);
 };
 

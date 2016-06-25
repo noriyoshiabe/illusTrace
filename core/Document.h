@@ -83,7 +83,6 @@ public:
         ClippingRect,
         BoundingRect,
         Paths,
-        SourceImage,
         BinarizedImage,
         NegativeImage,
         CenterLines,
@@ -108,7 +107,6 @@ public:
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
-    cv::Mat &sourceImage();
     cv::Mat &binarizedImage();
     cv::Mat &negativeImage();
     std::vector<std::vector<cv::Point2f>> *centerLines();
@@ -129,7 +127,6 @@ public:
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
-    void sourceImage(cv::Mat &sourceImage);
     void binarizedImage(cv::Mat &binarizedImage);
     void negativeImage(cv::Mat &negativeImage);
     void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
@@ -152,7 +149,6 @@ private:
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;
 
-    cv::Mat _sourceImage;
     cv::Mat _binarizedImage;
     cv::Mat _negativeImage;
 

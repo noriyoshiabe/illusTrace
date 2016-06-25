@@ -17,25 +17,23 @@ bool Illustrace::traceFromFile(const char *filepath, Document *document)
 
 void Illustrace::traceFromImage(cv::Mat &sourceImage, Document *document)
 {
-    document->sourceImage(sourceImage);
-
     cv::Rect clippingRect = cv::Rect(0, 0, sourceImage.cols, sourceImage.rows);
     document->clippingRect(clippingRect);
 
-    binarize(document);
+    binarize(sourceImage, document);
     buildLines(document);
     approximateLines(document);
     buildPaths(document);
 }
 
-void Illustrace::binarize(Document *document)
+void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
 {
-    cv::Mat binarizedImage = document->sourceImage().clone();
+    cv::Mat binarizedImage = sourceImage.clone();
 
     Filter::brightness(binarizedImage, document->brightness());
     notify(this, Illustrace::Event::BrightnessFilterApplied, document, &binarizedImage);
 
-    Filter::blur(binarizedImage, blur(document));
+    Filter::blur(binarizedImage, blur(sourceImage, document));
     notify(this, Illustrace::Event::BlurFilterApplied, document, &binarizedImage);
 
     Filter::threshold(binarizedImage);
@@ -172,9 +170,8 @@ void Illustrace::buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *pa
     }
 }
 
-int Illustrace::blur(Document *document)
+int Illustrace::blur(cv::Mat &sourceImage, Document *document)
 {
-    cv::Mat sourceImage = document->sourceImage();
     double shortSide = MIN(sourceImage.cols, sourceImage.rows);
     int blur = shortSide * document->blur();
     return 0 == blur % 2 ? blur + 1 : blur;
