@@ -48,7 +48,7 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
     document->binarizedImage(binarizedImage);
     document->preprocessedImage(binarizedImage);
 
-    cv::Mat paintLayer = cv::Mat(sourceImage.rows, sourceImage.cols, CV_8UC3);
+    cv::Mat paintLayer = cv::Mat::zeros(sourceImage.rows, sourceImage.cols, CV_8UC4);
     document->paintLayer(paintLayer);
 }
 
@@ -182,7 +182,7 @@ void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, s
 void Illustrace::buildPaintMask(Document *document)
 {
     const cv::Mat &image = document->binarizedImage();
-    cv::Mat paintMask = cv::Mat(image.rows, image.cols, CV_8UC1);
+    cv::Mat paintMask = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
 
     cairo_surface_t *surface = cairo_image_surface_create_for_data(paintMask.data, CAIRO_FORMAT_A8,
             paintMask.cols, paintMask.rows, cairo_format_stride_for_width(CAIRO_FORMAT_A8, paintMask.cols));
@@ -207,7 +207,8 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     cv::Mat &paintLayer = document->paintLayer();
 
     int sideLength = radius * 2 + 1;
-    cv::Mat circle = cv::Mat(sideLength, sideLength, CV_8UC1);
+    cv::Mat circle = cv::Mat::zeros(sideLength, sideLength, CV_8UC1);
+
     cv::circle(circle, cv::Point(radius, radius), radius, cv::Scalar(255), -1);
 
     int dstStartFromX = point.x - radius;
@@ -223,15 +224,19 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
                 if (0 <= dstX && dstX < paintLayer.cols) {
                     if (0 < circle.data[yOffset + x]
                             && 0 == paintLayer.data[yDstOffset + dstX]) {
-                        cv::Vec3b &_color = paintLayer.at<cv::Vec3b>(dstY, dstX);
+                        cv::Vec4b &_color = paintLayer.at<cv::Vec4b>(dstY, dstX);
                         _color[0] = color[0];
                         _color[1] = color[1];
                         _color[2] = color[2];
+                        _color[3] = color[3];
                     }
                 }
             }
         }
     }
+
+    notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
+    document->paintLayer(paintLayer);
 }
 
 void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)

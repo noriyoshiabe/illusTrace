@@ -186,10 +186,16 @@ void View::notify(Illustrace *sender, va_list argList)
         }
         break;
     case Illustrace::Event::PaintMaskBuilt:
-        // TODO
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
+        waitKeyIfNeeded();
         break;
     case Illustrace::Event::PaintLayerUpdated:
-        // TODO
+        {
+            cv::Mat bgra;
+            cv::cvtColor(*va_arg(argList, cv::Mat *), bgra, CV_RGBA2BGRA);
+            imshow(WindowName, bgra);
+            waitKeyIfNeeded();
+        }
         break;
     case Illustrace::Event::PaintPathsBuilt:
         // TODO

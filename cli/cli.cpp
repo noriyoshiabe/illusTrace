@@ -74,13 +74,13 @@ int CLI::main(int argc, char **argv)
                 if (background) {
                     *background++ = '\0';
                     long hex = std::stol(background, nullptr, 16);
-                    auto backgroundColor = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                    auto backgroundColor = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 255);
                     cli.document->backgroundColor(backgroundColor);
                     cli.document->backgroundEnable(true);
                 }
 
                 long hex = std::stol(optarg, nullptr, 16);
-                auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 255);
                 cli.document->color(color);
             }
             break;
@@ -222,8 +222,8 @@ bool CLI::execute(const char *inputFilePath)
 }
 
 enum Command {
+    DrawCircle,
     FillRegion,
-    DrawPoint,
 
     Unknown,
 };
@@ -232,7 +232,7 @@ void CLI::executeCommand(char *commandLine, int line)
 {
     int argc;
     char **argv = NACStringSplit(commandLine, ": ,", &argc);
-    if (0 == argc) {
+    if (0 == argc || '#' == argv[0][0]) {
         return;
     }
 
@@ -241,7 +241,7 @@ void CLI::executeCommand(char *commandLine, int line)
         Command command;
     } table[] = {
         {"FillRegion", FillRegion},
-        {"DrawPoint", DrawPoint},
+        {"DrawCircle", DrawCircle},
     };
 
     Command command = Unknown;
@@ -253,9 +253,28 @@ void CLI::executeCommand(char *commandLine, int line)
     }
 
     switch (command) {
-    case FillRegion:
+    case DrawCircle:
+        if (5 > argc) {
+            std::cout << "Bad command instruction. line: " << line << std::endl;
+        }
+        else {
+            cv::Point point = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
+            int radius = std::stoi(argv[3]);
+            long hex = std::stol(argv[4], nullptr, 16);
+            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+            illustrace.drawCircleOnPaintLayer(point, radius, color, document);
+        }
         break;
-    case DrawPoint:
+    case FillRegion:
+        if (4 > argc) {
+            std::cout << "Bad command instruction. line: " << line << std::endl;
+        }
+        else {
+            cv::Point seed = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
+            long hex = std::stol(argv[3], nullptr, 16);
+            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+            illustrace.fillRegionOnPaintLayer(seed, color, document);
+        }
         break;
     case Unknown:
         std::cout << "Bad command instruction. line: " << line << std::endl;
