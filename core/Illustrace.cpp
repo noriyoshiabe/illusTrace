@@ -179,7 +179,7 @@ void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, s
     }
 }
 
-void Illustrace::buildPaintMask(std::vector<Path *> *paths, Document *document)
+void Illustrace::buildPaintMask(Document *document)
 {
     const cv::Mat &image = document->binarizedImage();
     cv::Mat paintMask = cv::Mat(image.rows, image.cols, CV_8UC1);
@@ -193,7 +193,7 @@ void Illustrace::buildPaintMask(std::vector<Path *> *paths, Document *document)
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
-    drawPaths(cr, paths);
+    drawPaths(cr, document->paths());
 
     cairo_destroy(cr);
     cairo_surface_destroy(surface);

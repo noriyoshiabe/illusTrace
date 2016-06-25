@@ -18,11 +18,13 @@ public:
     void usage();
     void version();
     bool execute(const char *inputFilePath);
+    void executeCommand(char *commandLine, int line);
 
     Document *document;
     View view;
     Illustrace illustrace;
     bool outline;
+    const char *editFilePath;
     const char *outputFilepath;
 };
 

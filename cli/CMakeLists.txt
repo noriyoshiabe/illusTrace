@@ -9,12 +9,14 @@ find_package(Cario)
 find_package(LibXml2)
 
 add_definitions(-Wall)
-add_definitions(-std=c++11)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
   add_definitions(-DDEBUG)
 endif ()
 
+add_subdirectory (./nalib ${CMAKE_CURRENT_BINARY_DIR}/nalib)
+
+add_definitions(-std=c++11)
 add_subdirectory (../core ${CMAKE_CURRENT_BINARY_DIR}/core)
 
 set(SOURCES
@@ -31,6 +33,7 @@ include_directories(
 
 add_executable(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} illustrace-core)
+target_link_libraries(${TARGET_NAME} nalib)
 target_link_libraries(${TARGET_NAME} ${OpenCV_LIBRARIES})
 target_link_libraries(${TARGET_NAME} ${CAIRO_LIBRARIES})
 target_link_libraries(${TARGET_NAME} ${LIBXML2_LIBRARIES})

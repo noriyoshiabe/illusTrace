@@ -1,12 +1,14 @@
 #include "CLI.h"
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <regex>
 #include <getopt.h>
 #include "opencv2/highgui.hpp"
 #include "SVGWriter.h"
 #include "Log.h"
+#include "nalib/NACString.h"
 
 using namespace illustrace;
 
@@ -25,6 +27,7 @@ int CLI::main(int argc, char **argv)
         {"wait", required_argument, NULL, 'w'},
         {"step", no_argument, NULL, 'S'},
         {"plot", no_argument, NULL, 'p'},
+        {"edit", required_argument, NULL, 'e'},
         {"output", required_argument, NULL, 'o'},
         {"trace", no_argument, NULL, 'T'},
         {"help", no_argument, NULL, 'h'},
@@ -36,7 +39,7 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:c:w:SpTo:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:c:w:Spe:To:hv", _options, NULL))) {
         switch (opt) {
         case 'O':
             cli.document->mode(LineMode::Outline);
@@ -90,6 +93,9 @@ int CLI::main(int argc, char **argv)
         case 'p':
             cli.view.plot = true;
             break;
+        case 'e':
+            cli.editFilePath = optarg;
+            break;
         case 'o':
             cli.outputFilepath = optarg;
             break;
@@ -121,7 +127,7 @@ int CLI::main(int argc, char **argv)
     return cli.execute(argv[optind]) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-CLI::CLI()
+CLI::CLI() : editFilePath(nullptr), outputFilepath(nullptr)
 {
     document = new Document();
 }
@@ -161,6 +167,7 @@ void CLI::usage()
         "                              0 is infinity and key input is needed for continue.\n"
         "  -S, --step                  Wait with drawing one line.\n"
         "  -p, --plot                  Plot points and handles.\n"
+        "  -e, --edit <file>           Edit with command instruction.\n"
         "  -o, --output <file>         Output result to file. Currently, .svg only.\n"
         "  -T, --trace                 Print trace log.\n"
         "  -h, --help                  This help text.\n"
@@ -187,6 +194,23 @@ bool CLI::execute(const char *inputFilePath)
         return EXIT_FAILURE;
     }
 
+
+    if (editFilePath) {
+        char str[1024];
+        std::ifstream ifs(editFilePath);
+        if (ifs.fail()) {
+            std::cout << "Could not load command instruction." << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        illustrace.buildPaintMask(document);
+
+        int line = 0;
+        while (ifs.getline(str, 1024 - 1)) {
+            executeCommand(str, ++line);
+        }
+    }
+
     if (!outputFilepath) {
         view.waitKey();
     }
@@ -195,4 +219,46 @@ bool CLI::execute(const char *inputFilePath)
     }
 
     return ret ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+enum Command {
+    FillRegion,
+    DrawPoint,
+
+    Unknown,
+};
+
+void CLI::executeCommand(char *commandLine, int line)
+{
+    int argc;
+    char **argv = NACStringSplit(commandLine, ": ,", &argc);
+    if (0 == argc) {
+        return;
+    }
+
+    struct {
+        const char *name;
+        Command command;
+    } table[] = {
+        {"FillRegion", FillRegion},
+        {"DrawPoint", DrawPoint},
+    };
+
+    Command command = Unknown;
+
+    for (int i = 0; i < sizeof(table) / sizeof(table)[0]; ++i) {
+        if (0 == strcasecmp(table[i].name, argv[0])) {
+            command = table[i].command;
+        }
+    }
+
+    switch (command) {
+    case FillRegion:
+        break;
+    case DrawPoint:
+        break;
+    case Unknown:
+        std::cout << "Bad command instruction. line: " << line << std::endl;
+        break;
+    }
 }
