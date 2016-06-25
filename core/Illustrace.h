@@ -31,6 +31,7 @@ public:
         OutlineBuilt,
         OutlineApproximated,
         OutlineBezierized,
+        PaintMaskBuilt,
         PaintPathsBuilt,
     };
 
@@ -40,6 +41,7 @@ public:
     void buildLines(Document *document);
     void approximateLines(Document *document);
     void buildPaths(Document *document);
+    void buildPaintMask(std::vector<Path *> *paths, Document *document);
     void buildPaintPaths(Document *document);
 
     static inline const char *Event2CString(Event event)
@@ -61,6 +63,7 @@ public:
         CASE(OutlineBuilt);
         CASE(OutlineApproximated);
         CASE(OutlineBezierized);
+        CASE(PaintMaskBuilt);
         CASE(PaintPathsBuilt);
         }
         return "Unknown event";

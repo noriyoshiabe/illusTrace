@@ -185,6 +185,9 @@ void View::notify(Illustrace *sender, va_list argList)
             }
         }
         break;
+    case Illustrace::Event::PaintMaskBuilt:
+        // TODO
+        break;
     case Illustrace::Event::PaintPathsBuilt:
         // TODO
         break;
