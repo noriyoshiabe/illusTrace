@@ -202,7 +202,39 @@ void Illustrace::buildPaintMask(std::vector<Path *> *paths, Document *document)
     document->paintMask(paintMask);
 }
 
-void Illustrace::fillPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)
+void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
+{
+    cv::Mat &paintLayer = document->paintLayer();
+
+    int sideLength = radius * 2 + 1;
+    cv::Mat circle = cv::Mat(sideLength, sideLength, CV_8UC1);
+    cv::circle(circle, cv::Point(radius, radius), radius, cv::Scalar(255), -1);
+
+    int dstStartFromX = point.x - radius;
+    int dstStartFromY = point.y - radius;
+
+    for (int y = 0; y < sideLength; ++y) {
+        int dstY = dstStartFromY + y;
+        if (0 <= dstY && dstY < paintLayer.rows) {
+            int yOffset = sideLength * y;
+            int yDstOffset = dstY * paintLayer.cols;
+            for (int x = 0; x < sideLength; ++x) {
+                int dstX = dstStartFromX + x;
+                if (0 <= dstX && dstX < paintLayer.cols) {
+                    if (0 < circle.data[yOffset + x]
+                            && 0 == paintLayer.data[yDstOffset + dstX]) {
+                        cv::Vec3b &_color = paintLayer.at<cv::Vec3b>(dstY, dstX);
+                        _color[0] = color[0];
+                        _color[1] = color[1];
+                        _color[2] = color[2];
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)
 {
     cv::Mat &paintLayer = document->paintLayer();
     cv::floodFill(paintLayer, document->paintMask(), seed, color);
