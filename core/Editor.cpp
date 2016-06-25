@@ -23,9 +23,9 @@ void Editor::thickness(double thickness)
     document->thickness(thickness);
 }
 
-void Editor::rotation(double rotation)
+void Editor::transform(cv::Mat &transform)
 {
-    document->rotation(rotation);
+    document->transform(transform);
 }
 
 void Editor::clippingRect(cv::Rect &rect)

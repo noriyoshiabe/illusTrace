@@ -12,7 +12,7 @@ public:
 
     void detail(double detail);
     void thickness(double thickness);
-    void rotation(double rotation);
+    void transform(cv::Mat &transform);
     void clippingRect(cv::Rect &rect);
     void color(cv::Scalar &color);
     void backgroundColor(cv::Scalar &backgroundColor);

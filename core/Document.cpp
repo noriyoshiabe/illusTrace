@@ -9,7 +9,7 @@ Document::Document() :
     _detail(1.0),
     _smoothing(1.0),
     _thickness(1.0),
-    _rotation(0.0),
+    _transform(cv::Mat_<double>(2, 3)),
     _color(cv::Scalar(0, 0, 0)),
     _backgroundColor(cv::Scalar(255, 255, 255)),
     _backgroundEnable(false),
@@ -83,9 +83,9 @@ double Document::thickness()
     return _thickness;
 }
 
-double Document::rotation()
+cv::Mat &Document::transform()
 {
-    return _rotation;
+    return _transform;
 }
 
 cv::Scalar &Document::color()
@@ -189,10 +189,10 @@ void Document::thickness(double thickness)
     notify(this, Document::Event::Thickness);
 }
 
-void Document::rotation(double rotation)
+void Document::transform(cv::Mat &transform)
 {
-    _rotation = rotation;
-    notify(this, Document::Event::Rotation);
+    _transform = transform;
+    notify(this, Document::Event::Transform);
 }
 
 void Document::color(cv::Scalar &color)
