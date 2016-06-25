@@ -112,7 +112,12 @@ bool Document::backgroundEnable()
 
 cv::Mat &Document::paintLayer()
 {
-    return _paintlayer;
+    return _paintLayer;
+}
+
+cv::Mat &Document::paintMask()
+{
+    return _paintMask;
 }
 
 cv::Rect &Document::clippingRect()
@@ -232,8 +237,14 @@ void Document::backgroundEnable(bool backgroundEnable)
 
 void Document::paintLayer(cv::Mat &paintLayer)
 {
-    _paintlayer = paintLayer;
+    _paintLayer = paintLayer;
     notify(this, Document::Event::PaintLayer);
+}
+
+void Document::paintMask(cv::Mat &paintMask)
+{
+    _paintMask = paintMask;
+    notify(this, Document::Event::PaintMask);
 }
 
 void Document::clippingRect(cv::Rect &rect)
