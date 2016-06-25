@@ -224,6 +224,7 @@ bool CLI::execute(const char *inputFilePath)
 enum Command {
     DrawCircle,
     FillRegion,
+    BuildPaintPath,
 
     Unknown,
 };
@@ -242,6 +243,7 @@ void CLI::executeCommand(char *commandLine, int line)
     } table[] = {
         {"FillRegion", FillRegion},
         {"DrawCircle", DrawCircle},
+        {"BuildPaintPath", BuildPaintPath},
     };
 
     Command command = Unknown;
@@ -275,6 +277,9 @@ void CLI::executeCommand(char *commandLine, int line)
             auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 0xFF);
             illustrace.fillRegionOnPaintLayer(seed, color, document);
         }
+        break;
+    case BuildPaintPath:
+        illustrace.buildPaintPaths(document);
         break;
     case Unknown:
         std::cout << "Bad command instruction. line: " << line << std::endl;

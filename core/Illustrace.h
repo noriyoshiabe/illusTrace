@@ -4,7 +4,6 @@
 #include "Filter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
-#include "PolylineBuilder.h"
 #include "FeatureDetector.h"
 #include "GraphBuilder.h"
 #include "Document.h"

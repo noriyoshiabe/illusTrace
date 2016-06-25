@@ -249,7 +249,6 @@ bool Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     if (changed) {
         notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
         document->paintLayer(paintLayer);
-        buildPaintPaths(document);
     }
 
     return changed;
@@ -323,7 +322,6 @@ bool Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
 
     notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
     document->paintLayer(paintLayer);
-    buildPaintPaths(document);
 
     return true;
 }
@@ -369,12 +367,20 @@ void Illustrace::buildPaintPaths(Document *document)
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(negativeImage, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
-        std::vector<Path *> paths;
+        std::vector<std::vector<cv::Point2f>> approximatedLines;
 
         for (auto line : contours) {
+            std::vector<cv::Point2f> approx;
+            cv::approxPolyDP(cv::Mat(line), approx, 1, false);
+            approximatedLines.push_back(approx);
+        }
+
+        std::vector<Path *> paths;
+
+        for (auto line : approximatedLines) {
             auto *path = new Path();
             path->color = new cv::Scalar(color[0], color[1], color[2], color[3]);
-            PolylineBuilder::build(line, path, true);
+            BezierSplineBuilder::build(line, path, document->smoothing(), true);
             paths.push_back(path);
         }
 

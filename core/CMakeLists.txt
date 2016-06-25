@@ -10,7 +10,6 @@ set(SOURCES
   BezierSplineBuilder.cpp
   FeatureDetector.cpp
   GraphBuilder.cpp
-  PolylineBuilder.cpp
   SVGWriter.cpp
   Editor.cpp
   Log.cpp
