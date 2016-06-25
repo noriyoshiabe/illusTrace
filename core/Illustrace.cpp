@@ -39,18 +39,14 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
     Filter::threshold(binarizedImage);
     notify(this, Illustrace::Event::Binarized, document, &binarizedImage);
 
-    if (LineMode::Center == document->mode()) {
-        Filter::thinning(binarizedImage);
-        notify(this, Illustrace::Event::Thinned, document, &binarizedImage);
-    }
-
     document->binarizedImage(binarizedImage);
+    document->preprocessedImage(binarizedImage);
 }
 
 void Illustrace::buildLines(Document *document)
 {
-    cv::Mat binarizedImage = document->binarizedImage();
-    cv::Mat negativeImage = binarizedImage.clone();
+    cv::Mat preprocessedImage = document->preprocessedImage();
+    cv::Mat negativeImage = preprocessedImage.clone();
     Filter::negative(negativeImage);
     notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
 
@@ -58,12 +54,16 @@ void Illustrace::buildLines(Document *document)
     document->boundingRect(boundingRect);
 
     if (LineMode::Center == document->mode()) {
+        cv::Mat thinnedImage = preprocessedImage.clone();
+        Filter::thinning(thinnedImage);
+        notify(this, Illustrace::Event::Thinned, document, &thinnedImage);
+
         std::vector<cv::Point2f> keyPoints;
-        FeatureDetector::detect(binarizedImage, keyPoints);
-        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &binarizedImage, &keyPoints);
+        FeatureDetector::detect(thinnedImage, keyPoints);
+        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &thinnedImage, &keyPoints);
 
         Graph graph;
-        GraphBuilder::build(binarizedImage, keyPoints, graph);
+        GraphBuilder::build(thinnedImage, keyPoints, graph);
         notify(this, Illustrace::Event::CenterLineGraphBuilt, document, &graph);
 
         Graph approximatedGraph;

@@ -117,6 +117,11 @@ cv::Mat &Document::binarizedImage()
     return _binarizedImage;
 }
 
+cv::Mat &Document::preprocessedImage()
+{
+    return _preprocessedImage;
+}
+
 std::vector<std::vector<cv::Point2f>> *Document::centerLines()
 {
     return _centerLines;
@@ -223,6 +228,12 @@ void Document::binarizedImage(cv::Mat &binarizedImage)
 {
     _binarizedImage = binarizedImage;
     notify(this, Document::Event::BinarizedImage);
+}
+
+void Document::preprocessedImage(cv::Mat &preprocessedImage)
+{
+    _preprocessedImage = preprocessedImage;
+    notify(this, Document::Event::PreprocessedImage);
 }
 
 void Document::centerLines(std::vector<std::vector<cv::Point2f>> *centerLines)
