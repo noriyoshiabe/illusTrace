@@ -12,7 +12,6 @@ public:
 
     void detail(double detail);
     void thickness(double thickness);
-    void scale(double scale);
     void rotation(double rotation);
     void clippingRect(cv::Rect &rect);
     void color(cv::Scalar &color);

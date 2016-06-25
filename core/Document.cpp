@@ -9,7 +9,6 @@ Document::Document() :
     _detail(1.0),
     _smoothing(1.0),
     _thickness(1.0),
-    _scale(1.0),
     _rotation(0.0),
     _color(cv::Scalar(0, 0, 0, 255)),
     _backgroundColor(cv::Scalar(0, 0, 0, 0)),
@@ -81,11 +80,6 @@ double Document::smoothing()
 double Document::thickness()
 {
     return _thickness;
-}
-
-double Document::scale()
-{
-    return _scale;
 }
 
 double Document::rotation()
@@ -194,12 +188,6 @@ void Document::thickness(double thickness)
     notify(this, Document::Event::Thickness);
 }
 
-void Document::scale(double scale)
-{
-    _scale = scale;
-    notify(this, Document::Event::Scale);
-}
-
 void Document::rotation(double rotation)
 {
     _rotation = rotation;
@@ -302,9 +290,4 @@ void Document::outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy)
     }
     _outlineHierarchy = outlineHierarchy;
     notify(this, Document::Event::OutlineHierarchy);
-}
-
-cv::Size Document::scaledSize()
-{
-    return (cv::Size){(int)round(_clippingRect.width * _scale), (int)round(_clippingRect.height * _scale)};
 }

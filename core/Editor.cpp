@@ -23,11 +23,6 @@ void Editor::thickness(double thickness)
     document->thickness(thickness);
 }
 
-void Editor::scale(double scale)
-{
-    document->scale(scale);
-}
-
 void Editor::rotation(double rotation)
 {
     document->rotation(rotation);

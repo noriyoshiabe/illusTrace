@@ -77,7 +77,6 @@ public:
         Detail,
         Smoothing,
         Thickness,
-        Scale,
         Rotation,
         Color,
         BackgroundColor,
@@ -103,7 +102,6 @@ public:
     double detail();
     double smoothing();
     double thickness();
-    double scale();
     double rotation();
     cv::Scalar &color();
     cv::Scalar &backgroundColor();
@@ -125,7 +123,6 @@ public:
     void detail(double detail);
     void smoothing(double smoothing);
     void thickness(double thickness);
-    void scale(double scale);
     void rotation(double rotation);
     void color(cv::Scalar &color);
     void backgroundColor(cv::Scalar &backgroundColor);
@@ -141,8 +138,6 @@ public:
     void approximatedOutlineContours(std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours);
     void outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy);
 
-    cv::Size scaledSize();
-
 private:
     LineMode _mode;
     double _brightness;
@@ -150,7 +145,6 @@ private:
     double _detail;
     double _smoothing;
     double _thickness;
-    double _scale;
     double _rotation;
     cv::Scalar _color;
     cv::Scalar _backgroundColor;
