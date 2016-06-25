@@ -107,6 +107,7 @@ public:
         ClippingRect,
         BoundingRect,
         Paths,
+        PaintPaths,
         BinarizedImage,
         PreprocessedImage,
         CenterLines,
@@ -133,6 +134,7 @@ public:
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
+    std::vector<Path *> *paintPaths();
     cv::Mat &binarizedImage();
     cv::Mat &preprocessedImage();
     std::vector<std::vector<cv::Point2f>> *centerLines();
@@ -155,6 +157,7 @@ public:
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
+    void paintPaths(std::vector<Path *> *paintPaths);
     void binarizedImage(cv::Mat &binarizedImage);
     void preprocessedImage(cv::Mat &preprocessedImage);
     void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
@@ -178,6 +181,7 @@ private:
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;
+    std::vector<Path *> *_paintPaths;
 
     cv::Mat _binarizedImage;
     cv::Mat _preprocessedImage;

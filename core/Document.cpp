@@ -14,6 +14,7 @@ Document::Document() :
     _backgroundColor(cv::Scalar(255, 255, 255)),
     _backgroundEnable(false),
     _paths(nullptr),
+    _paintPaths(nullptr),
     _centerLines(nullptr),
     _approximatedCenterLines(nullptr),
     _outlineContours(nullptr),
@@ -28,9 +29,15 @@ Document::~Document()
         for (auto *path : *_paths) {
             delete path;
         }
+        delete _paths;
     }
 
-    delete _paths;
+    if (_paintPaths) {
+        for (auto *path : *_paintPaths) {
+            delete path;
+        }
+        delete _paintPaths;
+    }
 
     if (_centerLines) {
         delete _centerLines;
@@ -121,6 +128,11 @@ cv::Rect &Document::boundingRect()
 std::vector<Path *> *Document::paths()
 {
     return _paths;
+}
+
+std::vector<Path *> *Document::paintPaths()
+{
+    return _paintPaths;
 }
 
 cv::Mat &Document::binarizedImage()
@@ -242,9 +254,22 @@ void Document::paths(std::vector<Path *> *paths)
         for (auto *path : *_paths) {
             delete path;
         }
+        delete _paths;
     }
     _paths = paths;
     notify(this, Document::Event::Paths);
+}
+
+void Document::paintPaths(std::vector<Path *> *paintPaths)
+{
+    if (_paintPaths) {
+        for (auto *path : *_paintPaths) {
+            delete path;
+        }
+        delete _paintPaths;
+    }
+    _paintPaths = paintPaths;
+    notify(this, Document::Event::PaintPaths);
 }
 
 void Document::binarizedImage(cv::Mat &binarizedImage)
