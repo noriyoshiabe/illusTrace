@@ -41,6 +41,9 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
 
     document->binarizedImage(binarizedImage);
     document->preprocessedImage(binarizedImage);
+
+    cv::Mat paintLayer = cv::Mat(sourceImage.rows, sourceImage.cols, CV_8UC4);
+    document->paintLayer(paintLayer);
 }
 
 void Illustrace::buildLines(Document *document)

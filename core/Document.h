@@ -81,6 +81,7 @@ public:
         Color,
         BackgroundColor,
         BackgroundEnable,
+        PaintLayer,
         ClippingRect,
         BoundingRect,
         Paths,
@@ -106,6 +107,7 @@ public:
     cv::Scalar &color();
     cv::Scalar &backgroundColor();
     bool backgroundEnable();
+    cv::Mat &paintLayer();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
@@ -127,6 +129,7 @@ public:
     void color(cv::Scalar &color);
     void backgroundColor(cv::Scalar &backgroundColor);
     void backgroundEnable(bool enable);
+    void paintLayer(cv::Mat &paintLayer);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
@@ -148,6 +151,7 @@ private:
     cv::Mat _transform;
     cv::Scalar _color;
     cv::Scalar _backgroundColor;
+    cv::Mat _paintlayer;
     bool _backgroundEnable;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;

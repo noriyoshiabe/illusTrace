@@ -103,6 +103,11 @@ bool Document::backgroundEnable()
     return _backgroundEnable;
 }
 
+cv::Mat &Document::paintLayer()
+{
+    return _paintlayer;
+}
+
 cv::Rect &Document::clippingRect()
 {
     return _clippingRect;
@@ -211,6 +216,12 @@ void Document::backgroundEnable(bool backgroundEnable)
 {
     _backgroundEnable = backgroundEnable;
     notify(this, Document::Event::BackgroundEnable);
+}
+
+void Document::paintLayer(cv::Mat &paintLayer)
+{
+    _paintlayer = paintLayer;
+    notify(this, Document::Event::PaintLayer);
 }
 
 void Document::clippingRect(cv::Rect &rect)
