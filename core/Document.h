@@ -37,6 +37,17 @@ struct Segment {
         };
     }
 
+    static Segment M(cv::Point p) {
+        return (Segment){
+            Type::Move,
+            {
+                {0.0, 0.0},
+                {0.0, 0.0},
+                {(float)p.x, (float)p.y},
+            }
+        };
+    }
+
     static Segment L(cv::Point2f p) {
         return (Segment){
             Type::Line,
@@ -44,6 +55,17 @@ struct Segment {
                 {0.0, 0.0},
                 {0.0, 0.0},
                 {p.x, p.y},
+            }
+        };
+    }
+
+    static Segment L(cv::Point p) {
+        return (Segment){
+            Type::Line,
+            {
+                {0.0, 0.0},
+                {0.0, 0.0},
+                {(float)p.x, (float)p.y},
             }
         };
     }
