@@ -261,7 +261,7 @@ void CLI::executeCommand(char *commandLine, int line)
             cv::Point point = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
             int radius = std::stoi(argv[3]);
             long hex = std::stol(argv[4], nullptr, 16);
-            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 0xFF);
             illustrace.drawCircleOnPaintLayer(point, radius, color, document);
         }
         break;
@@ -272,7 +272,7 @@ void CLI::executeCommand(char *commandLine, int line)
         else {
             cv::Point seed = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
             long hex = std::stol(argv[3], nullptr, 16);
-            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 0xFF);
             illustrace.fillRegionOnPaintLayer(seed, color, document);
         }
         break;

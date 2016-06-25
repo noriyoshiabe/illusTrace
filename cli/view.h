@@ -33,7 +33,7 @@ private:
     template <class T>
     void drawLines(std::vector<std::vector<T>> &lines, double thickness, bool closePath = false);
     void drawPaths(std::vector<Path *> *paths, double thickness, cv::Scalar &stroke, cv::Scalar &fill);
-    void drawPath(Path *path, double thickness, cv::Scalar &stroke, cv::Scalar &fill);
+    void drawPath(Path *path, double thickness);
     template <class T>
     void plotPoints(std::vector<T> &points);
     template <class T>

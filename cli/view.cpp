@@ -198,7 +198,15 @@ void View::notify(Illustrace *sender, va_list argList)
         }
         break;
     case Illustrace::Event::PaintPathsBuilt:
-        // TODO
+        if (document->backgroundEnable()) {
+            fillBackground(document->backgroundColor());
+        }
+        else {
+            clearPreview();
+        }
+        drawPaths(va_arg(argList, std::vector<Path *> *), 1.0, document->color(), document->color());
+        drawPaths(document->paths(), document->thickness(), document->color(), document->color());
+        waitKeyIfNeeded();
         break;
     }
 }
@@ -288,14 +296,27 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, cv::Scalar &s
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
 
     for (auto *path : *paths) {
-        drawPath(path, thickness, stroke, fill);
+        drawPath(path, thickness);
 
         if (path->closed) {
-            cairo_set_source_rgb(cr, fill[0] / 255.0, fill[1] / 255.0, fill[2] / 255.0);
+            if (path->color) {
+                cv::Scalar &_color = *path->color;
+                cairo_set_source_rgb(cr, _color[0] / 255.0, _color[1] / 255.0, _color[2] / 255.0);
+            }
+            else {
+                cairo_set_source_rgb(cr, fill[0] / 255.0, fill[1] / 255.0, fill[2] / 255.0);
+            }
             cairo_fill_preserve(cr);
         }
 
-        cairo_set_source_rgb(cr, stroke[0] / 255.0, stroke[1] / 255.0, stroke[2] / 255.0);
+        if (path->color) {
+            cv::Scalar &_color = *path->color;
+            cairo_set_source_rgb(cr, _color[0] / 255.0, _color[1] / 255.0, _color[2] / 255.0);
+        }
+        else {
+            cairo_set_source_rgb(cr, stroke[0] / 255.0, stroke[1] / 255.0, stroke[2] / 255.0);
+        }
+
         cairo_stroke(cr);
 
         if (step) {
@@ -307,7 +328,7 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, cv::Scalar &s
     imshow(WindowName, preview);
 }
 
-void View::drawPath(Path *path, double thickness, cv::Scalar &stroke, cv::Scalar &fill)
+void View::drawPath(Path *path, double thickness)
 {
     cairo_new_sub_path(cr);
 
@@ -330,7 +351,7 @@ void View::drawPath(Path *path, double thickness, cv::Scalar &stroke, cv::Scalar
     }
 
     for (Path *child : path->children) {
-        drawPath(child, thickness, stroke, fill);
+        drawPath(child, thickness);
     }
 }
 

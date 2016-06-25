@@ -164,6 +164,10 @@ void Illustrace::buildPaths(Document *document)
 
 void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &hierarchy, int index, std::vector<Path *> &results)
 {
+    if (paths.empty()) {
+        return;
+    }
+
     for (; -1 != index; index = hierarchy[index][0]) {
         Path *path = paths[index];
         if (parent) {
@@ -245,6 +249,7 @@ bool Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     if (changed) {
         notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
         document->paintLayer(paintLayer);
+        buildPaintPaths(document);
     }
 
     return changed;
@@ -318,6 +323,8 @@ bool Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
 
     notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
     document->paintLayer(paintLayer);
+    buildPaintPaths(document);
+
     return true;
 }
 
@@ -325,7 +332,7 @@ void Illustrace::buildPaintPaths(Document *document)
 {
     std::unordered_map<uint32_t, std::vector<cv::Point>> paintMap;
 
-    cv::Mat paintLayer = document->paintLayer();
+    cv::Mat &paintLayer = document->paintLayer();
     uint32_t *data = (uint32_t *)paintLayer.data;
     for (int y = 0; y < paintLayer.rows; ++y) {
         int yOffset = y * paintLayer.cols;
@@ -357,6 +364,7 @@ void Illustrace::buildPaintPaths(Document *document)
             negativeImage.data[point.y * negativeImage.cols + point.x] = 255;
         }
 
+        Filter::blur(negativeImage, 3);
         std::vector<std::vector<cv::Point>> contours;
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(negativeImage, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
@@ -365,7 +373,7 @@ void Illustrace::buildPaintPaths(Document *document)
 
         for (auto line : contours) {
             auto *path = new Path();
-            path->color = new cv::Scalar(color[0], color[1], color[2]);
+            path->color = new cv::Scalar(color[0], color[1], color[2], color[3]);
             PolylineBuilder::build(line, path, true);
             paths.push_back(path);
         }
