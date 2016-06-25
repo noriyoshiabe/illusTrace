@@ -89,6 +89,37 @@ bool SVGWriter::write(const char *filepath, Document *document, const char *comm
             CHECK_AND_ABORT;
         }
 
+        auto *paintPaths = document->paintPaths();
+        if (!paintPaths->empty()) {
+            ret = xmlTextWriterStartElement(writer, BAD_CAST "g");
+            CHECK_AND_ABORT;
+
+            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill-rule", BAD_CAST "evenodd");
+            CHECK_AND_ABORT;
+
+            for (auto *path : *paintPaths) {
+                std::stringstream ss = std::stringstream("");
+
+                ret = xmlTextWriterStartElement(writer, BAD_CAST "path");
+                CHECK_AND_ABORT;
+
+                cv::Scalar &color = *path->color;
+                sprintf(str, "#%02X%02X%02X", (int)color[0], (int)color[1], (int)color[2]);
+                ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST str);
+                CHECK_AND_ABORT;
+
+                writePathToStringStream(path, ss);
+
+                ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "d", BAD_CAST ss.str().c_str());
+                CHECK_AND_ABORT;
+                ret = xmlTextWriterFullEndElement(writer);
+                CHECK_AND_ABORT;
+            }
+
+            ret = xmlTextWriterFullEndElement(writer);
+            CHECK_AND_ABORT;
+        }
+
         ret = xmlTextWriterStartElement(writer, BAD_CAST "g");
         CHECK_AND_ABORT;
 

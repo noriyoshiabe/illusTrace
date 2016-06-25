@@ -204,7 +204,7 @@ void View::notify(Illustrace *sender, va_list argList)
         else {
             clearPreview();
         }
-        drawPaths(va_arg(argList, std::vector<Path *> *), 1.0, document->color(), document->color());
+        drawPaths(va_arg(argList, std::vector<Path *> *), 0, document->color(), document->color());
         drawPaths(document->paths(), document->thickness(), document->color(), document->color());
         waitKeyIfNeeded();
         break;
