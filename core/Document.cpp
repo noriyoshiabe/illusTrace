@@ -10,8 +10,9 @@ Document::Document() :
     _smoothing(1.0),
     _thickness(1.0),
     _rotation(0.0),
-    _color(cv::Scalar(0, 0, 0, 255)),
-    _backgroundColor(cv::Scalar(0, 0, 0, 0)),
+    _color(cv::Scalar(0, 0, 0)),
+    _backgroundColor(cv::Scalar(255, 255, 255)),
+    _backgroundEnable(false),
     _paths(nullptr),
     _centerLines(nullptr),
     _approximatedCenterLines(nullptr),
@@ -95,6 +96,11 @@ cv::Scalar &Document::color()
 cv::Scalar &Document::backgroundColor()
 {
     return _backgroundColor;
+}
+
+bool Document::backgroundEnable()
+{
+    return _backgroundEnable;
 }
 
 cv::Rect &Document::clippingRect()
@@ -199,6 +205,12 @@ void Document::backgroundColor(cv::Scalar &backgroundColor)
 {
     _backgroundColor = backgroundColor;
     notify(this, Document::Event::BackgroundColor);
+}
+
+void Document::backgroundEnable(bool backgroundEnable)
+{
+    _backgroundEnable = backgroundEnable;
+    notify(this, Document::Event::BackgroundEnable);
 }
 
 void Document::clippingRect(cv::Rect &rect)

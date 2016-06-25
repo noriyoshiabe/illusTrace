@@ -80,6 +80,7 @@ public:
         Rotation,
         Color,
         BackgroundColor,
+        BackgroundEnable,
         ClippingRect,
         BoundingRect,
         Paths,
@@ -104,6 +105,7 @@ public:
     double rotation();
     cv::Scalar &color();
     cv::Scalar &backgroundColor();
+    bool backgroundEnable();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
@@ -124,6 +126,7 @@ public:
     void rotation(double rotation);
     void color(cv::Scalar &color);
     void backgroundColor(cv::Scalar &backgroundColor);
+    void backgroundEnable(bool enable);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
@@ -145,6 +148,7 @@ private:
     double _rotation;
     cv::Scalar _color;
     cv::Scalar _backgroundColor;
+    bool _backgroundEnable;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;

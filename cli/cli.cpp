@@ -59,7 +59,7 @@ int CLI::main(int argc, char **argv)
         case 'c':
             {
                 std::string s = optarg;
-                std::regex re("[0-9a-fA-F]{8}(,[0-9a-fA-F]{8})?");
+                std::regex re("[0-9a-fA-F]{6}(,[0-9a-fA-F]{6})?");
 
                 if (!std::regex_match(s.begin(), s.end(), re)) {
                     std::cout << "Color format is invalid." << std::endl;
@@ -71,12 +71,13 @@ int CLI::main(int argc, char **argv)
                 if (background) {
                     *background++ = '\0';
                     long hex = std::stol(background, nullptr, 16);
-                    auto backgroundColor = cv::Scalar((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                    auto backgroundColor = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
                     cli.document->backgroundColor(backgroundColor);
+                    cli.document->backgroundEnable(true);
                 }
 
                 long hex = std::stol(optarg, nullptr, 16);
-                auto color = cv::Scalar((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
+                auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF);
                 cli.document->color(color);
             }
             break;
@@ -155,7 +156,7 @@ void CLI::usage()
         "  -t, --thickness <value>     Adjustment for line thickness. 0 < value.\n"
         "  -s, --smooth <value>        Adjustment for bezier smoothness. 0 < value.\n"
         "  -c, --color <color[,color]> Color for line and background(optional).\n"
-        "                              Color format is HEX RGBA. ex) FF0000FF,000000FF\n"
+        "                              Color format is HEX RGB. ex) FF0000,000000\n"
         "  -w, --wait <msec>           Wait milli seconds for each of image proccessing phase.\n"
         "                              0 is infinity and key input is needed for continue.\n"
         "  -S, --step                  Wait with drawing one line.\n"

@@ -124,9 +124,8 @@ void View::notify(Illustrace *sender, va_list argList)
     case Illustrace::Event::CenterLineBezierized:
         {
             auto *paths = va_arg(argList, std::vector<Path *> *);
-            cv::Scalar backgroundColor = document->backgroundColor();
-            if (0 < backgroundColor[3]) {
-                fillBackground(backgroundColor);
+            if (document->backgroundEnable()) {
+                fillBackground(document->backgroundColor());
             }
             else {
                 clearPreview();
@@ -169,9 +168,8 @@ void View::notify(Illustrace *sender, va_list argList)
     case Illustrace::Event::OutlineBezierized:
         {
             auto *paths = va_arg(argList, std::vector<Path *> *);
-            cv::Scalar backgroundColor = document->backgroundColor();
-            if (0 < backgroundColor[3]) {
-                fillBackground(backgroundColor);
+            if (document->backgroundEnable()) {
+                fillBackground(document->backgroundColor());
             }
             else {
                 clearPreview();
@@ -200,7 +198,7 @@ void View::clearPreview()
 
 void View::fillBackground(cv::Scalar &color)
 {
-    cairo_set_source_rgba(cr, color[0] / 255.0, color[1] / 255.0, color[2] / 255.0, color[3] / 255.0);
+    cairo_set_source_rgb(cr, color[0] / 255.0, color[1] / 255.0, color[2] / 255.0);
     cairo_rectangle(cr, 0, 0, preview.cols - 1, preview.rows - 1);
     cairo_fill(cr);
     imshow(WindowName, preview);
@@ -278,11 +276,11 @@ void View::drawPaths(std::vector<Path *> *paths, double thickness, cv::Scalar &s
         drawPath(path, thickness, stroke, fill);
 
         if (path->closed) {
-            cairo_set_source_rgba(cr, fill[0] / 255.0, fill[1] / 255.0, fill[2] / 255.0, fill[3] / 255.0);
+            cairo_set_source_rgb(cr, fill[0] / 255.0, fill[1] / 255.0, fill[2] / 255.0);
             cairo_fill_preserve(cr);
         }
 
-        cairo_set_source_rgba(cr, stroke[0] / 255.0, stroke[1] / 255.0, stroke[2] / 255.0, fill[3] / 255.0);
+        cairo_set_source_rgb(cr, stroke[0] / 255.0, stroke[1] / 255.0, stroke[2] / 255.0);
         cairo_stroke(cr);
 
         if (step) {
