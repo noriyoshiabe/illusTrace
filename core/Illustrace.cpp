@@ -1,6 +1,7 @@
 #include "Illustrace.h"
 
 #include <unordered_map>
+#include <stack>
 #include "cairo/cairo.h"
 
 using namespace illustrace;
@@ -202,9 +203,17 @@ void Illustrace::buildPaintMask(Document *document)
     document->paintMask(paintMask);
 }
 
-void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
+bool Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
 {
+    bool changed = false;
+
     cv::Mat &paintLayer = document->paintLayer();
+    uint32_t *data = (uint32_t *)paintLayer.data;
+
+    cv::Mat &paintMask = document->paintMask();
+    uint8_t *paintMaskData = paintMask.data;
+
+    uint32_t newColor = (int)color[0] | (int)color[1] << 8 | (int)color[2] << 16 | (int)color[3] << 24;
 
     int sideLength = radius * 2 + 1;
     cv::Mat circle = cv::Mat::zeros(sideLength, sideLength, CV_8UC1);
@@ -222,29 +231,94 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
             for (int x = 0; x < sideLength; ++x) {
                 int dstX = dstStartFromX + x;
                 if (0 <= dstX && dstX < paintLayer.cols) {
-                    if (0 < circle.data[yOffset + x]
-                            && 0 == paintLayer.data[yDstOffset + dstX]) {
-                        cv::Vec4b &_color = paintLayer.at<cv::Vec4b>(dstY, dstX);
-                        _color[0] = color[0];
-                        _color[1] = color[1];
-                        _color[2] = color[2];
-                        _color[3] = color[3];
+                    if (0 != circle.data[yOffset + x] && 0 == paintMaskData[yDstOffset + dstX]) {
+                        if (data[yDstOffset + dstX] != newColor) {
+                            data[yDstOffset + dstX] = newColor;
+                            changed = true;
+                        }
                     }
                 }
             }
         }
     }
 
-    notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
-    document->paintLayer(paintLayer);
+    if (changed) {
+        notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
+        document->paintLayer(paintLayer);
+    }
+
+    return changed;
 }
 
-void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)
+bool Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)
 {
+    // Based on Scanline Floodfill Algorithm With Stack (floodFillScanlineStack)
+    // http://lodev.org/cgtutor/floodfill.html
+
     cv::Mat &paintLayer = document->paintLayer();
-    cv::floodFill(paintLayer, document->paintMask(), seed, color);
+    uint32_t *data = (uint32_t *)paintLayer.data;
+
+    cv::Mat &paintMask = document->paintMask();
+    uint8_t *paintMaskData = paintMask.data;
+
+    uint32_t newColor = (int)color[0] | (int)color[1] << 8 | (int)color[2] << 16 | (int)color[3] << 24;
+    uint32_t oldColor = data[seed.y * paintLayer.cols + seed.x];
+
+    if (oldColor == newColor || 0 != paintMaskData[seed.y * paintLayer.cols + seed.x]) {
+        return false;
+    }
+
+    std::stack<cv::Point> stack;
+
+    stack.push(seed);
+
+    while(!stack.empty()) {
+        cv::Point pt = stack.top();
+        stack.pop();
+
+        int yOffset = pt.y * paintLayer.cols;
+        int yOffsetMinus1 = yOffset - paintLayer.cols;
+        int yOffsetPlus1 = yOffset + paintLayer.cols;
+
+        while (0 <= pt.x && data[yOffset + pt.x] == oldColor && 0 == paintMaskData[yOffset + pt.x]) {
+            --pt.x;
+        }
+
+        ++pt.x;
+
+        bool spanAbove = false;
+        bool spanBelow = false;
+
+        while (pt.x < paintLayer.cols && data[yOffset + pt.x] == oldColor && 0 == paintMaskData[yOffset + pt.x]) {
+            data[yOffset + pt.x] = newColor;
+
+            if (0 < pt.y) {
+                if (!spanAbove && data[yOffsetMinus1 + pt.x] == oldColor && 0 == paintMaskData[yOffsetMinus1 + pt.x]) {
+                    stack.push(cv::Point(pt.x, pt.y - 1));
+                    spanAbove = true;
+                }
+                else if(spanAbove && (data[yOffsetMinus1 + pt.x] != oldColor || 0 != paintMaskData[yOffsetMinus1 + pt.x])) {
+                    spanAbove = false;
+                }
+            }
+
+            if (pt.y < paintLayer.rows - 1) {
+                if (!spanBelow && data[yOffsetPlus1 + pt.x] == oldColor && 0 == paintMaskData[yOffsetPlus1 + pt.x]) {
+                    stack.push(cv::Point(pt.x, pt.y + 1));
+                    spanBelow = true;
+                }
+                else if (spanBelow && (data[yOffsetPlus1 + pt.x] != oldColor || 0 != paintMaskData[yOffsetPlus1 + pt.x])) {
+                    spanBelow = false;
+                }
+            }
+
+            ++pt.x;
+        }
+    }
+
     notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
     document->paintLayer(paintLayer);
+    return true;
 }
 
 void Illustrace::buildPaintPaths(Document *document)

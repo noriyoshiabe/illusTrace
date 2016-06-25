@@ -43,8 +43,8 @@ public:
     void approximateLines(Document *document);
     void buildPaths(Document *document);
     void buildPaintMask(Document *document);
-    void drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
-    void fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
+    bool drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
+    bool fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
     void buildPaintPaths(Document *document);
 
     static inline const char *Event2CString(Event event)
