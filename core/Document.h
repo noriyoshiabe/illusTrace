@@ -84,7 +84,6 @@ public:
         BoundingRect,
         Paths,
         BinarizedImage,
-        NegativeImage,
         CenterLines,
         ApproximatedCenterLines,
         OutlineContours,
@@ -108,7 +107,6 @@ public:
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
     cv::Mat &binarizedImage();
-    cv::Mat &negativeImage();
     std::vector<std::vector<cv::Point2f>> *centerLines();
     std::vector<std::vector<cv::Point2f>> *approximatedCenterLines();
     std::vector<std::vector<cv::Point>> *outlineContours();
@@ -128,7 +126,6 @@ public:
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
     void binarizedImage(cv::Mat &binarizedImage);
-    void negativeImage(cv::Mat &negativeImage);
     void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
     void approximatedCenterLines(std::vector<std::vector<cv::Point2f>> *approximatedCenterLines);
     void outlineContours(std::vector<std::vector<cv::Point>> *outlineContours);
@@ -150,7 +147,6 @@ private:
     std::vector<Path *> *_paths;
 
     cv::Mat _binarizedImage;
-    cv::Mat _negativeImage;
 
     std::vector<std::vector<cv::Point2f>> *_centerLines;
     std::vector<std::vector<cv::Point2f>> *_approximatedCenterLines;

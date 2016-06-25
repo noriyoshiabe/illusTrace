@@ -117,11 +117,6 @@ cv::Mat &Document::binarizedImage()
     return _binarizedImage;
 }
 
-cv::Mat &Document::negativeImage()
-{
-    return _negativeImage;
-}
-
 std::vector<std::vector<cv::Point2f>> *Document::centerLines()
 {
     return _centerLines;
@@ -228,12 +223,6 @@ void Document::binarizedImage(cv::Mat &binarizedImage)
 {
     _binarizedImage = binarizedImage;
     notify(this, Document::Event::BinarizedImage);
-}
-
-void Document::negativeImage(cv::Mat &negativeImage)
-{
-    _negativeImage = negativeImage;
-    notify(this, Document::Event::NegativeImage);
 }
 
 void Document::centerLines(std::vector<std::vector<cv::Point2f>> *centerLines)

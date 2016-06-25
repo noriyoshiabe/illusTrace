@@ -39,31 +39,31 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
     Filter::threshold(binarizedImage);
     notify(this, Illustrace::Event::Binarized, document, &binarizedImage);
 
+    if (LineMode::Center == document->mode()) {
+        Filter::thinning(binarizedImage);
+        notify(this, Illustrace::Event::Thinned, document, &binarizedImage);
+    }
+
     document->binarizedImage(binarizedImage);
-
-    cv::Mat negativeImage = binarizedImage.clone();
-    Filter::negative(negativeImage);
-    notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
-
-    document->negativeImage(negativeImage);
-
-    cv::Rect boundingRect = cv::boundingRect(negativeImage);
-    document->boundingRect(boundingRect);
 }
 
 void Illustrace::buildLines(Document *document)
 {
-    if (LineMode::Center == document->mode()) {
-        cv::Mat thinnedImage = document->binarizedImage().clone();
-        Filter::thinning(thinnedImage);
-        notify(this, Illustrace::Event::Thinned, document, &thinnedImage);
+    cv::Mat binarizedImage = document->binarizedImage();
+    cv::Mat negativeImage = binarizedImage.clone();
+    Filter::negative(negativeImage);
+    notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
 
+    cv::Rect boundingRect = cv::boundingRect(negativeImage);
+    document->boundingRect(boundingRect);
+
+    if (LineMode::Center == document->mode()) {
         std::vector<cv::Point2f> keyPoints;
-        FeatureDetector::detect(thinnedImage, keyPoints);
-        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &thinnedImage, &keyPoints);
+        FeatureDetector::detect(binarizedImage, keyPoints);
+        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &binarizedImage, &keyPoints);
 
         Graph graph;
-        GraphBuilder::build(thinnedImage, keyPoints, graph);
+        GraphBuilder::build(binarizedImage, keyPoints, graph);
         notify(this, Illustrace::Event::CenterLineGraphBuilt, document, &graph);
 
         Graph approximatedGraph;
@@ -79,7 +79,7 @@ void Illustrace::buildLines(Document *document)
     else {
         auto *outlineContours = new std::vector<std::vector<cv::Point>>();
         auto *outlineHierarchy = new std::vector<cv::Vec4i>();
-        cv::findContours(document->negativeImage(), *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+        cv::findContours(negativeImage, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
         notify(this, Illustrace::Event::OutlineBuilt, document, outlineContours, outlineHierarchy);
 
         document->outlineContours(outlineContours);
