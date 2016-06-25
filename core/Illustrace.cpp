@@ -202,6 +202,14 @@ void Illustrace::buildPaintMask(std::vector<Path *> *paths, Document *document)
     document->paintMask(paintMask);
 }
 
+void Illustrace::fillPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document)
+{
+    cv::Mat &paintLayer = document->paintLayer();
+    cv::floodFill(paintLayer, document->paintMask(), seed, color);
+    notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
+    document->paintLayer(paintLayer);
+}
+
 void Illustrace::buildPaintPaths(Document *document)
 {
     std::unordered_map<uint32_t, std::vector<cv::Point>> paintMap;
