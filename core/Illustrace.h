@@ -4,6 +4,7 @@
 #include "Filter.h"
 #include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
+#include "PolylineBuilder.h"
 #include "FeatureDetector.h"
 #include "GraphBuilder.h"
 #include "Document.h"
@@ -30,6 +31,7 @@ public:
         OutlineBuilt,
         OutlineApproximated,
         OutlineBezierized,
+        PaintPathsBuilt,
     };
 
     bool traceFromFile(const char *filepath, Document *document);
@@ -38,6 +40,7 @@ public:
     void buildLines(Document *document);
     void approximateLines(Document *document);
     void buildPaths(Document *document);
+    void buildPaintPaths(Document *document);
 
     static inline const char *Event2CString(Event event)
     {
@@ -58,14 +61,15 @@ public:
         CASE(OutlineBuilt);
         CASE(OutlineApproximated);
         CASE(OutlineBezierized);
+        CASE(PaintPathsBuilt);
         }
-        return "Unknown repeat state";
+        return "Unknown event";
 #undef CASE
     }
 
 
 private:
-    void buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &outlineHierarchy, int index, std::vector<Path *> &results);
+    void buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &hierarchy, int index, std::vector<Path *> &results);
     int blur(cv::Mat &sourceImage, Document *document);
     double epsilon(Document *document);
 };

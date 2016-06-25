@@ -86,8 +86,14 @@ struct Path {
     std::vector<Segment> segments;
     bool closed;
     std::vector<Path *> children;
+    cv::Scalar *color;
 
-    Path() : closed(false) {};
+    Path() : closed(false), color(nullptr) {};
+    ~Path() {
+        if (color) {
+            delete color;
+        }
+    }
 };
 
 class Document : public Observable<Document> {

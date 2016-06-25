@@ -1,5 +1,7 @@
 #include "Illustrace.h"
 
+#include <unordered_map>
+
 using namespace illustrace;
 
 bool Illustrace::traceFromFile(const char *filepath, Document *document)
@@ -148,16 +150,16 @@ void Illustrace::buildPaths(Document *document)
 
         auto &outlineHierarchy = *document->outlineHierarchy();
         auto *hierarchyPaths = new std::vector<Path *>();
-        buildOutlinePathsHierarchy(paths, nullptr, outlineHierarchy, 0, *hierarchyPaths);
+        buildPathsHierarchy(paths, nullptr, outlineHierarchy, 0, *hierarchyPaths);
 
         notify(this, Illustrace::Event::OutlineBezierized, document, hierarchyPaths);
         document->paths(hierarchyPaths);
     }
 }
 
-void Illustrace::buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &outlineHierarchy, int index, std::vector<Path *> &results)
+void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &hierarchy, int index, std::vector<Path *> &results)
 {
-    for (; -1 != index; index = outlineHierarchy[index][0]) {
+    for (; -1 != index; index = hierarchy[index][0]) {
         Path *path = paths[index];
         if (parent) {
             parent->children.push_back(path);
@@ -166,11 +168,67 @@ void Illustrace::buildOutlinePathsHierarchy(std::vector<Path *> &paths, Path *pa
             results.push_back(path);
         }
 
-        int childIndex = outlineHierarchy[index][2];
+        int childIndex = hierarchy[index][2];
         if (-1 != childIndex) {
-            buildOutlinePathsHierarchy(paths, path, outlineHierarchy, childIndex, results);
+            buildPathsHierarchy(paths, path, hierarchy, childIndex, results);
         }
     }
+}
+
+void Illustrace::buildPaintPaths(Document *document)
+{
+    std::unordered_map<uint32_t, std::vector<cv::Point>> paintMap;
+
+    cv::Mat paintLayer = document->paintLayer();
+    uint32_t *data = (uint32_t *)paintLayer.data;
+    for (int y = 0; y < paintLayer.rows; ++y) {
+        int yOffset = y * paintLayer.cols;
+        for (int x = 0; x < paintLayer.cols; ++x) {
+            uint32_t color = data[yOffset + x];
+            if (paintMap.find(color) == paintMap.end()) {
+                paintMap[color] = std::vector<cv::Point>();
+            }
+
+            if (((uint8_t *)&color)[3]) {
+                paintMap[color].push_back((cv::Point){x, y});
+            }
+        }
+    }
+
+    cv::Mat negativeImage = cv::Mat(paintLayer.rows, paintLayer.cols, CV_8UC1);
+    auto *hierarchyPaths = new std::vector<Path *>();
+
+    for (auto entry : paintMap) {
+        const uint8_t *color = (const uint8_t *)&entry.first;
+        std::vector<cv::Point> &paintedPixels = entry.second;
+
+        int length = negativeImage.rows * negativeImage.cols;
+        for (int i = 0; i < length; ++i) {
+            negativeImage.data[i] = 0;
+        }
+
+        for (auto point : paintedPixels) {
+            negativeImage.data[point.y * negativeImage.cols + point.x] = 255;
+        }
+
+        std::vector<std::vector<cv::Point>> contours;
+        std::vector<cv::Vec4i> hierarchy;
+        cv::findContours(negativeImage, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+        std::vector<Path *> paths;
+
+        for (auto line : contours) {
+            auto *path = new Path();
+            path->color = new cv::Scalar(color[0], color[1], color[2]);
+            PolylineBuilder::build(line, path, true);
+            paths.push_back(path);
+        }
+
+        buildPathsHierarchy(paths, nullptr, hierarchy, 0, *hierarchyPaths);
+    }
+
+    notify(this, Illustrace::Event::PaintPathsBuilt, document, hierarchyPaths);
+    document->paintPaths(hierarchyPaths);
 }
 
 int Illustrace::blur(cv::Mat &sourceImage, Document *document)
