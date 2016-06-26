@@ -362,7 +362,7 @@ void Illustrace::buildPaintPaths(Document *document)
             negativeImage.data[point.y * negativeImage.cols + point.x] = 255;
         }
 
-        Filter::blur(negativeImage, 3);
+        Filter::blur(negativeImage, 5);
         std::vector<std::vector<cv::Point>> contours;
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(negativeImage, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
