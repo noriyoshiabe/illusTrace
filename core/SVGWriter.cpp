@@ -90,7 +90,7 @@ bool SVGWriter::write(const char *filepath, Document *document, const char *comm
         }
 
         auto *paintPaths = document->paintPaths();
-        if (!paintPaths->empty()) {
+        if (paintPaths && !paintPaths->empty()) {
             ret = xmlTextWriterStartElement(writer, BAD_CAST "g");
             CHECK_AND_ABORT;
 
