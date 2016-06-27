@@ -71,8 +71,8 @@ void Filter::thinning(cv::Mat &image)
                     int p6 = 0 == currRow[x-1] ? 1 : 0;
                     int p7 = 0 == prevRow[x-1] ? 1 : 0;
 
-                    // For avoid vanish point with 4 pixels square
-                    if (p2 && p4 && p3) {
+                    // For avoid vanish point
+                    if (p2) {
                         if (y + 2 < height && x + 2 < width) {
                             int pA = 0 == prevRow[x+2] ? 1 : 0;
                             int pB = 0 == currRow[x+2] ? 1 : 0;
