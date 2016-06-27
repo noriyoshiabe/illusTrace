@@ -38,5 +38,16 @@ static inline double cornerRadian(const T &p1, const T &p2, const T &p3)
     return std::isnan(t) ? 0.0 : t;
 }
 
+template<class T>
+static inline T interval(double lambda, const T &p1, const T &p2)
+{
+    return T(p1.x + lambda * (p2.x - p1.x), p1.y + lambda * (p2.y - p1.y));
+}
+
+static inline int modIndex(int index, int length)
+{
+    return length <= index ? index % length : index;
+}
+
 } // namespace util
 } // namespace illustrace

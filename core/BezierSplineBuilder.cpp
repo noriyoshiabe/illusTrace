@@ -3,7 +3,7 @@
 
 using namespace illustrace;
 
-void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, double smoothing, bool closePath)
+void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, double smoothing, bool closePath, bool keepPoint)
 {
     int length = line.size();
 
@@ -19,26 +19,64 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, do
         return;
     }
 
-    auto prev = Segment::M(line[0]);
-    result->segments.push_back(prev);
+    if (keepPoint) {
+        auto prev = Segment::M(line[0]);
+        result->segments.push_back(prev);
+     
+        auto current = Segment::C(line[0], line[1], line[1]);
+        
+        for (int i = 2; i < length; ++i) {
+            auto next = Segment::C(line[i-1], line[i], line[i]);
+            calcControlPoint(prev, current, next, smoothing);
+            result->segments.push_back(current);
 
-    auto current = Segment::C(line[0], line[1], line[1]);
+            prev = current;
+            current = next;
+        }
 
-    for (int i = 2; i < length; ++i) {
-        auto next = Segment::C(line[i-1], line[i], line[i]);
-        calcControlPoint(prev, current, next, smoothing);
         result->segments.push_back(current);
 
-        prev = current;
-        current = next;
+        if (3 <= length && result->segments[0][2] == result->segments[length - 1][2]) {
+            calcControlPoint(result->segments[length - 2], result->segments[length - 1], result->segments[1], smoothing);
+        }
+    }
+    else {
+        const double CP_INTERVAL_RATE = 0.85;
+
+        if (closePath) {
+            result->segments.push_back(Segment::M(util::interval(0.5, line[0], line[1])));
+
+            for (int i = 0; i < length; ++i) {
+                int j = util::modIndex(i + 1, length);
+                int k = util::modIndex(i + 2, length);
+
+                auto p1 = util::interval(CP_INTERVAL_RATE, line[i], line[j]);
+                auto p2 = util::interval(CP_INTERVAL_RATE, line[k], line[j]);
+                auto p3 = util::interval(0.5, line[j], line[k]);
+
+                result->segments.push_back(Segment::C(p1, p2, p3));
+            }
+        }
+        else {
+            result->segments.push_back(Segment::M(line[0]));
+            result->segments.push_back(Segment::L(util::interval(0.5, line[0], line[1])));
+
+            for (int i = 0; i < length - 2; ++i) {
+                int j = i + 1;
+                int k = i + 2;
+
+                auto p1 = util::interval(CP_INTERVAL_RATE, line[i], line[j]);
+                auto p2 = util::interval(CP_INTERVAL_RATE, line[k], line[j]);
+                auto p3 = util::interval(0.5, line[j], line[k]);
+
+                result->segments.push_back(Segment::C(p1, p2, p3));
+            }
+
+            result->segments.push_back(Segment::L(line[length - 1]));
+        }
     }
 
-    result->segments.push_back(current);
     result->closed = closePath;
-
-    if (3 <= length && result->segments[0][2] == result->segments[length - 1][2]) {
-        calcControlPoint(result->segments[length - 2], result->segments[length - 1], result->segments[1], smoothing);
-    }
 }
 
 void BezierSplineBuilder::calcControlPoint(Segment &prev, Segment &current, Segment &next, double smoothing)
@@ -47,12 +85,11 @@ void BezierSplineBuilder::calcControlPoint(Segment &prev, Segment &current, Segm
     cv::Point2f v2 = util::vector(current[2], next[2]);
 
     double t = -atan2(util::crossProduct(v1, v2), util::dotProduct(v1, v2));
-    double f = std::pow((fabs(t) / M_PI) - 0.8, 2.0) + 0.16; // degree of 0 to 0.8, 60 to 0.37, 90 to 0.25, 180 to 0.2
 
     t /= 2.0;
 
-    double ctlNextVX = v2.x / 2.0 * f * smoothing;
-    double ctlNextVY = v2.y / 2.0 * f * smoothing;
+    double ctlNextVX = v2.x / 4.0 * smoothing;
+    double ctlNextVY = v2.y / 4.0 * smoothing;
     ctlNextVX = ctlNextVX * cos(t) - ctlNextVY * sin(t);
     ctlNextVY = ctlNextVX * sin(t) + ctlNextVY * cos(t);
 

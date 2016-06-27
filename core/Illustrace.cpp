@@ -138,7 +138,7 @@ void Illustrace::buildPaths(Document *document)
 
         for (auto line : *document->approximatedCenterLines()) {
             auto *path = new Path();
-            BezierSplineBuilder::build(line, path, document->smoothing());
+            BezierSplineBuilder::build(line, path, document->smoothing(), false, true);
             paths->push_back(path);
         }
 
@@ -149,7 +149,7 @@ void Illustrace::buildPaths(Document *document)
         std::vector<Path *> paths;
         for (auto line : *document->approximatedOutlineContours()) {
             auto *path = new Path();
-            BezierSplineBuilder::build(line, path, document->smoothing(), true);
+            BezierSplineBuilder::build(line, path, document->smoothing(), true, false);
             paths.push_back(path);
         }
 
@@ -380,7 +380,7 @@ void Illustrace::buildPaintPaths(Document *document)
         for (auto line : approximatedLines) {
             auto *path = new Path();
             path->color = new cv::Scalar(color[0], color[1], color[2], color[3]);
-            BezierSplineBuilder::build(line, path, document->smoothing(), true);
+            BezierSplineBuilder::build(line, path, document->smoothing(), true, true);
             paths.push_back(path);
         }
 
