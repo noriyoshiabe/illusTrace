@@ -393,16 +393,13 @@ void Illustrace::buildPaintPaths(Document *document)
 
 int Illustrace::blur(cv::Mat &sourceImage, Document *document)
 {
-    double shortSide = MIN(sourceImage.cols, sourceImage.rows);
-    int blur = shortSide * document->blur();
+    int blur = document->blur() * 5;
     return 0 == blur % 2 ? blur + 1 : blur;
 }
 
 double Illustrace::epsilon(Document *document)
 {
-    cv::Rect boundingRect = document->boundingRect();
-    double shortSide = MIN(boundingRect.width, boundingRect.height);
-    return shortSide * (0.005 / document->detail()); // Inverse proportion. 0.5 to 1.0%
+    return 1.2 / document->detail();
 }
 
 // Local functions for Cairo

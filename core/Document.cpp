@@ -5,7 +5,7 @@ using namespace illustrace;
 Document::Document() :
     _mode(LineMode::Center),
     _brightness(0.0),
-    _blur(0.015),
+    _blur(1.0),
     _detail(1.0),
     _smoothing(1.0),
     _thickness(1.0),
