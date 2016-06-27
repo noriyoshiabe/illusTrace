@@ -402,7 +402,7 @@ double Illustrace::epsilon(Document *document)
 {
     cv::Rect boundingRect = document->boundingRect();
     double shortSide = MIN(boundingRect.width, boundingRect.height);
-    return shortSide * (0.006250 / document->detail()); // Inverse proportion. 0.5 to 1.25%
+    return shortSide * (0.005 / document->detail()); // Inverse proportion. 0.5 to 1.0%
 }
 
 // Local functions for Cairo

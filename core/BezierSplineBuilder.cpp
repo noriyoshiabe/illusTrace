@@ -41,17 +41,24 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, do
         }
     }
     else {
-        const double CP_INTERVAL_RATE = 0.85;
+        double cpIntervalRate = 0.5 + 0.35 * smoothing;
 
         if (closePath) {
+            double l = util::vectorLength(util::vector(line[0], line[length-1]));
+            if (2.0 > l) {
+                line[0] = util::interval(0.5, line[0], line[length-1]);
+                line.pop_back();
+                --length;
+            }
+
             result->segments.push_back(Segment::M(util::interval(0.5, line[0], line[1])));
 
             for (int i = 0; i < length; ++i) {
                 int j = util::modIndex(i + 1, length);
                 int k = util::modIndex(i + 2, length);
 
-                auto p1 = util::interval(CP_INTERVAL_RATE, line[i], line[j]);
-                auto p2 = util::interval(CP_INTERVAL_RATE, line[k], line[j]);
+                auto p1 = util::interval(cpIntervalRate, line[i], line[j]);
+                auto p2 = util::interval(cpIntervalRate, line[k], line[j]);
                 auto p3 = util::interval(0.5, line[j], line[k]);
 
                 result->segments.push_back(Segment::C(p1, p2, p3));
@@ -65,8 +72,8 @@ void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, do
                 int j = i + 1;
                 int k = i + 2;
 
-                auto p1 = util::interval(CP_INTERVAL_RATE, line[i], line[j]);
-                auto p2 = util::interval(CP_INTERVAL_RATE, line[k], line[j]);
+                auto p1 = util::interval(cpIntervalRate, line[i], line[j]);
+                auto p2 = util::interval(cpIntervalRate, line[k], line[j]);
                 auto p3 = util::interval(0.5, line[j], line[k]);
 
                 result->segments.push_back(Segment::C(p1, p2, p3));
