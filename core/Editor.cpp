@@ -84,6 +84,8 @@ public:
 class DrawCommand : public Editor::Command {
 public:
     DrawCommand(Editor *editor) : Command(editor) {}
+    virtual ~DrawCommand() {}
+    virtual void apply() = 0;
 
     cv::Mat newCanvas;
     cv::Mat oldCanvas;
@@ -97,20 +99,22 @@ public:
         document->preprocessedImage(newCanvas, nullptr);
     }
 
-    void undo() {
-        auto dirtyRect = cv::Rect(0, 0, oldCanvas.cols, oldCanvas.rows);
-        document->preprocessedImage(oldCanvas, &dirtyRect);
+    void apply() {
         illustrace->buildLines(document);
         illustrace->approximateLines(document);
         illustrace->buildPaths(document);
     }
 
+    void undo() {
+        auto dirtyRect = cv::Rect(0, 0, oldCanvas.cols, oldCanvas.rows);
+        document->preprocessedImage(oldCanvas, &dirtyRect);
+        apply();
+    }
+
     void redo() {
         auto dirtyRect = cv::Rect(0, 0, newCanvas.cols, newCanvas.rows);
         document->preprocessedImage(newCanvas, &dirtyRect);
-        illustrace->buildLines(document);
-        illustrace->approximateLines(document);
-        illustrace->buildPaths(document);
+        apply();
     }
 };
 
@@ -122,16 +126,20 @@ public:
         document->paintLayer(newCanvas, nullptr);
     }
 
+    void apply() {
+        illustrace->buildPaths(document);
+    }
+
     void undo() {
         auto dirtyRect = cv::Rect(0, 0, oldCanvas.cols, oldCanvas.rows);
         document->paintLayer(oldCanvas, &dirtyRect);
-        illustrace->buildPaths(document);
+        apply();
     }
 
     void redo() {
         auto dirtyRect = cv::Rect(0, 0, newCanvas.cols, newCanvas.rows);
         document->paintLayer(newCanvas, &dirtyRect);
-        illustrace->buildPaths(document);
+        apply();
     }
 };
 
@@ -407,17 +415,10 @@ void Editor::draw(float x, float y)
 
 void Editor::drawFinish()
 {
-    switch (_mode) {
-    case Mode::Line:
-        illustrace->buildLines(document);
-        illustrace->approximateLines(document);
-        illustrace->buildPaths(document);
-        break;
-    case Mode::Paint:
-        illustrace->buildPaths(document);
-        break;
-    default:
-        break;
+    DrawCommand *command;
+
+    if (!(command = dynamic_cast<DrawCommand *>(lastCommand))) {
+        command->apply();
     }
 
     lastCommand = nullptr;
@@ -446,7 +447,7 @@ void Editor::fill(float x, float y)
         break;
     }
 
-    illustrace->buildPaths(document);
+    command->apply();
 
     lastCommand = nullptr;
 }
