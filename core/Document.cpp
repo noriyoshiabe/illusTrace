@@ -237,8 +237,15 @@ void Document::backgroundEnable(bool backgroundEnable)
 
 void Document::paintLayer(cv::Mat &paintLayer)
 {
+    auto dirtyRect = cv::Rect(0, 0, paintLayer.cols, paintLayer.rows);
     _paintLayer = paintLayer;
-    notify(this, Document::Event::PaintLayer);
+    notify(this, Document::Event::PaintLayer, &dirtyRect);
+}
+
+void Document::paintLayer(cv::Mat &paintLayer, cv::Rect &dirtyRect)
+{
+    _paintLayer = paintLayer;
+    notify(this, Document::Event::PaintLayer, &dirtyRect);
 }
 
 void Document::paintMask(cv::Mat &paintMask)
@@ -291,8 +298,15 @@ void Document::binarizedImage(cv::Mat &binarizedImage)
 
 void Document::preprocessedImage(cv::Mat &preprocessedImage)
 {
+    auto dirtyRect = cv::Rect(0, 0, preprocessedImage.cols, preprocessedImage.rows);
     _preprocessedImage = preprocessedImage;
-    notify(this, Document::Event::PreprocessedImage);
+    notify(this, Document::Event::PreprocessedImage, &dirtyRect);
+}
+
+void Document::preprocessedImage(cv::Mat &preprocessedImage, cv::Rect &dirtyRect)
+{
+    _preprocessedImage = preprocessedImage;
+    notify(this, Document::Event::PreprocessedImage, &dirtyRect);
 }
 
 void Document::centerLines(std::vector<std::vector<cv::Point2f>> *centerLines)

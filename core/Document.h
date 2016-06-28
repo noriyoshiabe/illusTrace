@@ -162,6 +162,7 @@ public:
     void backgroundColor(cv::Scalar &backgroundColor);
     void backgroundEnable(bool enable);
     void paintLayer(cv::Mat &paintLayer);
+    void paintLayer(cv::Mat &paintLayer, cv::Rect &dirtyRect);
     void paintMask(cv::Mat &paintMask);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
@@ -169,6 +170,7 @@ public:
     void paintPaths(std::vector<Path *> *paintPaths);
     void binarizedImage(cv::Mat &binarizedImage);
     void preprocessedImage(cv::Mat &preprocessedImage);
+    void preprocessedImage(cv::Mat &preprocessedImage, cv::Rect &dirtyRect);
     void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
     void approximatedCenterLines(std::vector<std::vector<cv::Point2f>> *approximatedCenterLines);
     void outlineContours(std::vector<std::vector<cv::Point>> *outlineContours);

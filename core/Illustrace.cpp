@@ -209,12 +209,23 @@ void Illustrace::buildPaintMask(Document *document)
     document->paintMask(paintMask);
 }
 
+inline cv::Rect circleRect(cv::Point &point, int radius, cv::Mat &canvas)
+{
+    int minX = MAX(0, point.x - radius);
+    int minY = MAX(0, point.y - radius);
+    int maxX = MIN(point.y + radius, canvas.cols - 1);
+    int maxY = MIN(point.y + radius, canvas.rows - 1);
+    return cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+}
+
 void Illustrace::drawCircleOnPreprocessedImage(cv::Point &point, int radius, int color, Document *document)
 {
     cv::Mat &preprocessedImage = document->preprocessedImage();
     cv::circle(preprocessedImage, point, radius, cv::Scalar(color), -1);
-    notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage);
-    document->preprocessedImage(preprocessedImage);
+
+    auto dirtyRect = circleRect(point, radius, preprocessedImage);
+    notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
+    document->preprocessedImage(preprocessedImage, dirtyRect);
 }
 
 void Illustrace::eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Document *document)
@@ -247,8 +258,9 @@ void Illustrace::eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Do
         }
     }
 
-    notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage);
-    document->preprocessedImage(preprocessedImage);
+    auto dirtyRect = circleRect(point, radius, preprocessedImage);
+    notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
+    document->preprocessedImage(preprocessedImage, dirtyRect);
 }
 
 void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
@@ -291,8 +303,9 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     }
 
     if (changed) {
-        notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
-        document->paintLayer(paintLayer);
+        auto dirtyRect = circleRect(point, radius, paintLayer);
+        notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &dirtyRect);
+        document->paintLayer(paintLayer, dirtyRect);
     }
 }
 
@@ -314,6 +327,11 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
         return;
     }
 
+    int minX = seed.x;
+    int minY = seed.y;
+    int maxX = seed.x;
+    int maxY = seed.y;
+
     std::stack<cv::Point> stack;
 
     stack.push(seed);
@@ -326,9 +344,14 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
         int yOffsetMinus1 = yOffset - paintLayer.cols;
         int yOffsetPlus1 = yOffset + paintLayer.cols;
 
+        minX = MIN(pt.y, minY);
+        maxY = MAX(pt.y, maxY);
+
         while (0 <= pt.x && data[yOffset + pt.x] == oldColor && 0 == paintMaskData[yOffset + pt.x]) {
             --pt.x;
         }
+
+        minX = MIN(pt.x, minX);
 
         ++pt.x;
 
@@ -360,10 +383,13 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
 
             ++pt.x;
         }
+
+        maxX = MAX(pt.x, maxX);
     }
 
-    notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer);
-    document->paintLayer(paintLayer);
+    auto dirtyRect = cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+    notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &dirtyRect);
+    document->paintLayer(paintLayer, dirtyRect);
 }
 
 void Illustrace::buildPaintPaths(Document *document)
