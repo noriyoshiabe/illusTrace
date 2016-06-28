@@ -208,6 +208,10 @@ void View::notify(Illustrace *sender, va_list argList)
         drawPaths(document->paths(), document->thickness(), document->color(), document->color());
         waitKeyIfNeeded();
         break;
+    case Illustrace::Event::PreprocessedImageUpdated:
+        imshow(WindowName, *va_arg(argList, cv::Mat *));
+        waitKeyIfNeeded();
+        break;
     }
 }
 

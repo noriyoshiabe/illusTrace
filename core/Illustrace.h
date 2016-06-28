@@ -33,6 +33,7 @@ public:
         PaintMaskBuilt,
         PaintLayerUpdated,
         PaintPathsBuilt,
+        PreprocessedImageUpdated,
     };
 
     bool traceFromFile(const char *filepath, Document *document);
@@ -42,8 +43,10 @@ public:
     void approximateLines(Document *document);
     void buildPaths(Document *document);
     void buildPaintMask(Document *document);
-    bool drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
-    bool fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
+    void drawCircleOnPreprocessedImage(cv::Point &point, int radius, int color, Document *document);
+    void eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Document *document);
+    void drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
+    void fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
     void buildPaintPaths(Document *document);
 
     static inline const char *Event2CString(Event event)
@@ -68,6 +71,7 @@ public:
         CASE(PaintMaskBuilt);
         CASE(PaintLayerUpdated);
         CASE(PaintPathsBuilt);
+        CASE(PreprocessedImageUpdated);
         }
         return "Unknown event";
 #undef CASE
