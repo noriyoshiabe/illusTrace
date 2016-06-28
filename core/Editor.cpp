@@ -1,5 +1,7 @@
 #include "Editor.h"
 
+#define MINIMUM_CLIPPING_SIDE 50
+
 using namespace illustrace;
 
 class Editor::Command {
@@ -173,6 +175,22 @@ public:
 
     void undo() {
         document->backgroundColor(oldValue);
+    }
+};
+
+class ClippingRectCommand : public Editor::Command {
+public:
+    ClippingRectCommand(Editor *editor) : Command(editor) {}
+
+    cv::Rect oldValue;
+    cv::Rect newValue;
+
+    void execute() {
+        document->clippingRect(newValue);
+    }
+
+    void undo() {
+        document->clippingRect(oldValue);
     }
 };
 
@@ -536,4 +554,86 @@ void Editor::color(int colorIndex, double value)
         command->newValue[colorIndex] = value;
         execute(command);
     }
+}
+
+void Editor::trimmingTopLeft(float x, float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.x = MIN(x, rect.x + rect.width - 1 - MINIMUM_CLIPPING_SIDE);
+        rect.y = MIN(y, rect.y + rect.height - 1 - MINIMUM_CLIPPING_SIDE);
+    });
+}
+
+void Editor::trimmingTop(float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.y = MIN(y, rect.y + rect.height - 1 - MINIMUM_CLIPPING_SIDE);
+    });
+}
+
+void Editor::trimmingTopRight(float x, float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.y = MIN(y, rect.y + rect.height - 1 - MINIMUM_CLIPPING_SIDE);
+        rect.width = MAX(x - rect.x + 1, rect.x + MINIMUM_CLIPPING_SIDE - 1);
+    });
+}
+
+void Editor::trimmingRight(float x)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.width = MAX(x - rect.x + 1, rect.x + MINIMUM_CLIPPING_SIDE - 1);
+    });
+}
+
+void Editor::trimmingBottomRight(float x, float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.width = MAX(x - rect.x + 1, rect.x + MINIMUM_CLIPPING_SIDE - 1);
+        rect.height = MAX(y - rect.y + 1, rect.y + MINIMUM_CLIPPING_SIDE - 1);
+    });
+}
+
+void Editor::trimmingBottom(float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.height = MAX(y - rect.y + 1, rect.y + MINIMUM_CLIPPING_SIDE - 1);
+    });
+}
+
+void Editor::trimmingBottomLeft(float x, float y)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.height = MAX(y - rect.y + 1, rect.y + MINIMUM_CLIPPING_SIDE - 1);
+        rect.x = MIN(x, rect.x + rect.width - 1 - MINIMUM_CLIPPING_SIDE);
+    });
+}
+
+void Editor::trimmingLeft(float x)
+{
+    trimming([=](cv::Rect &rect) {
+        rect.x = MIN(x, rect.x + rect.width - 1 - MINIMUM_CLIPPING_SIDE);
+    });
+}
+
+void Editor::clippingRect(cv::Rect &rect)
+{
+    trimming([=](cv::Rect &_rect) {
+        _rect = rect;
+    });
+}
+
+template<typename Func>
+void Editor::trimming(Func func)
+{
+    ClippingRectCommand *command;
+
+    if (!(command = dynamic_cast<ClippingRectCommand *>(lastCommand))) {
+        command = new ClippingRectCommand(this);
+        command->oldValue = document->clippingRect();
+        command->newValue = command->oldValue;
+    }
+
+    func(command->newValue);
+    execute(command);
 }

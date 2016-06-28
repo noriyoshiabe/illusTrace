@@ -88,10 +88,12 @@ public:
     void trimmingTop(float y);
     void trimmingTopRight(float x, float y);
     void trimmingRight(float x);
-    void trimmingBottomLeft(float x, float y);
-    void trimmingBottom(float y);
     void trimmingBottomRight(float x, float y);
+    void trimmingBottom(float y);
+    void trimmingBottomLeft(float x, float y);
     void trimmingLeft(float x);
+
+    void clippingRect(cv::Rect &rect);
 
     Illustrace *illustrace;
     Document *document;
@@ -107,6 +109,8 @@ public:
 private:
     void execute(Command *command);
     void color(int colorIndex, double value);
+    template<typename Func>
+    void trimming(Func func);
 
     Mode _mode;
     LineState _lineState;
