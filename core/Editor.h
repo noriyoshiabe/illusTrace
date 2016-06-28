@@ -16,7 +16,9 @@ public:
         LineState,
         PaintState,
         ClipState,
-        Radius,
+        PreprocessedImageRadius,
+        PaintLayerRadius,
+        PaintColor,
         Execute,
         Undo,
         Redo,
@@ -60,6 +62,7 @@ public:
     void clipState(ClipState state);
 
     void radius(int radius);
+    cv::Scalar &paintColor();
     
     Mode mode();
     LineState lineState();
@@ -103,6 +106,7 @@ public:
 
 private:
     void execute(Command *command);
+    void color(int colorIndex, double value);
 
     Mode _mode;
     LineState _lineState;
@@ -110,7 +114,7 @@ private:
     ClipState _clipState;
     int preprocessedImageRadius;
     int paintLayerRadius;
-    cv::Scalar paintColor;
+    cv::Scalar _paintColor;
 
     std::stack<Command *> undoStack;
     std::stack<Command *> redoStack;

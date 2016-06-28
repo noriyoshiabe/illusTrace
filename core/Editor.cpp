@@ -143,6 +143,39 @@ public:
     }
 };
 
+class ColorCommand : public Editor::Command {
+public:
+    ColorCommand(Editor *editor) : Command(editor) {}
+    cv::Scalar oldValue;
+    cv::Scalar newValue;
+};
+
+class LineColorCommand : public ColorCommand {
+public:
+    LineColorCommand(Editor *editor) : ColorCommand(editor) {}
+
+    void execute() {
+        document->color(newValue);
+    }
+
+    void undo() {
+        document->color(oldValue);
+    }
+};
+
+class BackgroundColorCommand : public ColorCommand {
+public:
+    BackgroundColorCommand(Editor *editor) : ColorCommand(editor) {}
+
+    void execute() {
+        document->backgroundColor(newValue);
+    }
+
+    void undo() {
+        document->backgroundColor(oldValue);
+    }
+};
+
 
 Editor::Editor(Illustrace *illustrace, Document *document)
     : illustrace(illustrace), document(document),
@@ -151,6 +184,7 @@ Editor::Editor(Illustrace *illustrace, Document *document)
       _clipState(Editor::ClipState::Trimming),
       preprocessedImageRadius(5),
       paintLayerRadius(5),
+      _paintColor(cv::Scalar(255, 255, 255)),
       lastCommand(nullptr),
       currentPoint(0),
       savedPoint(0)
@@ -198,6 +232,11 @@ int Editor::radius()
     }
 }
 
+cv::Scalar &Editor::paintColor()
+{
+    return _paintColor;
+}
+
 void Editor::mode(Mode mode)
 {
     lastCommand = nullptr;
@@ -231,11 +270,11 @@ void Editor::radius(int radius)
     switch (_mode) {
     case Mode::Line:
         preprocessedImageRadius = radius;
-        notify(this, Event::Radius);
+        notify(this, Event::PreprocessedImageRadius);
         break;
     case Mode::Paint:
         paintLayerRadius = radius;
-        notify(this, Event::Radius);
+        notify(this, Event::PaintLayerRadius);
         break;
     default:
         break;
@@ -405,7 +444,7 @@ void Editor::draw(float x, float y)
         break;
     case Mode::Paint:
         if (PaintState::Brush == _paintState) {
-            illustrace->drawCircleOnPaintLayer(point, paintLayerRadius, paintColor, document);
+            illustrace->drawCircleOnPaintLayer(point, paintLayerRadius, _paintColor, document);
         }
         break;
     default:
@@ -435,7 +474,7 @@ void Editor::fill(float x, float y)
 
     switch (_paintState) {
     case PaintState::Fill:
-        illustrace->fillRegionOnPaintLayer(point, paintColor, document);
+        illustrace->fillRegionOnPaintLayer(point, _paintColor, document);
         break;
     case PaintState::Eraser:
         {
@@ -450,4 +489,51 @@ void Editor::fill(float x, float y)
     command->apply();
 
     lastCommand = nullptr;
+}
+
+void Editor::R(double red)
+{
+    color(0, red);
+}
+
+void Editor::G(double green)
+{
+    color(1, green);
+}
+
+void Editor::B(double blue)
+{
+    color(2, blue);
+}
+
+void Editor::color(int colorIndex, double value)
+{
+    if (Mode::Paint == _mode) {
+        _paintColor[colorIndex] = value;
+        notify(this, Event::PaintColor);
+    }
+    else {
+        ColorCommand *command;
+
+        if (!(command = dynamic_cast<ColorCommand *>(lastCommand))) {
+            switch (_mode) {
+            case Mode::Line:
+                command = new LineColorCommand(this);
+                command->oldValue = document->color();
+                break;
+            case Mode::BG:
+                command = new BackgroundColorCommand(this);
+                command->oldValue = document->backgroundColor();
+                break;
+            default:
+                // Illegal operation
+                return;
+            }
+
+            command->newValue = command->oldValue;
+        }
+
+        command->newValue[colorIndex] = value;
+        execute(command);
+    }
 }
