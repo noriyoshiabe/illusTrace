@@ -105,7 +105,7 @@ public:
         Detail,
         Smoothing,
         Thickness,
-        Transform,
+        Rotation,
         Color,
         BackgroundColor,
         BackgroundEnable,
@@ -133,7 +133,7 @@ public:
     double detail();
     double smoothing();
     double thickness();
-    cv::Mat &transform();
+    double rotation();
     cv::Scalar &color();
     cv::Scalar &backgroundColor();
     bool backgroundEnable();
@@ -157,7 +157,7 @@ public:
     void detail(double detail);
     void smoothing(double smoothing);
     void thickness(double thickness);
-    void transform(cv::Mat &transform);
+    void rotation(double rotation);
     void color(cv::Scalar &color);
     void backgroundColor(cv::Scalar &backgroundColor);
     void backgroundEnable(bool enable);
@@ -182,7 +182,7 @@ private:
     double _detail;
     double _smoothing;
     double _thickness;
-    cv::Mat _transform;
+    double _rotation;
     cv::Scalar _color;
     cv::Scalar _backgroundColor;
     cv::Mat _paintLayer;

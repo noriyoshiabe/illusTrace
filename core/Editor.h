@@ -2,24 +2,93 @@
 
 #include "Document.h"
 #include "Illustrace.h"
+#include "Observable.h"
 
 namespace illustrace {
 
-class Editor {
+class Editor : Observable<Editor> {
 public:
+    enum class Event {
+        Mode,
+        LineState,
+        PaintState,
+        ClipState,
+        Execute,
+        Undo,
+        Redo,
+    };
+
+    enum class Mode {
+        Line,
+        BG,
+        Paint,
+        Clip,
+    };
+
+    enum class LineState {
+        Line,
+        PencilBlack,
+        PencilWhite,
+        Eraser,
+        Color,
+    };
+
+    enum class PaintState {
+        Brush,
+        Fill,
+        Eraser,
+        Color
+    };
+
+    enum class ClipState {
+        Trimming,
+        Rotate,
+        Preset,
+    };
+
     Editor(Illustrace *illustrace, Document *document);
     ~Editor();
 
+    void mode(Mode mode);
+    void lineState(LineState state);
+    void paintState(PaintState state);
+    void clipState(ClipState state);
+    
+    Mode mode();
+    LineState lineState();
+    PaintState paintState();
+    ClipState clipState();
+
     void detail(double detail);
     void thickness(double thickness);
-    void transform(cv::Mat &transform);
-    void clippingRect(cv::Rect &rect);
-    void color(cv::Scalar &color);
-    void backgroundColor(cv::Scalar &backgroundColor);
+    void rotation(double rotation);
+    void backgroundEnable(bool enable);
+
+    void lineStart(float x, float y);
+    void lineMove(float x, float y);
+    void lineEnd();
+
+    void R(double red);
+    void G(double green);
+    void B(double blue);
+
+    void trimmingTopLeft(float x, float y);
+    void trimmingTop(float y);
+    void trimmingTopRight(float x, float y);
+    void trimmingRight(float x);
+    void trimmingBottomLeft(float x, float y);
+    void trimmingBottom(float y);
+    void trimmingBottomRight(float x, float y);
+    void trimmingLeft(float x);
 
 private:
     Illustrace *illustrace;
     Document *document;
+
+    Mode _mode;
+    LineState _lineState;
+    PaintState _paintState;
+    ClipState _clipState;
 };
 
 } // namespace illustrace

@@ -3,12 +3,59 @@
 using namespace illustrace;
 
 Editor::Editor(Illustrace *illustrace, Document *document)
-    : illustrace(illustrace), document(document)
+    : illustrace(illustrace), document(document),
+      _mode(Editor::Mode::Line), _lineState(Editor::LineState::Line),
+      _paintState(Editor::PaintState::Brush),
+      _clipState(Editor::ClipState::Trimming)
 {
 }
 
 Editor::~Editor()
 {
+}
+
+Editor::Mode Editor::mode()
+{
+    return _mode;
+}
+
+Editor::LineState Editor::lineState()
+{
+    return _lineState;
+}
+
+Editor::PaintState Editor::paintState()
+{
+    return _paintState;
+}
+
+Editor::ClipState Editor::clipState()
+{
+    return _clipState;
+}
+
+void Editor::mode(Mode mode)
+{
+    _mode = mode;
+    notify(this, Event::Mode);
+}
+
+void Editor::lineState(LineState state)
+{
+    _lineState = state;
+    notify(this, Event::LineState);
+}
+
+void Editor::paintState(PaintState state)
+{
+    _paintState = state;
+    notify(this, Event::PaintState);
+}
+
+void Editor::clipState(ClipState state)
+{
+    _clipState = state;
+    notify(this, Event::ClipState);
 }
 
 void Editor::detail(double detail)
@@ -23,22 +70,12 @@ void Editor::thickness(double thickness)
     document->thickness(thickness);
 }
 
-void Editor::transform(cv::Mat &transform)
+void Editor::rotation(double rotation)
 {
-    document->transform(transform);
+    document->rotation(rotation);
 }
 
-void Editor::clippingRect(cv::Rect &rect)
+void Editor::backgroundEnable(bool enable)
 {
-    document->clippingRect(rect);
-}
-
-void Editor::color(cv::Scalar &color)
-{
-    document->color(color);
-}
-
-void Editor::backgroundColor(cv::Scalar &backgroundColor)
-{
-    document->backgroundColor(backgroundColor);
+    document->backgroundEnable(enable);
 }
