@@ -3,11 +3,14 @@
 #include "Document.h"
 #include "Illustrace.h"
 #include "Observable.h"
+#include <stack>
 
 namespace illustrace {
 
 class Editor : Observable<Editor> {
 public:
+    class Command;
+
     enum class Event {
         Mode,
         LineState,
@@ -16,6 +19,7 @@ public:
         Execute,
         Undo,
         Redo,
+        Save,
     };
 
     enum class Mode {
@@ -81,14 +85,31 @@ public:
     void trimmingBottomRight(float x, float y);
     void trimmingLeft(float x);
 
-private:
     Illustrace *illustrace;
     Document *document;
+
+    void undo();
+    void redo();
+    bool canUndo();
+    bool canRedo();
+
+    void save();
+    bool hasChanged();
+
+private:
+    void execute(Command *command);
 
     Mode _mode;
     LineState _lineState;
     PaintState _paintState;
     ClipState _clipState;
+
+    std::stack<Command *> undoStack;
+    std::stack<Command *> redoStack;
+    Command *lastCommand;
+
+    int currentPoint;
+    int savedPoint;
 };
 
 } // namespace illustrace
