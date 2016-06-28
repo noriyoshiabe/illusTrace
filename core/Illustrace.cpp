@@ -225,7 +225,7 @@ void Illustrace::drawCircleOnPreprocessedImage(cv::Point &point, int radius, int
 
     auto dirtyRect = circleRect(point, radius, preprocessedImage);
     notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
-    document->preprocessedImage(preprocessedImage, dirtyRect);
+    document->preprocessedImage(preprocessedImage, &dirtyRect);
 }
 
 void Illustrace::eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Document *document)
@@ -260,7 +260,7 @@ void Illustrace::eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Do
 
     auto dirtyRect = circleRect(point, radius, preprocessedImage);
     notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
-    document->preprocessedImage(preprocessedImage, dirtyRect);
+    document->preprocessedImage(preprocessedImage, &dirtyRect);
 }
 
 void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
@@ -305,7 +305,7 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     if (changed) {
         auto dirtyRect = circleRect(point, radius, paintLayer);
         notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &dirtyRect);
-        document->paintLayer(paintLayer, dirtyRect);
+        document->paintLayer(paintLayer, &dirtyRect);
     }
 }
 
@@ -389,7 +389,7 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
 
     auto dirtyRect = cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
     notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &dirtyRect);
-    document->paintLayer(paintLayer, dirtyRect);
+    document->paintLayer(paintLayer, &dirtyRect);
 }
 
 void Illustrace::buildPaintPaths(Document *document)

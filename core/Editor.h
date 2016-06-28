@@ -16,6 +16,7 @@ public:
         LineState,
         PaintState,
         ClipState,
+        Radius,
         Execute,
         Undo,
         Redo,
@@ -57,20 +58,24 @@ public:
     void lineState(LineState state);
     void paintState(PaintState state);
     void clipState(ClipState state);
+
+    void radius(int radius);
     
     Mode mode();
     LineState lineState();
     PaintState paintState();
     ClipState clipState();
 
+    int radius();
+
     void detail(double detail);
     void thickness(double thickness);
     void rotation(double rotation);
     void backgroundEnable(bool enable);
 
-    void lineStart(float x, float y);
-    void lineMove(float x, float y);
-    void lineEnd();
+    void draw(float x, float y);
+    void drawFinish();
+    void fill(float x, float y);
 
     void R(double red);
     void G(double green);
@@ -103,6 +108,9 @@ private:
     LineState _lineState;
     PaintState _paintState;
     ClipState _clipState;
+    int preprocessedImageRadius;
+    int paintLayerRadius;
+    cv::Scalar paintColor;
 
     std::stack<Command *> undoStack;
     std::stack<Command *> redoStack;

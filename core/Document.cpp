@@ -242,10 +242,10 @@ void Document::paintLayer(cv::Mat &paintLayer)
     notify(this, Document::Event::PaintLayer, &dirtyRect);
 }
 
-void Document::paintLayer(cv::Mat &paintLayer, cv::Rect &dirtyRect)
+void Document::paintLayer(cv::Mat &paintLayer, cv::Rect *dirtyRect)
 {
     _paintLayer = paintLayer;
-    notify(this, Document::Event::PaintLayer, &dirtyRect);
+    notify(this, Document::Event::PaintLayer, dirtyRect);
 }
 
 void Document::paintMask(cv::Mat &paintMask)
@@ -303,10 +303,10 @@ void Document::preprocessedImage(cv::Mat &preprocessedImage)
     notify(this, Document::Event::PreprocessedImage, &dirtyRect);
 }
 
-void Document::preprocessedImage(cv::Mat &preprocessedImage, cv::Rect &dirtyRect)
+void Document::preprocessedImage(cv::Mat &preprocessedImage, cv::Rect *dirtyRect)
 {
     _preprocessedImage = preprocessedImage;
-    notify(this, Document::Event::PreprocessedImage, &dirtyRect);
+    notify(this, Document::Event::PreprocessedImage, dirtyRect);
 }
 
 void Document::centerLines(std::vector<std::vector<cv::Point2f>> *centerLines)
