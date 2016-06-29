@@ -4,18 +4,6 @@
 
 using namespace illustrace;
 
-class Editor::Command {
-public:
-    Command(Editor *editor) : document(editor->document), illustrace(editor->illustrace) {};
-    virtual ~Command() {}
-    virtual void execute() = 0;
-    virtual void undo() = 0;
-    virtual void redo() { execute(); }
-
-    Document *document;
-    Illustrace *illustrace;
-};
-
 class DetailCommand : public Editor::Command {
 public:
     DetailCommand(Editor *editor) : Command(editor) {}
@@ -637,41 +625,10 @@ std::ostream &operator<<(std::ostream &os, Editor const &self)
 {
     os << "<Editor ";
 
-    os << "mode: ";
-    switch (self._mode) {
-    case Editor::Mode::Line: os << "Line"; break;
-    case Editor::Mode::BG: os << "BG"; break;
-    case Editor::Mode::Paint: os << "Paint"; break;
-    case Editor::Mode::Clip: os << "Clip"; break;
-    }
-    os << ", ";
-
-    os << "lineState: ";
-    switch (self._lineState) {
-    case Editor::LineState::Line: os << "Line"; break;
-    case Editor::LineState::PencilBlack: os << "PencilBlack"; break;
-    case Editor::LineState::PencilWhite: os << "PencilWhite"; break;
-    case Editor::LineState::Eraser: os << "Eraser"; break;
-    case Editor::LineState::Color: os << "Color"; break;
-    }
-    os << ", ";
-
-    os << "paintState: ";
-    switch (self._paintState) {
-    case Editor::PaintState::Brush: os << "Brush"; break;
-    case Editor::PaintState::Fill: os << "Fill"; break;
-    case Editor::PaintState::Eraser: os << "Eraser"; break;
-    case Editor::PaintState::Color: os << "Color"; break;
-    }
-    os << ", ";
-
-    os << "clipState: ";
-    switch (self._clipState) {
-    case Editor::ClipState::Trimming: os << "Trimming"; break;
-    case Editor::ClipState::Rotate: os << "Rotate"; break;
-    }
-    os << ", ";
-
+    os << "mode: " << Editor::Mode2CString(self._mode) << ", ";
+    os << "lineState: " << Editor::LineState2CString(self._lineState) << ", ";
+    os << "paintState: " << Editor::PaintState2CString(self._paintState) << ", ";
+    os << "clipState: " << Editor::ClipState2CString(self._clipState) << ", ";
     os << "preprocessedImageRadius: " << self.preprocessedImageRadius << ", ";
     os << "paintLayerRadius: " << self.paintLayerRadius << ", ";
     os << "paintColor: " << self._paintColor << ", ";

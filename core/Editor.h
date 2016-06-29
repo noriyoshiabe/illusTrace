@@ -9,7 +9,17 @@ namespace illustrace {
 
 class Editor : public Observable<Editor> {
 public:
-    class Command;
+    class Command {
+    public:
+        Command(Editor *editor) : document(editor->document), illustrace(editor->illustrace) {};
+        virtual ~Command() {}
+        virtual void execute() = 0;
+        virtual void undo() = 0;
+        virtual void redo() { execute(); }
+
+        Document *document;
+        Illustrace *illustrace;
+    };
 
     enum class Event : int {
         Mode,
@@ -41,7 +51,6 @@ public:
         CASE(Redo);
         CASE(Save);
         }
-        return "Unknown event";
 #undef CASE
     }
 
@@ -52,6 +61,17 @@ public:
         Clip,
     };
 
+    static inline const char *Mode2CString(Mode mode) {
+#define CASE(mode) case Mode::mode: return #mode
+        switch (mode) {
+        CASE(Line);
+        CASE(BG);
+        CASE(Paint);
+        CASE(Clip);
+        }
+#undef CASE
+    }
+
     enum class LineState {
         Line,
         PencilBlack,
@@ -60,6 +80,18 @@ public:
         Color,
     };
 
+    static inline const char *LineState2CString(LineState state) {
+#define CASE(state) case LineState::state: return #state
+        switch (state) {
+        CASE(Line);
+        CASE(PencilBlack);
+        CASE(PencilWhite);
+        CASE(Eraser);
+        CASE(Color);
+        }
+#undef CASE
+    }
+
     enum class PaintState {
         Brush,
         Fill,
@@ -67,10 +99,30 @@ public:
         Color
     };
 
+    static inline const char *PaintState2CString(PaintState state) {
+#define CASE(state) case PaintState::state: return #state
+        switch (state) {
+        CASE(Brush);
+        CASE(Fill);
+        CASE(Eraser);
+        CASE(Color);
+        }
+#undef CASE
+    }
+
     enum class ClipState {
         Trimming,
         Rotate,
     };
+
+    static inline const char *ClipState2CString(ClipState state) {
+#define CASE(state) case ClipState::state: return #state
+        switch (state) {
+        CASE(Trimming);
+        CASE(Rotate);
+        }
+#undef CASE
+    }
 
     Editor(Illustrace *illustrace, Document *document);
     ~Editor();

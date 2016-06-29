@@ -49,8 +49,7 @@ public:
     void fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
     void buildPaintPaths(Document *document);
 
-    static inline const char *Event2CString(Event event)
-    {
+    static inline const char *Event2CString(Event event) {
 #define CASE(event) case event: return #event
         switch (event) {
         CASE(SourceImageLoaded);
@@ -73,7 +72,6 @@ public:
         CASE(PaintPathsBuilt);
         CASE(PreprocessedImageUpdated);
         }
-        return "Unknown event";
 #undef CASE
     }
 

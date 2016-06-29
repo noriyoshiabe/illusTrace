@@ -224,6 +224,53 @@ void View::notify(Editor *sender, va_list argList)
         printf("Editor::Event: %s\n", Editor::Event2CString(event));
     }
 #endif
+
+    switch (event) {
+    case Editor::Event::Mode:
+        printf("Editor::Mode: -> %s\n", Editor::Mode2CString(sender->mode()));
+        break;
+    case Editor::Event::LineState:
+        printf("Editor::LineState: -> %s\n", Editor::LineState2CString(sender->lineState()));
+        break;
+    case Editor::Event::PaintState:
+        printf("Editor::PaintState: -> %s\n", Editor::PaintState2CString(sender->paintState()));
+        break;
+    case Editor::Event::ClipState:
+        printf("Editor::ClipState: -> %s\n", Editor::ClipState2CString(sender->clipState()));
+        break;
+    case Editor::Event::PreprocessedImageRadius:
+        printf("Editor::PreprocessedImageRadius: -> %d\n", sender->radius());
+        break;
+    case Editor::Event::PaintLayerRadius:
+        printf("Editor::PaintLayerRadius: -> %d\n", sender->radius());
+        break;
+    case Editor::Event::PaintColor:
+        printf("Editor::PaintColor: -> %d,%d,%d\n", (int)sender->paintColor()[0], (int)sender->paintColor()[1], (int)sender->paintColor()[2]);
+        break;
+    case Editor::Event::Execute:
+        {
+            Editor::Command *command = va_arg(argList, Editor::Command *);
+            printf("Editor::Execute: -> %s\n", &typeid(*command).name()[2]);
+        }
+        break;
+    case Editor::Event::Undo:
+        {
+            Editor::Command *command = va_arg(argList, Editor::Command *);
+            printf("Editor::Undo: -> %s\n", &typeid(*command).name()[2]);
+        }
+        break;
+    case Editor::Event::Redo:
+        {
+            Editor::Command *command = va_arg(argList, Editor::Command *);
+            printf("Editor::Redo: -> %s\n", &typeid(*command).name()[2]);
+        }
+        break;
+    case Editor::Event::Save:
+        {
+            printf("Editor::Save:\n");
+        }
+        break;
+    }
 }
 
 void View::notify(Document *sender, va_list argList)

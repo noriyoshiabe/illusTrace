@@ -12,6 +12,15 @@ enum class LineMode {
     Outline,
 };
 
+static inline const char *LineMode2CString(LineMode mode) {
+#define CASE(mode) case LineMode::mode: return #mode
+    switch (mode) {
+    CASE(Center);
+    CASE(Outline);
+    }
+#undef CASE
+}
+
 struct Segment {
     enum Type {
         Move,
@@ -125,8 +134,7 @@ public:
         OutlineHierarchy,
     };
 
-    static inline const char *Event2CString(Event event)
-    {
+    static inline const char *Event2CString(Event event) {
 #define CASE(event) case event: return #event
         switch (event) {
         CASE(Mode);
@@ -154,7 +162,6 @@ public:
         CASE(ApproximatedOutlineContours);
         CASE(OutlineHierarchy);
         }
-        return "Unknown event";
 #undef CASE
     }
 

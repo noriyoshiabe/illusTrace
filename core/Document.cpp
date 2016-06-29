@@ -368,7 +368,7 @@ namespace illustrace {
 std::ostream &operator<<(std::ostream &os, Document const &self)
 {
     os << "<Document ";
-    os << "mode: " << (LineMode::Center == self._mode ? "Center" : "Outline") << ", ";
+    os << "mode: " << LineMode2CString(self._mode) << ", ";
     os << "brightness: " << self._brightness << ", ";
     os << "blur: " << self._blur << ", ";
     os << "detail: " << self._detail << ", ";
