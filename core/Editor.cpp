@@ -523,7 +523,7 @@ void Editor::B(double blue)
 void Editor::color(int colorIndex, double value)
 {
     if (Mode::Paint == _mode) {
-        _paintColor[colorIndex] = value;
+        _paintColor[colorIndex] = cv::saturate_cast<uchar>(value * 255.0);
         notify(this, Event::PaintColor);
     }
     else {
@@ -547,7 +547,7 @@ void Editor::color(int colorIndex, double value)
             command->newValue = command->oldValue;
         }
 
-        command->newValue[colorIndex] = value;
+        command->newValue[colorIndex] = cv::saturate_cast<uchar>(value * 255.0);
         execute(command);
     }
 }

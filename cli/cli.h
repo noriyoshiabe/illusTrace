@@ -3,6 +3,7 @@
 #include <string>
 #include "View.h"
 #include "Illustrace.h"
+#include "Editor.h"
 
 namespace illustrace {
 
@@ -23,6 +24,7 @@ public:
     Document *document;
     View view;
     Illustrace illustrace;
+    Editor *editor;
     bool outline;
     const char *editFilePath;
     const char *outputFilepath;

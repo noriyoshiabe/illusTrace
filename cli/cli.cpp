@@ -130,10 +130,12 @@ int CLI::main(int argc, char **argv)
 CLI::CLI() : editFilePath(nullptr), outputFilepath(nullptr)
 {
     document = new Document();
+    editor = new Editor(&illustrace, document);
 }
 
 CLI::~CLI()
 {
+    delete editor;
     delete document;
 }
 
@@ -222,9 +224,16 @@ bool CLI::execute(const char *inputFilePath)
 }
 
 enum Command {
-    DrawCircle,
-    FillRegion,
-    BuildPaintPath,
+    Mode,
+    PaintState,
+    Detail,
+    BGEnable,
+    Color,
+    Draw,
+    DrawFinish,
+    Fill,
+    Undo,
+    Redo,
 
     Unknown,
 };
@@ -240,46 +249,102 @@ void CLI::executeCommand(char *commandLine, int line)
     struct {
         const char *name;
         Command command;
+        int argc;
     } table[] = {
-        {"FillRegion", FillRegion},
-        {"DrawCircle", DrawCircle},
-        {"BuildPaintPath", BuildPaintPath},
+        {"Mode", Mode, 1},
+        {"PaintState", PaintState, 1},
+        {"Detail", Detail, 1},
+        {"BGEnable", BGEnable, 1},
+        {"Color", Color, 3},
+        {"Draw", Draw, 2},
+        {"DrawFinish", DrawFinish, 0},
+        {"Fill", Fill, 2},
+        {"Undo", Undo, 0},
+        {"Redo", Redo, 0},
     };
 
     Command command = Unknown;
 
     for (int i = 0; i < sizeof(table) / sizeof(table)[0]; ++i) {
         if (0 == strcasecmp(table[i].name, argv[0])) {
+            if (table[i].argc + 1 > argc) {
+                std::cout << "Bad command instruction. line: " << line << std::endl;
+                return;
+            }
             command = table[i].command;
         }
     }
 
     switch (command) {
-    case DrawCircle:
-        if (5 > argc) {
+    case Mode:
+        {
+            struct {
+                const char *name;
+                Editor::Mode mode;
+            } table[] = {
+                {"Line", Editor::Mode::Line},
+                {"BG", Editor::Mode::BG},
+                {"Paint", Editor::Mode::Paint},
+                {"Clip", Editor::Mode::Clip},
+            };
+
+            for (int i = 0; i < sizeof(table) / sizeof(table)[0]; ++i) {
+                if (0 == strcasecmp(table[i].name, argv[1])) {
+                    editor->mode(table[i].mode);
+                    return;
+                }
+            }
+
             std::cout << "Bad command instruction. line: " << line << std::endl;
         }
-        else {
-            cv::Point point = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
-            int radius = std::stoi(argv[3]);
-            long hex = std::stol(argv[4], nullptr, 16);
-            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 0xFF);
-            illustrace.drawCircleOnPaintLayer(point, radius, color, document);
-        }
         break;
-    case FillRegion:
-        if (4 > argc) {
+    case PaintState:
+        {
+            struct {
+                const char *name;
+                Editor::PaintState paintState;
+            } table[] = {
+                {"Brush", Editor::PaintState::Brush},
+                {"Fill", Editor::PaintState::Fill},
+                {"Eraser", Editor::PaintState::Eraser},
+                {"Color", Editor::PaintState::Color},
+            };
+
+            for (int i = 0; i < sizeof(table) / sizeof(table)[0]; ++i) {
+                if (0 == strcasecmp(table[i].name, argv[1])) {
+                    editor->paintState(table[i].paintState);
+                    return;
+                }
+            }
+
             std::cout << "Bad command instruction. line: " << line << std::endl;
         }
-        else {
-            cv::Point seed = cv::Point(std::stoi(argv[1]), std::stoi(argv[2]));
-            long hex = std::stol(argv[3], nullptr, 16);
-            auto color = cv::Scalar((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0XFF, 0xFF);
-            illustrace.fillRegionOnPaintLayer(seed, color, document);
-        }
         break;
-    case BuildPaintPath:
-        illustrace.buildPaintPaths(document);
+    case Detail:
+        editor->detail(std::stod(argv[1]));
+        break;
+    case BGEnable:
+        editor->backgroundEnable(0 == strcasecmp("true", argv[1]));
+        break;
+    case Color:
+        editor->R(std::stod(argv[1]));
+        editor->G(std::stod(argv[2]));
+        editor->B(std::stod(argv[3]));
+        break;
+    case Draw:
+        editor->draw(std::stof(argv[1]), std::stof(argv[2]));
+        break;
+    case DrawFinish:
+        editor->drawFinish();
+        break;
+    case Fill:
+        editor->fill(std::stof(argv[1]), std::stof(argv[2]));
+        break;
+    case Undo:
+        editor->undo();
+        break;
+    case Redo:
+        editor->redo();
         break;
     case Unknown:
         std::cout << "Bad command instruction. line: " << line << std::endl;
