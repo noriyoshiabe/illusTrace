@@ -207,9 +207,11 @@ bool CLI::execute(const char *inputFilePath)
 
         illustrace.buildPaintMask(document);
 
-        illustrace.removeObserver(&view);
-        document->addObserver(&view);
-        editor->addObserver(&view);
+        if (!outputFilepath) {
+            illustrace.removeObserver(&view);
+            document->addObserver(&view);
+            editor->addObserver(&view);
+        }
 
         int line = 0;
         while (ifs.getline(str, 1024 - 1)) {
