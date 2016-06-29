@@ -111,6 +111,7 @@ public:
         BackgroundEnable,
         PaintLayer,
         PaintMask,
+        ContentRect,
         ClippingRect,
         BoundingRect,
         Paths,
@@ -139,6 +140,7 @@ public:
     bool backgroundEnable();
     cv::Mat &paintLayer();
     cv::Mat &paintMask();
+    cv::Rect &contentRect();
     cv::Rect &clippingRect();
     cv::Rect &boundingRect();
     std::vector<Path *> *paths();
@@ -164,6 +166,7 @@ public:
     void paintLayer(cv::Mat &paintLayer);
     void paintLayer(cv::Mat &paintLayer, cv::Rect *dirtyRect);
     void paintMask(cv::Mat &paintMask);
+    void contentRect(cv::Rect &rect);
     void clippingRect(cv::Rect &rect);
     void boundingRect(cv::Rect &rect);
     void paths(std::vector<Path *> *paths);
@@ -190,6 +193,7 @@ private:
     cv::Mat _paintLayer;
     cv::Mat _paintMask;
     bool _backgroundEnable;
+    cv::Rect _contentRect;
     cv::Rect _clippingRect;
     cv::Rect _boundingRect;
     std::vector<Path *> *_paths;

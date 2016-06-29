@@ -120,6 +120,11 @@ cv::Mat &Document::paintMask()
     return _paintMask;
 }
 
+cv::Rect &Document::contentRect()
+{
+    return _contentRect;
+}
+
 cv::Rect &Document::clippingRect()
 {
     return _clippingRect;
@@ -237,9 +242,8 @@ void Document::backgroundEnable(bool backgroundEnable)
 
 void Document::paintLayer(cv::Mat &paintLayer)
 {
-    auto dirtyRect = cv::Rect(0, 0, paintLayer.cols, paintLayer.rows);
     _paintLayer = paintLayer;
-    notify(this, Document::Event::PaintLayer, &dirtyRect);
+    notify(this, Document::Event::PaintLayer, &_contentRect);
 }
 
 void Document::paintLayer(cv::Mat &paintLayer, cv::Rect *dirtyRect)
@@ -252,6 +256,12 @@ void Document::paintMask(cv::Mat &paintMask)
 {
     _paintMask = paintMask;
     notify(this, Document::Event::PaintMask);
+}
+
+void Document::contentRect(cv::Rect &rect)
+{
+    _contentRect = rect;
+    notify(this, Document::Event::ContentRect);
 }
 
 void Document::clippingRect(cv::Rect &rect)
@@ -298,9 +308,8 @@ void Document::binarizedImage(cv::Mat &binarizedImage)
 
 void Document::preprocessedImage(cv::Mat &preprocessedImage)
 {
-    auto dirtyRect = cv::Rect(0, 0, preprocessedImage.cols, preprocessedImage.rows);
     _preprocessedImage = preprocessedImage;
-    notify(this, Document::Event::PreprocessedImage, &dirtyRect);
+    notify(this, Document::Event::PreprocessedImage, &_contentRect);
 }
 
 void Document::preprocessedImage(cv::Mat &preprocessedImage, cv::Rect *dirtyRect)

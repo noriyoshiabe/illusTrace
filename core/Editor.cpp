@@ -108,14 +108,12 @@ public:
     }
 
     void undo() {
-        auto dirtyRect = cv::Rect(0, 0, oldCanvas.cols, oldCanvas.rows);
-        document->preprocessedImage(oldCanvas, &dirtyRect);
+        document->preprocessedImage(oldCanvas, &document->contentRect());
         apply();
     }
 
     void redo() {
-        auto dirtyRect = cv::Rect(0, 0, newCanvas.cols, newCanvas.rows);
-        document->preprocessedImage(newCanvas, &dirtyRect);
+        document->preprocessedImage(newCanvas, &document->contentRect());
         apply();
     }
 };
@@ -133,14 +131,12 @@ public:
     }
 
     void undo() {
-        auto dirtyRect = cv::Rect(0, 0, oldCanvas.cols, oldCanvas.rows);
-        document->paintLayer(oldCanvas, &dirtyRect);
+        document->paintLayer(oldCanvas, &document->contentRect());
         apply();
     }
 
     void redo() {
-        auto dirtyRect = cv::Rect(0, 0, newCanvas.cols, newCanvas.rows);
-        document->paintLayer(newCanvas, &dirtyRect);
+        document->paintLayer(newCanvas, &document->contentRect());
         apply();
     }
 };
