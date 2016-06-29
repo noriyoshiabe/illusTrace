@@ -100,7 +100,6 @@ public:
     PreprocessedImageCommand(Editor *editor) : DrawCommand(editor) {}
 
     void execute() {
-        document->preprocessedImage(newCanvas, nullptr);
     }
 
     void apply() {
@@ -126,7 +125,6 @@ public:
     PaintLayerCommand(Editor *editor) : DrawCommand(editor) {}
 
     void execute() {
-        document->paintLayer(newCanvas, nullptr);
     }
 
     void apply() {
@@ -313,7 +311,7 @@ void Editor::execute(Command *command)
         delete command;
     }
 
-    notify(this, Event::Execute);
+    notify(this, Event::Execute, command);
 }
 
 void Editor::undo()
@@ -325,7 +323,7 @@ void Editor::undo()
         redoStack.push(command);
         lastCommand = nullptr;
         --currentPoint;
-        notify(this, Event::Undo);
+        notify(this, Event::Undo, command);
     }
 }
 
@@ -338,7 +336,7 @@ void Editor::redo()
         undoStack.push(command);
         lastCommand = nullptr;
         ++currentPoint;
-        notify(this, Event::Redo);
+        notify(this, Event::Redo, command);
     }
 }
 
@@ -427,18 +425,19 @@ void Editor::draw(float x, float y)
         case Mode::Line:
             command = new PreprocessedImageCommand(this);
             command->oldCanvas = document->preprocessedImage();
+            command->newCanvas = command->oldCanvas.clone();
+            document->preprocessedImage(command->newCanvas, nullptr);
             break;
         case Mode::Paint:
             command = new PaintLayerCommand(this);
             command->oldCanvas = document->paintLayer();
+            command->newCanvas = command->oldCanvas.clone();
+            document->paintLayer(command->newCanvas, nullptr);
             break;
         default:
             // Illegal operation
             return;
         }
-
-        command->newCanvas = command->oldCanvas.clone();
-        execute(command);
     }
 
     auto point = cv::Point(x, y);
@@ -467,6 +466,8 @@ void Editor::draw(float x, float y)
     default:
         break;
     }
+
+    execute(command);
 }
 
 void Editor::drawFinish()
