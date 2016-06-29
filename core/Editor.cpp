@@ -27,12 +27,14 @@ public:
         document->detail(newValue);
         illustrace->approximateLines(document);
         illustrace->buildPaths(document);
+        illustrace->buildPaintMask(document);
     }
 
     void undo() {
         document->detail(oldValue);
         illustrace->approximateLines(document);
         illustrace->buildPaths(document);
+        illustrace->buildPaintMask(document);
     }
 };
 
@@ -105,6 +107,7 @@ public:
         illustrace->buildLines(document);
         illustrace->approximateLines(document);
         illustrace->buildPaths(document);
+        illustrace->buildPaintMask(document);
     }
 
     void undo() {
@@ -127,7 +130,7 @@ public:
     }
 
     void apply() {
-        illustrace->buildPaths(document);
+        illustrace->buildPaintPaths(document);
     }
 
     void undo() {
