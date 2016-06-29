@@ -626,3 +626,59 @@ void Editor::trimming(Func func)
     func(command->newValue);
     execute(command);
 }
+
+namespace illustrace {
+
+std::ostream &operator<<(std::ostream &os, Editor const &self)
+{
+    os << "<Editor ";
+
+    os << "mode: ";
+    switch (self._mode) {
+    case Editor::Mode::Line: os << "Line"; break;
+    case Editor::Mode::BG: os << "BG"; break;
+    case Editor::Mode::Paint: os << "Paint"; break;
+    case Editor::Mode::Clip: os << "Clip"; break;
+    }
+    os << ", ";
+
+    os << "lineState: ";
+    switch (self._lineState) {
+    case Editor::LineState::Line: os << "Line"; break;
+    case Editor::LineState::PencilBlack: os << "PencilBlack"; break;
+    case Editor::LineState::PencilWhite: os << "PencilWhite"; break;
+    case Editor::LineState::Eraser: os << "Eraser"; break;
+    case Editor::LineState::Color: os << "Color"; break;
+    }
+    os << ", ";
+
+    os << "paintState: ";
+    switch (self._paintState) {
+    case Editor::PaintState::Brush: os << "Brush"; break;
+    case Editor::PaintState::Fill: os << "Fill"; break;
+    case Editor::PaintState::Eraser: os << "Eraser"; break;
+    case Editor::PaintState::Color: os << "Color"; break;
+    }
+    os << ", ";
+
+    os << "clipState: ";
+    switch (self._clipState) {
+    case Editor::ClipState::Trimming: os << "Trimming"; break;
+    case Editor::ClipState::Rotate: os << "Rotate"; break;
+    }
+    os << ", ";
+
+    os << "preprocessedImageRadius: " << self.preprocessedImageRadius << ", ";
+    os << "paintLayerRadius: " << self.paintLayerRadius << ", ";
+    os << "paintColor: " << self._paintColor << ", ";
+    os << "undoStack: " << self.undoStack.size() << ", ";
+    os << "redoStack: " << self.redoStack.size() << ", ";
+    os << "lastCommand: " << self.lastCommand << ", ";
+    os << "currentPoint: " << self.currentPoint << ", ";
+    os << "savedPoint: " << self.savedPoint << "";
+    os << ">";
+
+    return os;
+}
+
+} // namespace illustrace

@@ -362,3 +362,38 @@ void Document::outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy)
     _outlineHierarchy = outlineHierarchy;
     notify(this, Document::Event::OutlineHierarchy);
 }
+
+namespace illustrace {
+
+std::ostream &operator<<(std::ostream &os, Document const &self)
+{
+    os << "<Document ";
+    os << "mode: " << (LineMode::Center == self._mode ? "Center" : "Outline") << ", ";
+    os << "brightness: " << self._brightness << ", ";
+    os << "blur: " << self._blur << ", ";
+    os << "detail: " << self._detail << ", ";
+    os << "smoothing: " << self._smoothing << ", ";
+    os << "thickness: " << self._thickness << ", ";
+    os << "rotation: " << self._rotation << ", ";
+    os << "color: " << self._color << ", ";
+    os << "backgroundColor: " << self._backgroundColor << ", ";
+    os << "paintLayer: " << &self._paintLayer << ", ";
+    os << "paintMask: " << &self._paintMask << ", ";
+    os << "backgroundEnable: " << self._backgroundEnable << ", ";
+    os << "contentRect: " << self._contentRect << ", ";
+    os << "clippingRect: " << self._clippingRect << ", ";
+    os << "boundingRect: " << self._boundingRect << ", ";
+    os << "paths: " << self._paths << ", ";
+    os << "paintPaths: " << self._paintPaths << ", ";
+    os << "binarizedImage: " << &self._binarizedImage << ", ";
+    os << "preprocessedImage: " << &self._preprocessedImage << ", ";
+    os << "centerLines: " << self._centerLines << ", ";
+    os << "approximatedCenterLines: " << self._approximatedCenterLines << ", ";
+    os << "outlineContours: " << self._outlineContours << ", ";
+    os << "approximatedOutlineContours: " << self._approximatedOutlineContours << ", ";
+    os << "outlineHierarchy: " << self._outlineHierarchy << "";
+    os << ">";
+    return os;
+}
+
+} // namespace illustrace

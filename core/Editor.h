@@ -103,6 +103,8 @@ public:
     void save();
     bool hasChanged();
 
+    friend std::ostream &operator<<(std::ostream &os, Editor const &self);
+
 private:
     void execute(Command *command);
     void color(int colorIndex, double value);
