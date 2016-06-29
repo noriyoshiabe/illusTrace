@@ -251,18 +251,36 @@ void View::notify(Editor *sender, va_list argList)
         {
             Editor::Command *command = va_arg(argList, Editor::Command *);
             printf("Editor::Execute: -> %s\n", &typeid(*command).name()[2]);
+#ifdef DEBUG
+            if (__IsTrace__) {
+                std::cout << *sender << std::endl;
+                std::cout << *sender->document << std::endl;
+            }
+#endif
         }
         break;
     case Editor::Event::Undo:
         {
             Editor::Command *command = va_arg(argList, Editor::Command *);
             printf("Editor::Undo: -> %s\n", &typeid(*command).name()[2]);
+#ifdef DEBUG
+            if (__IsTrace__) {
+                std::cout << *sender << std::endl;
+                std::cout << *sender->document << std::endl;
+            }
+#endif
         }
         break;
     case Editor::Event::Redo:
         {
             Editor::Command *command = va_arg(argList, Editor::Command *);
             printf("Editor::Redo: -> %s\n", &typeid(*command).name()[2]);
+#ifdef DEBUG
+            if (__IsTrace__) {
+                std::cout << *sender << std::endl;
+                std::cout << *sender->document << std::endl;
+            }
+#endif
         }
         break;
     case Editor::Event::Save:
@@ -282,6 +300,34 @@ void View::notify(Document *sender, va_list argList)
         printf("Document::Event: %s\n", Document::Event2CString(event));
     }
 #endif
+
+    switch (event) {
+    case Document::Event::Thickness:
+    case Document::Event::Color:
+    case Document::Event::BackgroundColor:
+    case Document::Event::BackgroundEnable:
+    case Document::Event::Paths:
+    case Document::Event::PaintPaths:
+        if (sender->backgroundEnable()) {
+            fillBackground(sender->backgroundColor());
+        }
+        else {
+            clearPreview();
+        }
+        drawPaths(sender->paintPaths(), 0, sender->color(), sender->color());
+        drawPaths(sender->paths(), sender->thickness(), sender->color(), sender->color());
+        waitKeyIfNeeded();
+        break;
+    case Document::Event::PaintLayer:
+        if (plot) {
+            copyFrom(sender->paintLayer());
+            drawPaths(sender->paths(), sender->thickness(), sender->color(), sender->color());
+            waitKeyIfNeeded();
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 void View::clearPreview()
@@ -364,6 +410,10 @@ void View::drawLines(std::vector<std::vector<T>> &lines, double thickness, bool 
 
 void View::drawPaths(std::vector<Path *> *paths, double thickness, cv::Scalar &stroke, cv::Scalar &fill)
 {
+    if (!paths) {
+        return;
+    }
+
     cairo_set_line_width(cr, thickness);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);

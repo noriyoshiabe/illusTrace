@@ -187,7 +187,7 @@ Editor::Editor(Illustrace *illustrace, Document *document)
       _clipState(Editor::ClipState::Trimming),
       preprocessedImageRadius(5),
       paintLayerRadius(5),
-      _paintColor(cv::Scalar(255, 255, 255)),
+      _paintColor(cv::Scalar(255, 255, 255, 255)),
       lastCommand(nullptr),
       currentPoint(0),
       savedPoint(0)
@@ -474,6 +474,7 @@ void Editor::fill(float x, float y)
     DrawCommand *command = new PaintLayerCommand(this);
     command->oldCanvas = document->paintLayer();
     command->newCanvas = command->oldCanvas.clone();
+    document->paintLayer(command->newCanvas, nullptr);
     execute(command);
 
     auto point = cv::Point(x, y);
