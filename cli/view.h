@@ -2,13 +2,14 @@
 
 #include "Observer.h"
 #include "Illustrace.h"
+#include "Editor.h"
 
 #include "opencv2/highgui.hpp"
 #include "cairo/cairo.h"
 
 namespace illustrace {
 
-class View : public Observer<Illustrace> {
+class View : public Observer<Illustrace>, public Observer<Editor>, public Observer<Document> {
 public:
     View();
     ~View();
@@ -26,6 +27,8 @@ private:
     cairo_t *cr;
 
     void notify(Illustrace *sender, va_list argList);
+    void notify(Editor *sender, va_list argList);
+    void notify(Document *sender, va_list argList);
 
     void clearPreview();
     void fillBackground(cv::Scalar &color);

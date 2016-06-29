@@ -7,11 +7,11 @@
 
 namespace illustrace {
 
-class Editor : Observable<Editor> {
+class Editor : public Observable<Editor> {
 public:
     class Command;
 
-    enum class Event {
+    enum class Event : int {
         Mode,
         LineState,
         PaintState,
@@ -24,6 +24,26 @@ public:
         Redo,
         Save,
     };
+
+    static inline const char *Event2CString(Event event)
+    {
+#define CASE(event) case Event::event: return #event
+        switch (event) {
+        CASE(Mode);
+        CASE(LineState);
+        CASE(PaintState);
+        CASE(ClipState);
+        CASE(PreprocessedImageRadius);
+        CASE(PaintLayerRadius);
+        CASE(PaintColor);
+        CASE(Execute);
+        CASE(Undo);
+        CASE(Redo);
+        CASE(Save);
+        }
+        return "Unknown event";
+#undef CASE
+    }
 
     enum class Mode {
         Line,

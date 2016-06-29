@@ -40,7 +40,7 @@ void View::notify(Illustrace *sender, va_list argList)
 
 #ifdef DEBUG
     if (__IsTrace__) {
-        printf("%s: %s\n", __func__, Illustrace::Event2CString(event));
+        printf("Illustrace::Event: %s\n", Illustrace::Event2CString(event));
     }
 #endif
 
@@ -213,6 +213,28 @@ void View::notify(Illustrace *sender, va_list argList)
         waitKeyIfNeeded();
         break;
     }
+}
+
+void View::notify(Editor *sender, va_list argList)
+{
+    Editor::Event event = static_cast<Editor::Event>(va_arg(argList, int));
+
+#ifdef DEBUG
+    if (__IsTrace__) {
+        printf("Editor::Event: %s\n", Editor::Event2CString(event));
+    }
+#endif
+}
+
+void View::notify(Document *sender, va_list argList)
+{
+    Document::Event event = static_cast<Document::Event>(va_arg(argList, int));
+
+#ifdef DEBUG
+    if (__IsTrace__) {
+        printf("Document::Event: %s\n", Document::Event2CString(event));
+    }
+#endif
 }
 
 void View::clearPreview()

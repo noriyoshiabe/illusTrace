@@ -125,6 +125,39 @@ public:
         OutlineHierarchy,
     };
 
+    static inline const char *Event2CString(Event event)
+    {
+#define CASE(event) case event: return #event
+        switch (event) {
+        CASE(Mode);
+        CASE(Brightness);
+        CASE(Blur);
+        CASE(Detail);
+        CASE(Smoothing);
+        CASE(Thickness);
+        CASE(Rotation);
+        CASE(Color);
+        CASE(BackgroundColor);
+        CASE(BackgroundEnable);
+        CASE(PaintLayer);
+        CASE(PaintMask);
+        CASE(ContentRect);
+        CASE(ClippingRect);
+        CASE(BoundingRect);
+        CASE(Paths);
+        CASE(PaintPaths);
+        CASE(BinarizedImage);
+        CASE(PreprocessedImage);
+        CASE(CenterLines);
+        CASE(ApproximatedCenterLines);
+        CASE(OutlineContours);
+        CASE(ApproximatedOutlineContours);
+        CASE(OutlineHierarchy);
+        }
+        return "Unknown event";
+#undef CASE
+    }
+
     Document();
     ~Document();
 
