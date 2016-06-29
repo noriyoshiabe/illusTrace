@@ -612,13 +612,6 @@ void Editor::trimmingLeft(float x)
     });
 }
 
-void Editor::clippingRect(cv::Rect &rect)
-{
-    trimming([=](cv::Rect &_rect) {
-        _rect = rect;
-    });
-}
-
 template<typename Func>
 void Editor::trimming(Func func)
 {

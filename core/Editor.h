@@ -50,7 +50,6 @@ public:
     enum class ClipState {
         Trimming,
         Rotate,
-        Preset,
     };
 
     Editor(Illustrace *illustrace, Document *document);
@@ -92,8 +91,6 @@ public:
     void trimmingBottom(float y);
     void trimmingBottomLeft(float x, float y);
     void trimmingLeft(float x);
-
-    void clippingRect(cv::Rect &rect);
 
     Illustrace *illustrace;
     Document *document;
