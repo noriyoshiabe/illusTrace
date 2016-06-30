@@ -62,6 +62,16 @@
                                     <segment title="Mono"/>
                                 </segments>
                             </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1ZT-RF-fSJ">
+                                <rect key="frame" x="20" y="76" width="87" height="29"/>
+                                <segments>
+                                    <segment title="Auto"/>
+                                    <segment title="Lock"/>
+                                </segments>
+                                <connections>
+                                    <action selector="focusControlAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="4Dg-VI-jgf"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -82,8 +92,10 @@
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="ZzS-ex-SaO"/>
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="f4k-TI-0Ws"/>
                             <constraint firstItem="Do4-Li-odV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="h3t-Mj-uq6"/>
+                            <constraint firstItem="1ZT-RF-fSJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="lky-Ba-582"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="nMf-dX-Ydf"/>
                             <constraint firstItem="MO3-13-eA5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="pgA-Kw-4WY"/>
+                            <constraint firstItem="1ZT-RF-fSJ" firstAttribute="top" secondItem="Do4-Li-odV" secondAttribute="bottom" constant="20" id="u7H-x0-U1a"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Kbp-CH-qxD" secondAttribute="bottom" id="xou-rY-4Sz"/>
                         </constraints>
                     </view>
@@ -91,6 +103,7 @@
                         <outlet property="brightnessSlider" destination="qg4-BY-dzX" id="fss-VG-D2P"/>
                         <outlet property="colorControl" destination="Do4-Li-odV" id="rHl-2X-gla"/>
                         <outlet property="detailSlider" destination="2NJ-BT-yYd" id="sn2-64-Yta"/>
+                        <outlet property="focusControl" destination="1ZT-RF-fSJ" id="UNX-kW-wRC"/>
                         <outlet property="imageView" destination="Kbp-CH-qxD" id="dMx-BY-sJ0"/>
                         <outlet property="modeControl" destination="MO3-13-eA5" id="VWB-iS-J1f"/>
                         <outlet property="smoothingSlider" destination="XDV-8f-5Cv" id="NGB-Bt-dqc"/>

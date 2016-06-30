@@ -29,6 +29,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *colorControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *focusControl;
 @end
 
 @implementation CameraViewController
@@ -184,6 +185,33 @@ using namespace illustrace;
         case 1:
             _document->mode(LineMode::Center);
             break;
+    }
+}
+
+- (IBAction)focusControlAction:(UISegmentedControl *)sender
+{
+    NSArray *devices = [AVCaptureDevice devices];
+    NSError *error;
+    for (AVCaptureDevice *device in devices) {
+        if (([device hasMediaType:AVMediaTypeVideo]) &&
+            ([device position] == AVCaptureDevicePositionBack) ) {
+            [device lockForConfiguration:&error];
+            
+            switch (sender.selectedSegmentIndex) {
+                case 0:
+                    if ([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+                        device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+                    }
+                    break;
+                case 1:
+                    if ([device isFocusModeSupported:AVCaptureFocusModeLocked]) {
+                        device.focusMode = AVCaptureFocusModeLocked;
+                    }
+                    break;
+            }
+            
+            [device unlockForConfiguration];
+        }
     }
 }
 
