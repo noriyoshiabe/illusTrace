@@ -5,6 +5,45 @@
 
 using namespace illustrace;
 
+void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
+{
+    cv::Mat image = sourceImage.clone();
+    Filter::brightness(image, document->brightness());
+    Filter::blur(image, blur(image, document));
+    Filter::threshold(image);
+    Filter::negative(image);
+
+    auto *outlineContours = document->outlineContours();
+    auto *outlineHierarchy = document->outlineHierarchy();
+    auto *approximatedOutlineContours = document->approximatedOutlineContours();
+    auto *paths = document->paths();
+
+    outlineContours->clear();
+    outlineHierarchy->clear();
+    approximatedOutlineContours->clear();
+    paths->clear();
+
+    cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+    double _epsilon = epsilon(document);
+    double smoothing = document->smoothing();
+
+    for (auto line : *outlineContours) {
+        std::vector<cv::Point2f> approx;
+        cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
+        approximatedOutlineContours->push_back(approx);
+    }
+
+    std::vector<Path *> _paths;
+    for (auto line : *approximatedOutlineContours) {
+        auto *path = new Path();
+        BezierSplineBuilder::build(line, path, smoothing, true, false);
+        _paths.push_back(path);
+    }
+
+    buildPathsHierarchy(_paths, nullptr, *outlineHierarchy, 0, *paths);
+}
+
 bool Illustrace::traceFromFile(const char *filepath, Document *document)
 {
     cv::Mat sourceImage = imread(filepath, cv::IMREAD_GRAYSCALE);

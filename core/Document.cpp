@@ -21,6 +21,13 @@ Document::Document() :
     _approximatedOutlineContours(nullptr),
     _outlineHierarchy(nullptr)
 {
+    _paths = new std::vector<Path *>();
+    _paintPaths = new std::vector<Path *>();
+    _centerLines = new std::vector<std::vector<cv::Point2f>>();
+    _approximatedCenterLines = new std::vector<std::vector<cv::Point2f>>();
+    _outlineContours = new std::vector<std::vector<cv::Point>>();
+    _approximatedOutlineContours = new std::vector<std::vector<cv::Point2f>>();
+    _outlineHierarchy = new std::vector<cv::Vec4i>();
 }
 
 Document::~Document()

@@ -8,7 +8,7 @@
 
 #import "CameraViewController.h"
 #import <opencv2/videoio/cap_ios.h>
-#import "Filter.h"
+#import "Illustrace.h"
 
 #define kCvPreviewWidth 480.0
 #define kCvPreviewHeight 640.0
@@ -17,6 +17,8 @@ using namespace illustrace;
 
 @interface CameraViewController () <CvVideoCameraDelegate> {
     CvVideoCamera* _videoCamera;
+    Document *_document;
+    Illustrace _illustrace;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @end
@@ -26,6 +28,8 @@ using namespace illustrace;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _document = new Document();
     
     _videoCamera = [[CvVideoCamera alloc] initWithParentView:_imageView];
     _videoCamera.delegate = self;
@@ -73,7 +77,7 @@ using namespace illustrace;
 
 - (void)processImage:(cv::Mat &)image
 {
-    Filter::threshold(image);
+    _illustrace.traceForPreview(image, _document);
 }
 
 @end

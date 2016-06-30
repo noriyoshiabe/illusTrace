@@ -37,6 +37,8 @@ public:
         PreprocessedImageUpdated,
     };
 
+    void traceForPreview(cv::Mat &sourceImage, Document *document);
+
     bool traceFromFile(const char *filepath, Document *document);
     void traceFromImage(cv::Mat &sourceImage, Document *document);
     void binarize(cv::Mat &sourceImage, Document *document);
