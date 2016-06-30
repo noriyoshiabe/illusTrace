@@ -23,6 +23,11 @@ using namespace illustrace;
     CGContextRef _bitmapContext;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
+@property (weak, nonatomic) IBOutlet UISlider *detailSlider;
+@property (weak, nonatomic) IBOutlet UISlider *smoothingSlider;
+@property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @end
 
 @implementation CameraViewController
@@ -32,6 +37,7 @@ using namespace illustrace;
     [super viewDidLoad];
     
     _document = new Document();
+    _document->mode(LineMode::Outline);
     
     _videoCamera = [[CvVideoCamera alloc] initWithParentView:_imageView];
     _videoCamera.delegate = self;
@@ -134,6 +140,40 @@ using namespace illustrace;
     }
     
     [self drawPaths];
+}
+
+#pragma mark IBAction
+
+- (IBAction)brightnessSliderAction:(UISlider *)sender
+{
+    _document->brightness(sender.value);
+}
+
+- (IBAction)detailSliderAction:(UISlider *)sender
+{
+    _document->detail(sender.value);
+}
+
+- (IBAction)smoothingSliderAction:(UISlider *)sender
+{
+    _document->smoothing(sender.value);
+}
+
+- (IBAction)thicknessSliderAction:(UISlider *)sender
+{
+    _document->thickness(sender.value);
+}
+
+- (IBAction)modeControllSliderAction:(UISegmentedControl *)sender
+{
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            _document->mode(LineMode::Outline);
+            break;
+        case 1:
+            _document->mode(LineMode::Center);
+            break;
+    }
 }
 
 @end

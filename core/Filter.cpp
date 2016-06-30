@@ -1,4 +1,4 @@
-#include "Filter.h" 
+#include "Filter.h"
 
 using namespace illustrace;
 
@@ -9,6 +9,22 @@ void Filter::brightness(cv::Mat &image, double brightness, double contrast)
     int length = image.rows * image.cols;
     for (int i = 0; i < length; ++i) {
         image.data[i] = cv::saturate_cast<uchar>(contrast * image.data[i] + brightness);
+    }
+}
+
+void Filter::gamma(cv::Mat &image, double g)
+{
+    uchar lut[256];
+    double _gamma = 1.0 / (g + 1.0);
+    for (int i = 0; i < 256; i++) {
+        lut[i] = pow(1.0 * i / 255.0, _gamma) * 255.0;
+    }
+
+    int length = image.rows * image.cols * 4;
+    for (int i = 0; i < length; i += 4) {
+        image.data[i+0] = lut[image.data[i+0]];
+        image.data[i+1] = lut[image.data[i+1]];
+        image.data[i+2] = lut[image.data[i+2]];
     }
 }
 

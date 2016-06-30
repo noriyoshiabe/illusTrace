@@ -7,10 +7,11 @@ using namespace illustrace;
 
 void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
 {
+    Filter::gamma(sourceImage, document->brightness());
+
     cv::Mat image;
     cv::cvtColor(sourceImage, image, CV_BGRA2GRAY);
 
-    Filter::brightness(image, document->brightness());
     Filter::blur(image, blur(image, document));
     Filter::threshold(image);
 
