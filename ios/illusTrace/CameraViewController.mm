@@ -28,6 +28,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UISlider *smoothingSlider;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *colorControl;
 @end
 
 @implementation CameraViewController
@@ -84,8 +85,18 @@ using namespace illustrace;
 
 - (void)drawPaths
 {
-    CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
-    CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
+    if (1 == _colorControl.selectedSegmentIndex) {
+        CGContextSetRGBFillColor(_bitmapContext, 1.0, 1.0, 1.0, 1.0);
+        CGContextFillRect(_bitmapContext, (CGRect){CGPointZero, {kCvPreviewWidth, kCvPreviewHeight}});
+        
+        CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 0.0, 1.0);
+        CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 0.0, 1.0);
+    }
+    else {
+        CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
+        CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
+    }
+    
     CGContextSetLineWidth(_bitmapContext, _document->thickness());
     CGContextSetLineCap(_bitmapContext, kCGLineCapRound);
     

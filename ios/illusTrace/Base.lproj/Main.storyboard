@@ -55,6 +55,13 @@
                                     <action selector="modeControllSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="jQ5-h9-Ur6"/>
                                 </connections>
                             </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Do4-Li-odV">
+                                <rect key="frame" x="20" y="28" width="99" height="29"/>
+                                <segments>
+                                    <segment title="Color"/>
+                                    <segment title="Mono"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -65,6 +72,7 @@
                             <constraint firstItem="MO3-13-eA5" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="B8i-ic-58g"/>
                             <constraint firstItem="Kbp-CH-qxD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="CnH-Fc-tf1"/>
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="EAP-eR-RKN"/>
+                            <constraint firstItem="Do4-Li-odV" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="FaF-Sn-vH7"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HGe-BN-Eil" secondAttribute="bottom" constant="20" id="Hdo-UE-ldv"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="top" secondItem="2NJ-BT-yYd" secondAttribute="bottom" constant="15" id="JoA-BG-sBW"/>
                             <constraint firstItem="qg4-BY-dzX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="OO3-jn-bXr"/>
@@ -73,6 +81,7 @@
                             <constraint firstItem="HGe-BN-Eil" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="SN6-9X-TWD"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="ZzS-ex-SaO"/>
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="f4k-TI-0Ws"/>
+                            <constraint firstItem="Do4-Li-odV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="h3t-Mj-uq6"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="nMf-dX-Ydf"/>
                             <constraint firstItem="MO3-13-eA5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="pgA-Kw-4WY"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Kbp-CH-qxD" secondAttribute="bottom" id="xou-rY-4Sz"/>
@@ -80,6 +89,7 @@
                     </view>
                     <connections>
                         <outlet property="brightnessSlider" destination="qg4-BY-dzX" id="fss-VG-D2P"/>
+                        <outlet property="colorControl" destination="Do4-Li-odV" id="rHl-2X-gla"/>
                         <outlet property="detailSlider" destination="2NJ-BT-yYd" id="sn2-64-Yta"/>
                         <outlet property="imageView" destination="Kbp-CH-qxD" id="dMx-BY-sJ0"/>
                         <outlet property="modeControl" destination="MO3-13-eA5" id="VWB-iS-J1f"/>
