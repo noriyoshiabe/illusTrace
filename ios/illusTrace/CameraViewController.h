@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CameraViewController.h
 //  illusTrace
 //
 //  Created by abechan on 2016/06/30.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface CameraViewController : UIViewController
 
 
 @end
