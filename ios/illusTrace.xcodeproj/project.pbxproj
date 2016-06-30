@@ -13,6 +13,17 @@
 		021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8A1D255034008CE5B0 /* Main.storyboard */; };
 		021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8D1D255034008CE5B0 /* Assets.xcassets */; };
 		021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */; };
+		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
+		02A057AE1D257DC000DD16B4 /* CenterLineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */; };
+		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
+		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
+		02A057B21D257DC000DD16B4 /* FeatureDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */; };
+		02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579D1D257DBF00DD16B4 /* Filter.cpp */; };
+		02A057B41D257DC000DD16B4 /* GraphBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */; };
+		02A057B51D257DC000DD16B4 /* Illustrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057A11D257DBF00DD16B4 /* Illustrace.cpp */; };
+		02A057B61D257DC000DD16B4 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057A31D257DBF00DD16B4 /* Log.cpp */; };
+		02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057AA1D257DBF00DD16B4 /* SVGWriter.cpp */; };
+		02A057BA1D257E5300DD16B4 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A057B91D257E5300DD16B4 /* libxml2.tbd */; };
 		02C884151D25555600BBB439 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884141D25555600BBB439 /* opencv2.framework */; };
 		02C884171D25566300BBB439 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884161D25566300BBB439 /* AVFoundation.framework */; };
 		02C884191D25568600BBB439 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884181D25568600BBB439 /* CoreMedia.framework */; };
@@ -30,6 +41,31 @@
 		021D2F8D1D255034008CE5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		021D2F901D255034008CE5B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		021D2F921D255034008CE5B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
+		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
+		02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CenterLineBuilder.cpp; sourceTree = "<group>"; };
+		02A057951D257DBF00DD16B4 /* CenterLineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenterLineBuilder.h; sourceTree = "<group>"; };
+		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
+		02A057981D257DBF00DD16B4 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
+		02A057991D257DBF00DD16B4 /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
+		02A0579A1D257DBF00DD16B4 /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
+		02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FeatureDetector.cpp; sourceTree = "<group>"; };
+		02A0579C1D257DBF00DD16B4 /* FeatureDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeatureDetector.h; sourceTree = "<group>"; };
+		02A0579D1D257DBF00DD16B4 /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
+		02A0579E1D257DBF00DD16B4 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphBuilder.cpp; sourceTree = "<group>"; };
+		02A057A01D257DBF00DD16B4 /* GraphBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphBuilder.h; sourceTree = "<group>"; };
+		02A057A11D257DBF00DD16B4 /* Illustrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Illustrace.cpp; sourceTree = "<group>"; };
+		02A057A21D257DBF00DD16B4 /* Illustrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Illustrace.h; sourceTree = "<group>"; };
+		02A057A31D257DBF00DD16B4 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		02A057A41D257DBF00DD16B4 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		02A057A51D257DBF00DD16B4 /* Observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observable.h; sourceTree = "<group>"; };
+		02A057A61D257DBF00DD16B4 /* Observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observer.h; sourceTree = "<group>"; };
+		02A057A91D257DBF00DD16B4 /* PaintMaskBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaintMaskBuilder.h; sourceTree = "<group>"; };
+		02A057AA1D257DBF00DD16B4 /* SVGWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SVGWriter.cpp; sourceTree = "<group>"; };
+		02A057AB1D257DBF00DD16B4 /* SVGWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGWriter.h; sourceTree = "<group>"; };
+		02A057AC1D257DBF00DD16B4 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		02A057B91D257E5300DD16B4 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		02C884141D25555600BBB439 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		02C884161D25566300BBB439 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		02C884181D25568600BBB439 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -41,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02A057BA1D257E5300DD16B4 /* libxml2.tbd in Frameworks */,
 				02C8841B1D2556A500BBB439 /* AssetsLibrary.framework in Frameworks */,
 				02C884191D25568600BBB439 /* CoreMedia.framework in Frameworks */,
 				02C884171D25566300BBB439 /* AVFoundation.framework in Frameworks */,
@@ -58,7 +95,9 @@
 				02C884181D25568600BBB439 /* CoreMedia.framework */,
 				02C884161D25566300BBB439 /* AVFoundation.framework */,
 				02C884141D25555600BBB439 /* opencv2.framework */,
+				02A057B91D257E5300DD16B4 /* libxml2.tbd */,
 				021D2F801D255034008CE5B0 /* illusTrace */,
+				02A057911D257DBF00DD16B4 /* core */,
 				021D2F7F1D255034008CE5B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,6 +132,38 @@
 				021D2F821D255034008CE5B0 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02A057911D257DBF00DD16B4 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */,
+				02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */,
+				02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */,
+				02A057951D257DBF00DD16B4 /* CenterLineBuilder.h */,
+				02A057971D257DBF00DD16B4 /* Document.cpp */,
+				02A057981D257DBF00DD16B4 /* Document.h */,
+				02A057991D257DBF00DD16B4 /* Editor.cpp */,
+				02A0579A1D257DBF00DD16B4 /* Editor.h */,
+				02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */,
+				02A0579C1D257DBF00DD16B4 /* FeatureDetector.h */,
+				02A0579D1D257DBF00DD16B4 /* Filter.cpp */,
+				02A0579E1D257DBF00DD16B4 /* Filter.h */,
+				02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */,
+				02A057A01D257DBF00DD16B4 /* GraphBuilder.h */,
+				02A057A11D257DBF00DD16B4 /* Illustrace.cpp */,
+				02A057A21D257DBF00DD16B4 /* Illustrace.h */,
+				02A057A31D257DBF00DD16B4 /* Log.cpp */,
+				02A057A41D257DBF00DD16B4 /* Log.h */,
+				02A057A51D257DBF00DD16B4 /* Observable.h */,
+				02A057A61D257DBF00DD16B4 /* Observer.h */,
+				02A057A91D257DBF00DD16B4 /* PaintMaskBuilder.h */,
+				02A057AA1D257DBF00DD16B4 /* SVGWriter.cpp */,
+				02A057AB1D257DBF00DD16B4 /* SVGWriter.h */,
+				02A057AC1D257DBF00DD16B4 /* Util.h */,
+			);
+			name = core;
+			path = ../core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,9 +237,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02A057B51D257DC000DD16B4 /* Illustrace.cpp in Sources */,
+				02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */,
 				021D2F891D255034008CE5B0 /* CameraViewController.mm in Sources */,
+				02A057B21D257DC000DD16B4 /* FeatureDetector.cpp in Sources */,
 				021D2F861D255034008CE5B0 /* AppDelegate.m in Sources */,
+				02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */,
+				02A057B61D257DC000DD16B4 /* Log.cpp in Sources */,
+				02A057B01D257DC000DD16B4 /* Document.cpp in Sources */,
+				02A057AE1D257DC000DD16B4 /* CenterLineBuilder.cpp in Sources */,
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
+				02A057B41D257DC000DD16B4 /* GraphBuilder.cpp in Sources */,
+				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
+				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +368,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = illusTrace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.illustrace.illusTrace;
@@ -306,6 +388,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = illusTrace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.illustrace.illusTrace;

@@ -8,9 +8,12 @@
 
 #import "CameraViewController.h"
 #import <opencv2/videoio/cap_ios.h>
+#import "Filter.h"
 
 #define kCvPreviewWidth 480.0
 #define kCvPreviewHeight 640.0
+
+using namespace illustrace;
 
 @interface CameraViewController () <CvVideoCameraDelegate> {
     CvVideoCamera* _videoCamera;
@@ -70,7 +73,7 @@
 
 - (void)processImage:(cv::Mat &)image
 {
-    
+    Filter::threshold(image);
 }
 
 @end
