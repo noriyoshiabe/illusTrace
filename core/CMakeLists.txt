@@ -10,6 +10,7 @@ set(SOURCES
   BezierSplineBuilder.cpp
   FeatureDetector.cpp
   GraphBuilder.cpp
+  osx/PaintMaskBuilder.cpp
   SVGWriter.cpp
   Editor.cpp
   Log.cpp
