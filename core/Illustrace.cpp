@@ -13,37 +13,85 @@ void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
     Filter::brightness(image, document->brightness());
     Filter::blur(image, blur(image, document));
     Filter::threshold(image);
-    Filter::negative(image);
 
-    auto *outlineContours = document->outlineContours();
-    auto *outlineHierarchy = document->outlineHierarchy();
-    auto *approximatedOutlineContours = document->approximatedOutlineContours();
-    auto *paths = document->paths();
+    if (LineMode::Center == document->mode()) {
+        auto *centerLines = document->centerLines();
+        auto *approximatedCenterLines = document->approximatedCenterLines();    
+        auto *paths = document->paths();
 
-    outlineContours->clear();
-    outlineHierarchy->clear();
-    approximatedOutlineContours->clear();
-    paths->clear();
+        centerLines->clear();
+        approximatedCenterLines->clear();
+        for (auto *path : *paths) {
+            delete path;
+        }
+        paths->clear();
 
-    cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+        double _epsilon = epsilon(document);
+        double smoothing = document->smoothing();
 
-    double _epsilon = epsilon(document);
-    double smoothing = document->smoothing();
+        Filter::thinning(image);
 
-    for (auto line : *outlineContours) {
-        std::vector<cv::Point2f> approx;
-        cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
-        approximatedOutlineContours->push_back(approx);
+        std::vector<cv::Point2f> keyPoints;
+        FeatureDetector::detect(image, keyPoints);
+        Graph graph;
+        GraphBuilder::build(image, keyPoints, graph);
+        Graph approximatedGraph;
+        GraphBuilder::approximate(graph, approximatedGraph);
+
+        CenterLineBuilder::build(approximatedGraph, *centerLines);
+
+        for (auto line : *centerLines) {
+            std::vector<cv::Point2f> approx;
+            bool needAdjust = line.front() == line.back();
+            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
+            if (needAdjust && approx.front() != approx.back()) {
+                approx.push_back(approx.front());
+            }
+            approximatedCenterLines->push_back(approx);
+        }
+
+        for (auto line : *approximatedCenterLines) {
+            auto *path = new Path();
+            BezierSplineBuilder::build(line, path, smoothing, false, true);
+            paths->push_back(path);
+        }
     }
+    else {
+        Filter::negative(image);
 
-    std::vector<Path *> _paths;
-    for (auto line : *approximatedOutlineContours) {
-        auto *path = new Path();
-        BezierSplineBuilder::build(line, path, smoothing, true, false);
-        _paths.push_back(path);
+        auto *outlineContours = document->outlineContours();
+        auto *outlineHierarchy = document->outlineHierarchy();
+        auto *approximatedOutlineContours = document->approximatedOutlineContours();
+        auto *paths = document->paths();
+
+        outlineContours->clear();
+        outlineHierarchy->clear();
+        approximatedOutlineContours->clear();
+        for (auto *path : *paths) {
+            delete path;
+        }
+        paths->clear();
+
+        cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+        double _epsilon = epsilon(document);
+        double smoothing = document->smoothing();
+
+        for (auto line : *outlineContours) {
+            std::vector<cv::Point2f> approx;
+            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
+            approximatedOutlineContours->push_back(approx);
+        }
+
+        std::vector<Path *> _paths;
+        for (auto line : *approximatedOutlineContours) {
+            auto *path = new Path();
+            BezierSplineBuilder::build(line, path, smoothing, true, false);
+            _paths.push_back(path);
+        }
+
+        buildPathsHierarchy(_paths, nullptr, *outlineHierarchy, 0, *paths);
     }
-
-    buildPathsHierarchy(_paths, nullptr, *outlineHierarchy, 0, *paths);
 }
 
 bool Illustrace::traceFromFile(const char *filepath, Document *document)
