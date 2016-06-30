@@ -39,9 +39,8 @@ using namespace illustrace;
     _videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset640x480;
     _videoCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     _videoCamera.defaultFPS = 30;
-    _videoCamera.grayscaleMode = YES;
     
-    _colorSpace = CGColorSpaceCreateDeviceGray();
+    _colorSpace = CGColorSpaceCreateDeviceRGB();
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -79,41 +78,46 @@ using namespace illustrace;
 
 - (void)drawPaths
 {
-    CGContextSetStrokeColorWithColor(_bitmapContext, [UIColor blackColor].CGColor);
+    CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
+    CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
     CGContextSetLineWidth(_bitmapContext, _document->thickness());
     CGContextSetLineCap(_bitmapContext, kCGLineCapRound);
     
     for (auto *path : *_document->paths()) {
-        CGContextBeginPath(_bitmapContext);
+        CGMutablePathRef pathRef = CGPathCreateMutable();
         
-        [self drawPath:path];
+        [self drawPath:path subPath:pathRef];
         
         if (path->closed) {
+            CGContextAddPath(_bitmapContext, pathRef);
             CGContextEOFillPath(_bitmapContext);
         }
         
+        CGContextAddPath(_bitmapContext, pathRef);
         CGContextStrokePath(_bitmapContext);
+        
+        CGPathRelease(pathRef);
     }
 }
 
-- (void)drawPath:(Path *)path
+- (void)drawPath:(Path *)path subPath:(CGMutablePathRef)subPath
 {
     for (Segment &s : path->segments) {
         switch (s.type) {
             case Segment::Type::Move:
-                CGContextMoveToPoint(_bitmapContext, s[2].x, s[2].y);
+                CGPathMoveToPoint(subPath, NULL, s[2].x, s[2].y);
                 break;
             case Segment::Type::Line:
-                CGContextAddLineToPoint(_bitmapContext, s[2].x, s[2].y);
+                CGPathAddLineToPoint(subPath, NULL, s[2].x, s[2].y);
                 break;
             case Segment::Type::Curve:
-                CGContextAddCurveToPoint(_bitmapContext, s[0].x, s[0].y, s[1].x, s[1].y, s[2].x, s[2].y);
+                CGPathAddCurveToPoint(subPath, NULL, s[0].x, s[0].y, s[1].x, s[1].y, s[2].x, s[2].y);
                 break;
         }
     }
     
     for (Path *child : path->children) {
-        [self drawPath:child];
+        [self drawPath:child subPath:subPath];
     }
 }
 
@@ -124,7 +128,7 @@ using namespace illustrace;
     _illustrace.traceForPreview(image, _document);
     
     if (!_bitmapContext) {
-        _bitmapContext = CGBitmapContextCreate(image.data, image.cols, image.rows, 8, image.cols, _colorSpace, kCGImageAlphaNone);
+        _bitmapContext = CGBitmapContextCreate(image.data, image.cols, image.rows, 8, image.cols * 4, _colorSpace, kCGImageAlphaPremultipliedLast);
         CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, image.rows);
         CGContextConcatCTM(_bitmapContext, flipVertical);
     }

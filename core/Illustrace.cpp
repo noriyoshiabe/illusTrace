@@ -7,7 +7,9 @@ using namespace illustrace;
 
 void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
 {
-    cv::Mat image = sourceImage.clone();
+    cv::Mat image;
+    cv::cvtColor(sourceImage, image, CV_BGRA2GRAY);
+
     Filter::brightness(image, document->brightness());
     Filter::blur(image, blur(image, document));
     Filter::threshold(image);
