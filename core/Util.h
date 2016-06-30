@@ -44,7 +44,7 @@ static inline T interval(double lambda, const T &p1, const T &p2)
     return T(p1.x + lambda * (p2.x - p1.x), p1.y + lambda * (p2.y - p1.y));
 }
 
-static inline int modIndex(int index, int length)
+static inline int modIndex(int index, size_t length)
 {
     return length <= index ? index % length : index;
 }

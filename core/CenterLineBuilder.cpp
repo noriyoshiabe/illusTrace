@@ -30,7 +30,7 @@ void CenterLineBuilder::walk(GraphVertex *vertex, cv::Point2f *prev, std::list<c
     while (!vertex->adjacencyList.empty()) {
         GraphVertex *_vertex;
 
-        int length = vertex->adjacencyList.size();
+        auto length = vertex->adjacencyList.size();
         if (1 < length && prev) {
             double minRadian = 999.0;
             int minIndex = 0;

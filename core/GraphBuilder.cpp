@@ -199,7 +199,7 @@ void GraphBuilder::build(cv::Mat &thinnedImage, std::vector<cv::Point2f> &keyPoi
 
     mergeNearCrossPoint(result);
 
-    int length = result.vertices.size();
+    auto length = result.vertices.size();
     for (int i = 0; i < length; ++i) {
         if (result.vertices[i]->removed) {
             result.vertices.erase(result.vertices.begin() + i);
@@ -272,7 +272,7 @@ void GraphBuilder::mergeNearCrossPoint(Graph &result)
                 _vertex->removed = true;
             }
 
-            int division = toMerge.size() + 1;
+            auto division = toMerge.size() + 1;
             vertex->point.x /= division;
             vertex->point.y /= division;
         }
@@ -316,7 +316,7 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
             vertex = queue.front();
             queue.pop();
 
-            int length = vertex->adjacencyList.size();
+            auto length = vertex->adjacencyList.size();
             for (int i = 0; i < length; ++i) {
                 auto *adjacency = vertex->adjacencyList[i];
 
@@ -376,7 +376,7 @@ void GraphBuilder::approximate(const Graph &graph, Graph &result)
         }
     }
 
-    int length = result.vertices.size();
+    auto length = result.vertices.size();
     for (int i = 0; i < length; ++i) {
         if (result.vertices[i]->removed) {
             result.vertices.erase(result.vertices.begin() + i);

@@ -5,7 +5,7 @@ using namespace illustrace;
 
 void BezierSplineBuilder::build(std::vector<cv::Point2f> &line, Path *result, double smoothing, bool closePath, bool keepPoint)
 {
-    int length = line.size();
+    auto length = line.size();
 
     if (1 == length) {
         result->segments.push_back(Segment::M(line[0]));
