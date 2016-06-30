@@ -9,6 +9,9 @@
 #import "CameraViewController.h"
 #import <opencv2/videoio/cap_ios.h>
 
+#define kCvPreviewWidth 480.0
+#define kCvPreviewHeight 640.0
+
 @interface CameraViewController () <CvVideoCameraDelegate> {
     CvVideoCamera* _videoCamera;
 }
@@ -36,6 +39,18 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [_videoCamera start];
+        
+        CALayer *layer = [_imageView.layer.sublayers objectAtIndex:0];
+        
+        CGFloat ratiox = kCvPreviewWidth / layer.frame.size.width;
+        CGFloat ratioy = kCvPreviewHeight / layer.frame.size.height;
+        CGFloat ratio = (ratiox < ratioy)? ratiox : ratioy;
+        CGFloat w = kCvPreviewWidth / ratio;
+        CGFloat h = kCvPreviewHeight / ratio;
+        CGFloat x = (layer.frame.size.width - w) / 2.0;
+        CGFloat y = (layer.frame.size.height - h) / 2.0;
+        
+        layer.frame = CGRectMake(x, y, w, h);
     });
 }
 

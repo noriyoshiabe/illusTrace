@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -20,18 +19,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Kbp-CH-qxD">
-                                <rect key="frame" x="0.0" y="-100" width="600" height="800"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Kbp-CH-qxD" secondAttribute="height" multiplier="3:4" id="LCO-jb-F22"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Kbp-CH-qxD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="6s5-Lp-dF4"/>
-                            <constraint firstItem="Kbp-CH-qxD" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="LpE-f8-WXs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Kbp-CH-qxD" secondAttribute="trailing" constant="-20" id="kGY-9Y-ZJL"/>
-                            <constraint firstItem="Kbp-CH-qxD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="v37-f7-a2X"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Kbp-CH-qxD" secondAttribute="trailing" constant="-20" id="6Yx-JK-6oU"/>
+                            <constraint firstItem="Kbp-CH-qxD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="7et-IO-PAL"/>
+                            <constraint firstItem="Kbp-CH-qxD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="CnH-Fc-tf1"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Kbp-CH-qxD" secondAttribute="bottom" id="xou-rY-4Sz"/>
                         </constraints>
                     </view>
                     <connections>
