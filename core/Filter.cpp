@@ -12,6 +12,18 @@ void Filter::brightness(cv::Mat &image, double brightness, double contrast)
     }
 }
 
+void Filter::brightnessBGRA(cv::Mat &image, double brightness, double contrast)
+{
+    brightness *= 255.0;
+
+    int length = image.rows * image.cols * 4;
+    for (int i = 0; i < length; i += 4) {
+        image.data[i+0] = cv::saturate_cast<uchar>(contrast * image.data[i+0] + brightness);
+        image.data[i+1] = cv::saturate_cast<uchar>(contrast * image.data[i+1] + brightness);
+        image.data[i+2] = cv::saturate_cast<uchar>(contrast * image.data[i+2] + brightness);
+    }
+}
+
 void Filter::gamma(cv::Mat &image, double g)
 {
     uchar lut[256];

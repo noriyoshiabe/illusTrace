@@ -7,7 +7,9 @@ using namespace illustrace;
 
 void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
 {
-    Filter::gamma(sourceImage, document->brightness());
+    double brightness = document->brightness();
+    double contrast = 0.0 < brightness ?  1.0 + brightness / 2.0 : 1.0;
+    Filter::brightnessBGRA(sourceImage, brightness, contrast);
 
     cv::Mat image;
     cv::cvtColor(sourceImage, image, CV_BGRA2GRAY);

@@ -188,7 +188,7 @@ using namespace illustrace;
 
 - (IBAction)brightnessSliderAction:(UISlider *)sender
 {
-    _document->brightness(0.0 > sender.value ? sender.value : sender.value * 2.0);
+    _document->brightness(sender.value);
 }
 
 - (IBAction)detailSliderAction:(UISlider *)sender
