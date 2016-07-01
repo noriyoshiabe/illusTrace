@@ -240,7 +240,13 @@ using namespace illustrace;
 {
     NSError *error = nil;
     if ([_videoDevice lockForConfiguration:&error]) {
+        CGPoint point = [sender locationInView: _imageView];
+        point.x /= _imageView.frame.size.width;
+        point.y /= _imageView.frame.size.height;
+        
+        _videoDevice.focusPointOfInterest = point;
         _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
+        _videoDevice.exposurePointOfInterest = point;
         _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
         [_videoDevice unlockForConfiguration];
     }
