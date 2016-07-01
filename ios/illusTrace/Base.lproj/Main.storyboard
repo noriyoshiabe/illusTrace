@@ -39,7 +39,7 @@
                                     <action selector="smoothingSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Plq-n3-Gb6"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="HGe-BN-Eil">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="HGe-BN-Eil">
                                 <rect key="frame" x="18" y="550" width="564" height="31"/>
                                 <connections>
                                     <action selector="thicknessSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="emt-F3-TNX"/>
