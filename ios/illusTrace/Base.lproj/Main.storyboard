@@ -21,13 +21,13 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Kbp-CH-qxD">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="qg4-BY-dzX">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-0.5" maxValue="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="qg4-BY-dzX">
                                 <rect key="frame" x="18" y="415" width="564" height="31"/>
                                 <connections>
                                     <action selector="brightnessSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="ThZ-Px-YCr"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2NJ-BT-yYd">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="2NJ-BT-yYd">
                                 <rect key="frame" x="18" y="460" width="564" height="31"/>
                                 <connections>
                                     <action selector="detailSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="WoP-0D-hpR"/>
@@ -39,7 +39,7 @@
                                     <action selector="smoothingSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Plq-n3-Gb6"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="HGe-BN-Eil">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="HGe-BN-Eil">
                                 <rect key="frame" x="18" y="550" width="564" height="31"/>
                                 <connections>
                                     <action selector="thicknessSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="emt-F3-TNX"/>

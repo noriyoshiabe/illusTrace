@@ -204,7 +204,7 @@ using namespace illustrace;
 
 - (IBAction)detailSliderAction:(UISlider *)sender
 {
-    _document->detail(sender.value);
+    _document->detail(MAX(0.1, sender.value));
 }
 
 - (IBAction)smoothingSliderAction:(UISlider *)sender
