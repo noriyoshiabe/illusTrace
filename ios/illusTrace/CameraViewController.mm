@@ -21,6 +21,7 @@ using namespace illustrace;
     Illustrace _illustrace;
     CGColorSpaceRef _colorSpace;
     CGContextRef _bitmapContext;
+    uchar *_imageData;
     
     AVCaptureDevice *_videoDevice;
     CGFloat _zoomScale;
@@ -174,9 +175,17 @@ using namespace illustrace;
 {
     _illustrace.traceForPreview(image, _document);
     
+    if (_imageData != image.data) {
+        if (_bitmapContext) {
+            CGContextRelease(_bitmapContext);
+            _bitmapContext = NULL;
+        }
+        
+        _imageData = image.data;
+    }
+    
     if (!_bitmapContext) {
         _bitmapContext = CGBitmapContextCreate(image.data, image.cols, image.rows, 8, image.cols * 4, _colorSpace, kCGImageAlphaPremultipliedLast);
-        CGContextRetain(_bitmapContext);
         CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, image.rows);
         CGContextConcatCTM(_bitmapContext, flipVertical);
     }
