@@ -62,11 +62,18 @@
                                     <segment title="Mono"/>
                                 </segments>
                             </segmentedControl>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="n5s-YQ-ydB">
+                                <rect key="frame" x="531" y="76" width="51" height="31"/>
+                                <connections>
+                                    <action selector="lightSwitchAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="wiD-BS-SFb"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="HGe-BN-Eil" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="0zF-Pk-8p6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Kbp-CH-qxD" secondAttribute="trailing" constant="-20" id="6Yx-JK-6oU"/>
+                            <constraint firstItem="n5s-YQ-ydB" firstAttribute="top" secondItem="MO3-13-eA5" secondAttribute="bottom" constant="20" id="6ne-FK-xZv"/>
                             <constraint firstItem="qg4-BY-dzX" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="6rt-OE-J5q"/>
                             <constraint firstItem="Kbp-CH-qxD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="7et-IO-PAL"/>
                             <constraint firstItem="MO3-13-eA5" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="B8i-ic-58g"/>
@@ -79,6 +86,7 @@
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="top" secondItem="qg4-BY-dzX" secondAttribute="bottom" constant="15" id="Ohn-Zf-Otw"/>
                             <constraint firstItem="HGe-BN-Eil" firstAttribute="top" secondItem="XDV-8f-5Cv" secondAttribute="bottom" constant="15" id="SKo-1h-9Nh"/>
                             <constraint firstItem="HGe-BN-Eil" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="SN6-9X-TWD"/>
+                            <constraint firstItem="n5s-YQ-ydB" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="YkF-L1-4JY"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="ZzS-ex-SaO"/>
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="f4k-TI-0Ws"/>
                             <constraint firstItem="Do4-Li-odV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="h3t-Mj-uq6"/>
@@ -92,6 +100,7 @@
                         <outlet property="colorControl" destination="Do4-Li-odV" id="rHl-2X-gla"/>
                         <outlet property="detailSlider" destination="2NJ-BT-yYd" id="sn2-64-Yta"/>
                         <outlet property="imageView" destination="Kbp-CH-qxD" id="dMx-BY-sJ0"/>
+                        <outlet property="lightSwitch" destination="n5s-YQ-ydB" id="GH9-8W-4Lv"/>
                         <outlet property="modeControl" destination="MO3-13-eA5" id="VWB-iS-J1f"/>
                         <outlet property="smoothingSlider" destination="XDV-8f-5Cv" id="NGB-Bt-dqc"/>
                         <outlet property="thicknessSlider" destination="HGe-BN-Eil" id="HDT-Cu-7wt"/>

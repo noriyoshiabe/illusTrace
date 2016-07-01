@@ -33,6 +33,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *colorControl;
+@property (weak, nonatomic) IBOutlet UISwitch *lightSwitch;
 @end
 
 @implementation CameraViewController
@@ -71,12 +72,13 @@ using namespace illustrace;
         if (AVCaptureDevicePositionBack == [device position]) {
             _videoDevice = device;
             
-            NSError *error = nil;
-            if ([_videoDevice lockForConfiguration:&error]) {
+            if ([_videoDevice lockForConfiguration:nil]) {
                 _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
                 _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
                 [_videoDevice unlockForConfiguration];
             }
+            
+            _lightSwitch.enabled = _videoDevice.hasTorch;
         }
     }
 }
@@ -227,6 +229,16 @@ using namespace illustrace;
     }
 }
 
+- (IBAction)lightSwitchAction:(UISwitch *)sender
+{
+    if ([_videoDevice lockForConfiguration:nil]) {
+        [_videoDevice setTorchMode:sender.isOn ? AVCaptureTorchModeOn : AVCaptureTorchModeOff];
+        _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
+        _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
+        [_videoDevice unlockForConfiguration];
+    }
+}
+
 #pragma mark GestureRecognizer
 
 - (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
@@ -236,9 +248,7 @@ using namespace illustrace;
     }
     
     if (UIGestureRecognizerStateChanged == sender.state) {
-        NSError *error = nil;
-        
-        if ([_videoDevice lockForConfiguration:&error]) {
+        if ([_videoDevice lockForConfiguration:nil]) {
             _videoDevice.videoZoomFactor = MAX(1.0, MIN(_zoomScale * sender.scale, _videoDevice.activeFormat.videoMaxZoomFactor));
             [_videoDevice unlockForConfiguration];
         }
@@ -247,8 +257,7 @@ using namespace illustrace;
 
 - (void)singleTapGestureRecognizerAction:(UITapGestureRecognizer *)sender
 {
-    NSError *error = nil;
-    if ([_videoDevice lockForConfiguration:&error]) {
+    if ([_videoDevice lockForConfiguration:nil]) {
         CGPoint point = [sender locationInView: _imageView];
         point.x /= _imageView.frame.size.width;
         point.y /= _imageView.frame.size.height;
@@ -263,8 +272,7 @@ using namespace illustrace;
 
 - (void)doubleTapGestureRecognizerAction:(UITapGestureRecognizer *)sender
 {
-    NSError *error = nil;
-    if ([_videoDevice lockForConfiguration:&error]) {
+    if ([_videoDevice lockForConfiguration:nil]) {
         _videoDevice.videoZoomFactor = 1.0;
         [_videoDevice unlockForConfiguration];
     }
