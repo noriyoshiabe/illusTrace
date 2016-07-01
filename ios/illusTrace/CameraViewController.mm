@@ -10,9 +10,6 @@
 #import <opencv2/videoio/cap_ios.h>
 #import "Illustrace.h"
 
-#define kCvPreviewWidth 480.0
-#define kCvPreviewHeight 640.0
-
 using namespace illustrace;
 
 @interface CameraViewController () <CvVideoCameraDelegate> {
@@ -24,6 +21,7 @@ using namespace illustrace;
     uchar *_imageData;
     
     AVCaptureDevice *_videoDevice;
+    CGSize _dimensions;
     CGFloat _zoomScale;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -48,7 +46,7 @@ using namespace illustrace;
     _videoCamera = [[CvVideoCamera alloc] initWithParentView:_imageView];
     _videoCamera.delegate = self;
     _videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
-    _videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset640x480;
+    _videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPresetPhoto;
     _videoCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     _videoCamera.defaultFPS = 30;
     
@@ -90,17 +88,30 @@ using namespace illustrace;
     dispatch_async(dispatch_get_main_queue(), ^{
         [_videoCamera start];
         
-        CALayer *layer = [_imageView.layer.sublayers objectAtIndex:0];
-        
-        CGFloat ratiox = kCvPreviewWidth / layer.frame.size.width;
-        CGFloat ratioy = kCvPreviewHeight / layer.frame.size.height;
-        CGFloat ratio = (ratiox > ratioy)? ratiox : ratioy;
-        CGFloat w = kCvPreviewWidth / ratio;
-        CGFloat h = kCvPreviewHeight / ratio;
-        CGFloat x = (layer.frame.size.width - w) / 2.0;
-        CGFloat y = (layer.frame.size.height - h) / 2.0;
-        
-        layer.frame = CGRectMake(x, y, w, h);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AVCaptureInput *input = [_videoCamera.captureSession.inputs objectAtIndex:0];
+            AVCaptureInputPort *port = [input.ports objectAtIndex:0];
+            CMFormatDescriptionRef formatDescription = port.formatDescription;
+            CMVideoDimensions dimentions = CMVideoFormatDescriptionGetDimensions(formatDescription);
+            _dimensions.width = dimentions.width < dimentions.height ? dimentions.width : dimentions.height;
+            _dimensions.height = dimentions.width< dimentions.height ? dimentions.height : dimentions.width;
+            
+#if 0
+            NSLog( @"dimensions: %f %f", _dimensions.width, _dimensions.height);
+#endif
+            
+            CALayer *layer = [_imageView.layer.sublayers objectAtIndex:0];
+            
+            CGFloat ratiox = _dimensions.width / layer.frame.size.width;
+            CGFloat ratioy = _dimensions.height / layer.frame.size.height;
+            CGFloat ratio = (ratiox < ratioy)? ratiox : ratioy;
+            CGFloat w = _dimensions.width / ratio;
+            CGFloat h = _dimensions.height / ratio;
+            CGFloat x = (layer.frame.size.width - w) / 2.0;
+            CGFloat y = (layer.frame.size.height - h) / 2.0;
+            
+            layer.frame = CGRectMake(x, y, w, h);
+        });
     });
 }
 
@@ -120,7 +131,7 @@ using namespace illustrace;
 {
     if (1 == _colorControl.selectedSegmentIndex) {
         CGContextSetRGBFillColor(_bitmapContext, 1.0, 1.0, 1.0, 1.0);
-        CGContextFillRect(_bitmapContext, (CGRect){CGPointZero, {kCvPreviewWidth, kCvPreviewHeight}});
+        CGContextFillRect(_bitmapContext, (CGRect){CGPointZero, {_dimensions.width, _dimensions.height}});
         
         CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 0.0, 1.0);
         CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 0.0, 1.0);
