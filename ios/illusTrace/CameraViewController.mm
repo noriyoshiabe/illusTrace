@@ -137,8 +137,8 @@ using namespace illustrace;
         CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 0.0, 1.0);
     }
     else {
-        CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
-        CGContextSetRGBFillColor(_bitmapContext, 0.0, 0.0, 1.0, 0.5);
+        CGContextSetRGBStrokeColor(_bitmapContext, 0.0, 1.0, 0.0, 0.66);
+        CGContextSetRGBFillColor(_bitmapContext, 0.0, 1.0, 0.0, 0.33);
     }
     
     CGContextSetLineWidth(_bitmapContext, _document->thickness());
