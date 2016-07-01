@@ -16,8 +16,9 @@ void Filter::gamma(cv::Mat &image, double g)
 {
     uchar lut[256];
     double _gamma = 1.0 / (g + 1.0);
+    _gamma = std::isnan(_gamma) ? 0.0 : _gamma;
     for (int i = 0; i < 256; i++) {
-        lut[i] = pow(1.0 * i / 255.0, _gamma) * 255.0;
+        lut[i] = pow(i / 255.0, _gamma) * 255.0;
     }
 
     int length = image.rows * image.cols * 4;

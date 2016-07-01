@@ -21,6 +21,9 @@ using namespace illustrace;
     Illustrace _illustrace;
     CGColorSpaceRef _colorSpace;
     CGContextRef _bitmapContext;
+    
+    AVCaptureDevice *_videoDevice;
+    CGFloat _zoomScale;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
@@ -29,7 +32,6 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *colorControl;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *focusControl;
 @end
 
 @implementation CameraViewController
@@ -49,6 +51,33 @@ using namespace illustrace;
     _videoCamera.defaultFPS = 30;
     
     _colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    _imageView.userInteractionEnabled = YES;
+    
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
+    [_imageView addGestureRecognizer:pinchGestureRecognizer];
+    
+    UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGestureRecognizerAction:)];
+    singleTapRecognizer.numberOfTapsRequired = 1;
+    [_imageView addGestureRecognizer:singleTapRecognizer];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGestureRecognizerAction:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    [_imageView addGestureRecognizer:doubleTapRecognizer];
+    [singleTapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+    
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if (AVCaptureDevicePositionBack == [device position]) {
+            _videoDevice = device;
+            
+            NSError *error = nil;
+            if ([_videoDevice lockForConfiguration:&error]) {
+                _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
+                _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
+                [_videoDevice unlockForConfiguration];
+            }
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -62,7 +91,7 @@ using namespace illustrace;
         
         CGFloat ratiox = kCvPreviewWidth / layer.frame.size.width;
         CGFloat ratioy = kCvPreviewHeight / layer.frame.size.height;
-        CGFloat ratio = (ratiox < ratioy)? ratiox : ratioy;
+        CGFloat ratio = (ratiox > ratioy)? ratiox : ratioy;
         CGFloat w = kCvPreviewWidth / ratio;
         CGFloat h = kCvPreviewHeight / ratio;
         CGFloat x = (layer.frame.size.width - w) / 2.0;
@@ -147,6 +176,7 @@ using namespace illustrace;
     
     if (!_bitmapContext) {
         _bitmapContext = CGBitmapContextCreate(image.data, image.cols, image.rows, 8, image.cols * 4, _colorSpace, kCGImageAlphaPremultipliedLast);
+        CGContextRetain(_bitmapContext);
         CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, image.rows);
         CGContextConcatCTM(_bitmapContext, flipVertical);
     }
@@ -158,7 +188,7 @@ using namespace illustrace;
 
 - (IBAction)brightnessSliderAction:(UISlider *)sender
 {
-    _document->brightness(sender.value);
+    _document->brightness(0.0 > sender.value ? sender.value : sender.value * 2.0);
 }
 
 - (IBAction)detailSliderAction:(UISlider *)sender
@@ -188,30 +218,40 @@ using namespace illustrace;
     }
 }
 
-- (IBAction)focusControlAction:(UISegmentedControl *)sender
+#pragma mark GestureRecognizer
+
+- (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
 {
-    NSArray *devices = [AVCaptureDevice devices];
-    NSError *error;
-    for (AVCaptureDevice *device in devices) {
-        if (([device hasMediaType:AVMediaTypeVideo]) &&
-            ([device position] == AVCaptureDevicePositionBack) ) {
-            [device lockForConfiguration:&error];
-            
-            switch (sender.selectedSegmentIndex) {
-                case 0:
-                    if ([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
-                        device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
-                    }
-                    break;
-                case 1:
-                    if ([device isFocusModeSupported:AVCaptureFocusModeLocked]) {
-                        device.focusMode = AVCaptureFocusModeLocked;
-                    }
-                    break;
-            }
-            
-            [device unlockForConfiguration];
+    if (UIGestureRecognizerStateBegan == sender.state) {
+        _zoomScale = _videoDevice.videoZoomFactor;
+    }
+    
+    if (UIGestureRecognizerStateChanged == sender.state) {
+        NSError *error = nil;
+        
+        if ([_videoDevice lockForConfiguration:&error]) {
+            _videoDevice.videoZoomFactor = MAX(1.0, MIN(_zoomScale * sender.scale, _videoDevice.activeFormat.videoMaxZoomFactor));
+            [_videoDevice unlockForConfiguration];
         }
+    }
+}
+
+- (void)singleTapGestureRecognizerAction:(UITapGestureRecognizer *)sender
+{
+    NSError *error = nil;
+    if ([_videoDevice lockForConfiguration:&error]) {
+        _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
+        _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
+        [_videoDevice unlockForConfiguration];
+    }
+}
+
+- (void)doubleTapGestureRecognizerAction:(UITapGestureRecognizer *)sender
+{
+    NSError *error = nil;
+    if ([_videoDevice lockForConfiguration:&error]) {
+        _videoDevice.videoZoomFactor = 1.0;
+        [_videoDevice unlockForConfiguration];
     }
 }
 
