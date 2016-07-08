@@ -139,20 +139,34 @@ using namespace illustrace;
     CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, height);
     CGContextConcatCTM(bitmapContext, flipVertical);
     
-    CGContextSetRGBStrokeColor(bitmapContext, 0.0, .478431373, 1.0, 1.0);
+    UIColor *color = [Color systemBlueColor];
+    CGFloat r, g, b;
+    [color getRed:&r green:&g blue:&b alpha:NULL];
+    
+    CGContextSetRGBStrokeColor(bitmapContext, r, g, b, 1.0);
+    CGContextSetRGBFillColor(bitmapContext, r, g, b, 0.2);
+
     CGContextSetLineWidth(bitmapContext, 1.0);
     CGContextSetLineCap(bitmapContext, kCGLineCapRound);
     
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    
     for (auto contour : outlineContours) {
-        CGContextMoveToPoint(bitmapContext, contour[0].x, contour[0].y);
+        CGPathMoveToPoint(pathRef, NULL, contour[0].x, contour[0].y);
         
         size_t length = contour.size();
         for (int i = 1; i < length; ++i) {
-            CGContextAddLineToPoint(bitmapContext, contour[i].x, contour[i].y);
+            CGPathAddLineToPoint(pathRef, NULL, contour[i].x, contour[i].y);
         }
-        
-        CGContextStrokePath(bitmapContext);
     }
+    
+    CGContextAddPath(bitmapContext, pathRef);
+    CGContextEOFillPath(bitmapContext);
+    
+    CGContextAddPath(bitmapContext, pathRef);
+    CGContextStrokePath(bitmapContext);
+    
+    CGPathRelease(pathRef);
     
     CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
     UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationRight];
