@@ -10,14 +10,6 @@
 
 @implementation NavigationBar
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -28,7 +20,17 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     UIView *v = [super hitTest:point withEvent:event];
-    return v == self ? nil : v;
+    if (v != self) {
+        return v;
+    }
+    else {
+        for (UIView *subview in self.subviews) {
+            if (CGRectContainsPoint(subview.frame, point)) {
+                return v;
+            }
+        }
+        return nil;
+    }
 }
 
 @end

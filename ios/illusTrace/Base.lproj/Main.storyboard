@@ -31,16 +31,16 @@
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-0.5" maxValue="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Hly-yG-pDI" customClass="Slider">
                                 <rect key="frame" x="28" y="462" width="544" height="31"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vNJ-lm-I88">
-                                <rect key="frame" x="30" y="442" width="61" height="15"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <rect key="frame" x="30" y="440" width="70" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sE2-mB-bNS" secondAttribute="bottom" id="9eE-j4-5H1"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="FTL-ZY-tZE" secondAttribute="bottom" constant="20" id="ADw-QL-XHW"/>
@@ -71,7 +71,7 @@
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="isA-1C-uGV">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="isA-1C-uGV">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="dgJ-Rd-GJQ">
                                 <rect key="frame" x="558" y="11" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -87,16 +87,50 @@
                         <outlet property="lightButton" destination="Mly-GO-dpM" id="Aau-hZ-GEb"/>
                         <outlet property="previewView" destination="sE2-mB-bNS" id="ovy-9A-Fhh"/>
                         <outlet property="shapeButton" destination="7qY-si-9Ga" id="HOk-DM-a3j"/>
+                        <segue destination="4Vf-B6-zVR" kind="show" identifier="Edit" id="8Iq-vL-xHD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1100" y="321"/>
         </scene>
+        <!--Edit View Controller-->
+        <scene sceneID="IA9-mN-YcA">
+            <objects>
+                <viewController id="4Vf-B6-zVR" customClass="EditViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VbO-Zp-UQe"/>
+                        <viewControllerLayoutGuide type="bottom" id="X6u-X8-MJW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yle-k3-3wN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ik2-aR-VEW" customClass="EditViewPreviewView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="top" secondItem="yle-k3-3wN" secondAttribute="topMargin" id="eyg-bX-PYO"/>
+                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="leading" secondItem="yle-k3-3wN" secondAttribute="leadingMargin" constant="-20" id="gog-bJ-hwo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ik2-aR-VEW" secondAttribute="trailing" constant="-20" id="hvk-HP-XyV"/>
+                            <constraint firstItem="X6u-X8-MJW" firstAttribute="top" secondItem="Ik2-aR-VEW" secondAttribute="bottom" id="kSi-0y-dxO"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="previewView" destination="Ik2-aR-VEW" id="glH-Ug-ajS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Gb-Nd-iyS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1861" y="321"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="R0P-Zg-ulq">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rN8-yy-3cY" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rN8-yy-3cY" customClass="NavigationController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2GU-yv-IsJ" customClass="NavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

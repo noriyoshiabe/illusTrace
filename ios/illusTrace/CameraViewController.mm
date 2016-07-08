@@ -9,6 +9,7 @@
 #import "CameraViewController.h"
 #import "Illustrace.h"
 #import "Color.h"
+#import "EditViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -23,6 +24,8 @@ using namespace illustrace;
     AVCaptureSession *_session;
     BOOL _lightEnable;
     BOOL _negative;
+    
+    Document *_document;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *previewView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lightButton;
@@ -117,13 +120,24 @@ using namespace illustrace;
                  
                  CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
                  
-                 Document *document = new Document();
-                 document->brightness(_brightnessSlider.value);
-                 document->negative(_negative);
+                 _document = new Document();
+                 _document->brightness(_brightnessSlider.value);
+                 _document->negative(_negative);
                  
-                 _illustrace.traceFromImage(resizedImage, document);
+                 _illustrace.traceFromImage(resizedImage, _document);
+                 
+                 [self performSegueWithIdentifier:@"Edit" sender:self];
              }
          }];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Edit"]) {
+        EditViewController *vc = segue.destinationViewController;
+        vc.document = _document;
+        _document = NULL;
     }
 }
 
