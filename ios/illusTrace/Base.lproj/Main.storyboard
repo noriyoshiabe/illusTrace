@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rN8-yy-3cY">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Camera View Controller-->
@@ -21,31 +22,100 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sE2-mB-bNS">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTL-ZY-tZE">
-                                <rect key="frame" x="22" y="545" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTL-ZY-tZE">
+                                <rect key="frame" x="271" y="522" width="58" height="58"/>
+                                <state key="normal" image="shutter"/>
                                 <connections>
                                     <action selector="takeButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6M8-ty-L0r"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-0.5" maxValue="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Hly-yG-pDI" customClass="Slider">
+                                <rect key="frame" x="28" y="462" width="544" height="31"/>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vNJ-lm-I88">
+                                <rect key="frame" x="30" y="442" width="61" height="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sE2-mB-bNS" secondAttribute="bottom" id="9eE-j4-5H1"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="FTL-ZY-tZE" secondAttribute="bottom" constant="20" id="ADw-QL-XHW"/>
+                            <constraint firstItem="Hly-yG-pDI" firstAttribute="leading" secondItem="vNJ-lm-I88" secondAttribute="leading" id="D5u-ap-3mY"/>
                             <constraint firstItem="sE2-mB-bNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="KA1-Et-wAq"/>
+                            <constraint firstItem="Hly-yG-pDI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="KH4-Mk-XGg"/>
                             <constraint firstItem="sE2-mB-bNS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="QRO-kC-aWf"/>
-                            <constraint firstItem="FTL-ZY-tZE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="2" id="SCu-ap-ifO"/>
+                            <constraint firstItem="FTL-ZY-tZE" firstAttribute="top" secondItem="Hly-yG-pDI" secondAttribute="bottom" constant="30" id="ab2-CY-b3S"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sE2-mB-bNS" secondAttribute="trailing" constant="-20" id="flO-Pc-Xal"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="FTL-ZY-tZE" secondAttribute="bottom" constant="25" id="xIj-26-nX1"/>
+                            <constraint firstItem="Hly-yG-pDI" firstAttribute="top" secondItem="vNJ-lm-I88" secondAttribute="bottom" constant="5" id="guv-1K-4UX"/>
+                            <constraint firstItem="FTL-ZY-tZE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="mTi-gq-sNK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Hly-yG-pDI" secondAttribute="trailing" constant="10" id="oOp-UA-sGe"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="9Hn-V5-TEY">
+                        <leftBarButtonItems>
+                            <barButtonItem image="light" id="Mly-GO-dpM">
+                                <connections>
+                                    <action selector="lightButtonAction:" destination="BYZ-38-t0r" id="gyt-6b-nsi"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="_" id="RUn-xk-GJd">
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </barButtonItem>
+                            <barButtonItem image="shape" id="7qY-si-9Ga">
+                                <connections>
+                                    <action selector="shapeButtonAction:" destination="BYZ-38-t0r" id="9ZD-nZ-GrL"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="isA-1C-uGV">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="dgJ-Rd-GJQ">
+                                <rect key="frame" x="558" y="11" width="22" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="infoButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qex-fy-hUS"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="brightnessSlider" destination="Hly-yG-pDI" id="LTq-Ef-7FJ"/>
+                        <outlet property="lightButton" destination="Mly-GO-dpM" id="Aau-hZ-GEb"/>
                         <outlet property="previewView" destination="sE2-mB-bNS" id="ovy-9A-Fhh"/>
+                        <outlet property="shapeButton" destination="7qY-si-9Ga" id="HOk-DM-a3j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1100" y="321"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="R0P-Zg-ulq">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rN8-yy-3cY" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2GU-yv-IsJ" customClass="NavigationBar">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="CIZ-ta-pRy"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nuy-Ve-73Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="288" y="321"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="light" width="22" height="22"/>
+        <image name="shape" width="22" height="22"/>
+        <image name="shutter" width="58" height="58"/>
+    </resources>
 </document>

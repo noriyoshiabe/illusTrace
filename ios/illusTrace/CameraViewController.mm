@@ -8,18 +8,26 @@
 
 #import "CameraViewController.h"
 #import "Illustrace.h"
+#import "Color.h"
+
 #import <AVFoundation/AVFoundation.h>
 
 using namespace illustrace;
 
 @interface CameraViewController () <AVCaptureVideoDataOutputSampleBufferDelegate> {
     Illustrace _illustrace;
+    AVCaptureDevice *_camera;
     AVCaptureDeviceInput *_videoInput;
     AVCaptureStillImageOutput *_stillImageOutput;
     AVCaptureVideoDataOutput *_videoDataOutput;
     AVCaptureSession *_session;
+    BOOL _lightEnable;
+    BOOL _negative;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *previewView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *lightButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *shapeButton;
+@property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
 @end
 
 @implementation CameraViewController
@@ -32,9 +40,9 @@ using namespace illustrace;
     _session = [[AVCaptureSession alloc] init];
     _session.sessionPreset = AVCaptureSessionPresetPhoto;
     
-    AVCaptureDevice *camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    _camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    _videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:camera error:&error];
+    _videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:_camera error:&error];
     [_session addInput:_videoInput];
     
     _videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
@@ -66,6 +74,27 @@ using namespace illustrace;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)infoButtonAction:(id)sender
+{
+}
+
+- (IBAction)lightButtonAction:(id)sender
+{
+    _lightEnable = !_lightEnable;
+    _lightButton.tintColor = _lightEnable ? [Color systemBlueColor] : nil;
+    
+    if ([_camera lockForConfiguration:nil]) {
+        [_camera setTorchMode:_lightEnable ? AVCaptureTorchModeOn : AVCaptureTorchModeOff];
+        [_camera unlockForConfiguration];
+    }
+}
+
+- (IBAction)shapeButtonAction:(id)sender
+{
+    _negative = !_negative;
+    _shapeButton.image = [UIImage imageNamed:_negative ? @"shape_invert" : @"shape"];
 }
 
 - (IBAction)takeButtonAction:(id)sender
@@ -102,7 +131,7 @@ using namespace illustrace;
     std::vector<std::vector<cv::Point>> outlineContours;
     std::vector<cv::Vec4i> outlineHierarchy;
     
-    _illustrace.traceForPreview(sourceImage, outlineContours, outlineHierarchy, 0.0);
+    _illustrace.traceForPreview(sourceImage, outlineContours, outlineHierarchy, _brightnessSlider.value, _negative);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef bitmapContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);

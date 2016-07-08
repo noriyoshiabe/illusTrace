@@ -13,6 +13,9 @@
 		021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8A1D255034008CE5B0 /* Main.storyboard */; };
 		021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8D1D255034008CE5B0 /* Assets.xcassets */; };
 		021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */; };
+		024188621D303AF80006C00B /* NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188611D303AF80006C00B /* NavigationBar.m */; };
+		024188651D3040BD0006C00B /* Slider.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188641D3040BD0006C00B /* Slider.m */; };
+		024188681D30470A0006C00B /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188671D30470A0006C00B /* Color.m */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
 		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
@@ -38,6 +41,12 @@
 		021D2F8D1D255034008CE5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		021D2F901D255034008CE5B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		021D2F921D255034008CE5B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		024188601D303AF80006C00B /* NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationBar.h; sourceTree = "<group>"; };
+		024188611D303AF80006C00B /* NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationBar.m; sourceTree = "<group>"; };
+		024188631D3040BD0006C00B /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.h; sourceTree = "<group>"; };
+		024188641D3040BD0006C00B /* Slider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Slider.m; sourceTree = "<group>"; };
+		024188661D30470A0006C00B /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
+		024188671D30470A0006C00B /* Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
@@ -104,6 +113,7 @@
 		021D2F801D255034008CE5B0 /* illusTrace */ = {
 			isa = PBXGroup;
 			children = (
+				0241885F1D303ADF0006C00B /* Component */,
 				021D2F841D255034008CE5B0 /* AppDelegate.h */,
 				021D2F851D255034008CE5B0 /* AppDelegate.m */,
 				021D2F871D255034008CE5B0 /* CameraViewController.h */,
@@ -123,6 +133,19 @@
 				021D2F821D255034008CE5B0 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0241885F1D303ADF0006C00B /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				024188601D303AF80006C00B /* NavigationBar.h */,
+				024188611D303AF80006C00B /* NavigationBar.m */,
+				024188631D3040BD0006C00B /* Slider.h */,
+				024188641D3040BD0006C00B /* Slider.m */,
+				024188661D30470A0006C00B /* Color.h */,
+				024188671D30470A0006C00B /* Color.m */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 		02A057911D257DBF00DD16B4 /* core */ = {
@@ -227,10 +250,13 @@
 				021D2F891D255034008CE5B0 /* CameraViewController.mm in Sources */,
 				021D2F861D255034008CE5B0 /* AppDelegate.m in Sources */,
 				02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */,
+				024188681D30470A0006C00B /* Color.m in Sources */,
 				02A057B61D257DC000DD16B4 /* Log.cpp in Sources */,
 				02A057B01D257DC000DD16B4 /* Document.cpp in Sources */,
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
+				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
+				024188651D3040BD0006C00B /* Slider.m in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
