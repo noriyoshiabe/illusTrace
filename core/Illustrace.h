@@ -27,8 +27,7 @@ public:
         PreprocessedImageUpdated,
     };
 
-    void traceForPreview(cv::Mat &sourceImage, Document *document);
-
+    void traceForPreview(cv::Mat &sourceImage, std::vector<std::vector<cv::Point>> &outlineContours, std::vector<cv::Vec4i> &outlineHierarchy, double brightness, bool negative = false);
     bool traceFromFile(const char *filepath, Document *document);
     void traceFromImage(cv::Mat &sourceImage, Document *document);
     void binarize(cv::Mat &sourceImage, Document *document);

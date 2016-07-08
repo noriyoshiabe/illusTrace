@@ -13,6 +13,7 @@
 using namespace illustrace;
 
 @interface CameraViewController () <AVCaptureVideoDataOutputSampleBufferDelegate> {
+    Illustrace _illustrace;
     AVCaptureDeviceInput *_videoInput;
     AVCaptureStillImageOutput *_stillImageOutput;
     AVCaptureVideoDataOutput *_videoDataOutput;
@@ -91,17 +92,38 @@ using namespace illustrace;
 {
     CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-    uint8_t *imageAdress = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
-    
-    // TODO scan
     
     uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
     size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
     size_t width = CVPixelBufferGetWidth(pixelBuffer);
     size_t height = CVPixelBufferGetHeight(pixelBuffer);
     
+    cv::Mat sourceImage((int)height, (int)width, CV_8UC4, baseAddress, bytesPerRow);
+    std::vector<std::vector<cv::Point>> outlineContours;
+    std::vector<cv::Vec4i> outlineHierarchy;
+    
+    _illustrace.traceForPreview(sourceImage, outlineContours, outlineHierarchy, 0.0);
+    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef bitmapContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    
+    CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, height);
+    CGContextConcatCTM(bitmapContext, flipVertical);
+    
+    CGContextSetRGBStrokeColor(bitmapContext, 0.0, .478431373, 1.0, 1.0);
+    CGContextSetLineWidth(bitmapContext, 1.0);
+    CGContextSetLineCap(bitmapContext, kCGLineCapRound);
+    
+    for (auto contour : outlineContours) {
+        CGContextMoveToPoint(bitmapContext, contour[0].x, contour[0].y);
+        
+        size_t length = contour.size();
+        for (int i = 1; i < length; ++i) {
+            CGContextAddLineToPoint(bitmapContext, contour[i].x, contour[i].y);
+        }
+        
+        CGContextStrokePath(bitmapContext);
+    }
     
     CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
     UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationRight];
