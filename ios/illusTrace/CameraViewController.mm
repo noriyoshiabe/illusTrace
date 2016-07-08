@@ -29,7 +29,6 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UISlider *detailSlider;
 @property (weak, nonatomic) IBOutlet UISlider *smoothingSlider;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *colorControl;
 @property (weak, nonatomic) IBOutlet UISwitch *lightSwitch;
 @end
@@ -41,7 +40,6 @@ using namespace illustrace;
     [super viewDidLoad];
     
     _document = new Document();
-    _document->mode(LineMode::Outline);
     
     _videoCamera = [[CvVideoCamera alloc] initWithParentView:_imageView];
     _videoCamera.delegate = self;
@@ -226,18 +224,6 @@ using namespace illustrace;
 - (IBAction)thicknessSliderAction:(UISlider *)sender
 {
     _document->thickness(sender.value);
-}
-
-- (IBAction)modeControllSliderAction:(UISegmentedControl *)sender
-{
-    switch (sender.selectedSegmentIndex) {
-        case 0:
-            _document->mode(LineMode::Outline);
-            break;
-        case 1:
-            _document->mode(LineMode::Center);
-            break;
-    }
 }
 
 - (IBAction)lightSwitchAction:(UISwitch *)sender

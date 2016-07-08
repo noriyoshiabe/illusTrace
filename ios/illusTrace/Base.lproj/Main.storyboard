@@ -45,16 +45,6 @@
                                     <action selector="thicknessSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="emt-F3-TNX"/>
                                 </connections>
                             </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="MO3-13-eA5">
-                                <rect key="frame" x="463" y="28" width="117" height="29"/>
-                                <segments>
-                                    <segment title="Outline"/>
-                                    <segment title="Center"/>
-                                </segments>
-                                <connections>
-                                    <action selector="modeControllSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="jQ5-h9-Ur6"/>
-                                </connections>
-                            </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Do4-Li-odV">
                                 <rect key="frame" x="20" y="28" width="99" height="29"/>
                                 <segments>
@@ -63,7 +53,7 @@
                                 </segments>
                             </segmentedControl>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="n5s-YQ-ydB">
-                                <rect key="frame" x="531" y="76" width="51" height="31"/>
+                                <rect key="frame" x="531" y="28" width="51" height="31"/>
                                 <connections>
                                     <action selector="lightSwitchAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="wiD-BS-SFb"/>
                                 </connections>
@@ -73,10 +63,8 @@
                         <constraints>
                             <constraint firstItem="HGe-BN-Eil" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="0zF-Pk-8p6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Kbp-CH-qxD" secondAttribute="trailing" constant="-20" id="6Yx-JK-6oU"/>
-                            <constraint firstItem="n5s-YQ-ydB" firstAttribute="top" secondItem="MO3-13-eA5" secondAttribute="bottom" constant="20" id="6ne-FK-xZv"/>
                             <constraint firstItem="qg4-BY-dzX" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="6rt-OE-J5q"/>
                             <constraint firstItem="Kbp-CH-qxD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="7et-IO-PAL"/>
-                            <constraint firstItem="MO3-13-eA5" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="B8i-ic-58g"/>
                             <constraint firstItem="Kbp-CH-qxD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="CnH-Fc-tf1"/>
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="EAP-eR-RKN"/>
                             <constraint firstItem="Do4-Li-odV" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="FaF-Sn-vH7"/>
@@ -91,7 +79,7 @@
                             <constraint firstItem="2NJ-BT-yYd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="f4k-TI-0Ws"/>
                             <constraint firstItem="Do4-Li-odV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="h3t-Mj-uq6"/>
                             <constraint firstItem="XDV-8f-5Cv" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="nMf-dX-Ydf"/>
-                            <constraint firstItem="MO3-13-eA5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="pgA-Kw-4WY"/>
+                            <constraint firstItem="n5s-YQ-ydB" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="nb5-Ma-C6A"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Kbp-CH-qxD" secondAttribute="bottom" id="xou-rY-4Sz"/>
                         </constraints>
                     </view>
@@ -101,7 +89,6 @@
                         <outlet property="detailSlider" destination="2NJ-BT-yYd" id="sn2-64-Yta"/>
                         <outlet property="imageView" destination="Kbp-CH-qxD" id="dMx-BY-sJ0"/>
                         <outlet property="lightSwitch" destination="n5s-YQ-ydB" id="GH9-8W-4Lv"/>
-                        <outlet property="modeControl" destination="MO3-13-eA5" id="VWB-iS-J1f"/>
                         <outlet property="smoothingSlider" destination="XDV-8f-5Cv" id="NGB-Bt-dqc"/>
                         <outlet property="thicknessSlider" destination="HGe-BN-Eil" id="HDT-Cu-7wt"/>
                     </connections>

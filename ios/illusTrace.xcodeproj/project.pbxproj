@@ -14,12 +14,9 @@
 		021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8D1D255034008CE5B0 /* Assets.xcassets */; };
 		021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
-		02A057AE1D257DC000DD16B4 /* CenterLineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
 		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
-		02A057B21D257DC000DD16B4 /* FeatureDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */; };
 		02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579D1D257DBF00DD16B4 /* Filter.cpp */; };
-		02A057B41D257DC000DD16B4 /* GraphBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */; };
 		02A057B51D257DC000DD16B4 /* Illustrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057A11D257DBF00DD16B4 /* Illustrace.cpp */; };
 		02A057B61D257DC000DD16B4 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057A31D257DBF00DD16B4 /* Log.cpp */; };
 		02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057AA1D257DBF00DD16B4 /* SVGWriter.cpp */; };
@@ -43,18 +40,12 @@
 		021D2F921D255034008CE5B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
-		02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CenterLineBuilder.cpp; sourceTree = "<group>"; };
-		02A057951D257DBF00DD16B4 /* CenterLineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenterLineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
 		02A057981D257DBF00DD16B4 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		02A057991D257DBF00DD16B4 /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
 		02A0579A1D257DBF00DD16B4 /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
-		02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FeatureDetector.cpp; sourceTree = "<group>"; };
-		02A0579C1D257DBF00DD16B4 /* FeatureDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeatureDetector.h; sourceTree = "<group>"; };
 		02A0579D1D257DBF00DD16B4 /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
 		02A0579E1D257DBF00DD16B4 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
-		02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphBuilder.cpp; sourceTree = "<group>"; };
-		02A057A01D257DBF00DD16B4 /* GraphBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphBuilder.h; sourceTree = "<group>"; };
 		02A057A11D257DBF00DD16B4 /* Illustrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Illustrace.cpp; sourceTree = "<group>"; };
 		02A057A21D257DBF00DD16B4 /* Illustrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Illustrace.h; sourceTree = "<group>"; };
 		02A057A31D257DBF00DD16B4 /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
@@ -139,18 +130,12 @@
 			children = (
 				02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */,
 				02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */,
-				02A057941D257DBF00DD16B4 /* CenterLineBuilder.cpp */,
-				02A057951D257DBF00DD16B4 /* CenterLineBuilder.h */,
 				02A057971D257DBF00DD16B4 /* Document.cpp */,
 				02A057981D257DBF00DD16B4 /* Document.h */,
 				02A057991D257DBF00DD16B4 /* Editor.cpp */,
 				02A0579A1D257DBF00DD16B4 /* Editor.h */,
-				02A0579B1D257DBF00DD16B4 /* FeatureDetector.cpp */,
-				02A0579C1D257DBF00DD16B4 /* FeatureDetector.h */,
 				02A0579D1D257DBF00DD16B4 /* Filter.cpp */,
 				02A0579E1D257DBF00DD16B4 /* Filter.h */,
-				02A0579F1D257DBF00DD16B4 /* GraphBuilder.cpp */,
-				02A057A01D257DBF00DD16B4 /* GraphBuilder.h */,
 				02A057A11D257DBF00DD16B4 /* Illustrace.cpp */,
 				02A057A21D257DBF00DD16B4 /* Illustrace.h */,
 				02A057A31D257DBF00DD16B4 /* Log.cpp */,
@@ -240,14 +225,11 @@
 				02A057B51D257DC000DD16B4 /* Illustrace.cpp in Sources */,
 				02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */,
 				021D2F891D255034008CE5B0 /* CameraViewController.mm in Sources */,
-				02A057B21D257DC000DD16B4 /* FeatureDetector.cpp in Sources */,
 				021D2F861D255034008CE5B0 /* AppDelegate.m in Sources */,
 				02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */,
 				02A057B61D257DC000DD16B4 /* Log.cpp in Sources */,
 				02A057B01D257DC000DD16B4 /* Document.cpp in Sources */,
-				02A057AE1D257DC000DD16B4 /* CenterLineBuilder.cpp in Sources */,
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
-				02A057B41D257DC000DD16B4 /* GraphBuilder.cpp in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
 			);
