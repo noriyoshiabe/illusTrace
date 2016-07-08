@@ -17,84 +17,40 @@ void Illustrace::traceForPreview(cv::Mat &sourceImage, Document *document)
     Filter::blur(image, blur(image, document));
     Filter::threshold(image);
 
-    if (LineMode::Center == document->mode()) {
-        auto *centerLines = document->centerLines();
-        auto *approximatedCenterLines = document->approximatedCenterLines();    
-        auto *paths = document->paths();
+    Filter::negative(image);
 
-        centerLines->clear();
-        approximatedCenterLines->clear();
-        for (auto *path : *paths) {
-            delete path;
-        }
-        paths->clear();
+    auto *outlineContours = document->outlineContours();
+    auto *outlineHierarchy = document->outlineHierarchy();
+    auto *approximatedOutlineContours = document->approximatedOutlineContours();
+    auto *paths = document->paths();
 
-        double _epsilon = epsilon(document);
-        double smoothing = document->smoothing();
-
-        Filter::thinning(image);
-
-        std::vector<cv::Point2f> keyPoints;
-        FeatureDetector::detect(image, keyPoints);
-        Graph graph;
-        GraphBuilder::build(image, keyPoints, graph);
-        Graph approximatedGraph;
-        GraphBuilder::approximate(graph, approximatedGraph);
-
-        CenterLineBuilder::build(approximatedGraph, *centerLines);
-
-        for (auto line : *centerLines) {
-            std::vector<cv::Point2f> approx;
-            bool needAdjust = line.front() == line.back();
-            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
-            if (needAdjust && approx.front() != approx.back()) {
-                approx.push_back(approx.front());
-            }
-            approximatedCenterLines->push_back(approx);
-        }
-
-        for (auto line : *approximatedCenterLines) {
-            auto *path = new Path();
-            BezierSplineBuilder::build(line, path, smoothing, false, true);
-            paths->push_back(path);
-        }
+    outlineContours->clear();
+    outlineHierarchy->clear();
+    approximatedOutlineContours->clear();
+    for (auto *path : *paths) {
+        delete path;
     }
-    else {
-        Filter::negative(image);
+    paths->clear();
 
-        auto *outlineContours = document->outlineContours();
-        auto *outlineHierarchy = document->outlineHierarchy();
-        auto *approximatedOutlineContours = document->approximatedOutlineContours();
-        auto *paths = document->paths();
+    cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
-        outlineContours->clear();
-        outlineHierarchy->clear();
-        approximatedOutlineContours->clear();
-        for (auto *path : *paths) {
-            delete path;
-        }
-        paths->clear();
+    double _epsilon = epsilon(document);
+    double smoothing = document->smoothing();
 
-        cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-
-        double _epsilon = epsilon(document);
-        double smoothing = document->smoothing();
-
-        for (auto line : *outlineContours) {
-            std::vector<cv::Point2f> approx;
-            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
-            approximatedOutlineContours->push_back(approx);
-        }
-
-        std::vector<Path *> _paths;
-        for (auto line : *approximatedOutlineContours) {
-            auto *path = new Path();
-            BezierSplineBuilder::build(line, path, smoothing, true, false);
-            _paths.push_back(path);
-        }
-
-        buildPathsHierarchy(_paths, nullptr, *outlineHierarchy, 0, *paths);
+    for (auto line : *outlineContours) {
+        std::vector<cv::Point2f> approx;
+        cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
+        approximatedOutlineContours->push_back(approx);
     }
+
+    std::vector<Path *> _paths;
+    for (auto line : *approximatedOutlineContours) {
+        auto *path = new Path();
+        BezierSplineBuilder::build(line, path, smoothing, true, false);
+        _paths.push_back(path);
+    }
+
+    buildPathsHierarchy(_paths, nullptr, *outlineHierarchy, 0, *paths);
 }
 
 bool Illustrace::traceFromFile(const char *filepath, Document *document)
@@ -154,103 +110,46 @@ void Illustrace::buildLines(Document *document)
     cv::Rect boundingRect = cv::boundingRect(negativeImage);
     document->boundingRect(boundingRect);
 
-    if (LineMode::Center == document->mode()) {
-        cv::Mat thinnedImage = preprocessedImage.clone();
-        Filter::thinning(thinnedImage);
-        notify(this, Illustrace::Event::Thinned, document, &thinnedImage);
+    auto *outlineContours = new std::vector<std::vector<cv::Point>>();
+    auto *outlineHierarchy = new std::vector<cv::Vec4i>();
+    cv::findContours(negativeImage, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+    notify(this, Illustrace::Event::OutlineBuilt, document, outlineContours, outlineHierarchy);
 
-        std::vector<cv::Point2f> keyPoints;
-        FeatureDetector::detect(thinnedImage, keyPoints);
-        notify(this, Illustrace::Event::CenterLineKeyPointDetected, document, &thinnedImage, &keyPoints);
-
-        Graph graph;
-        GraphBuilder::build(thinnedImage, keyPoints, graph);
-        notify(this, Illustrace::Event::CenterLineGraphBuilt, document, &graph);
-
-        Graph approximatedGraph;
-        GraphBuilder::approximate(graph, approximatedGraph);
-        notify(this, Illustrace::Event::CenterLineGraphApproximated, document, &approximatedGraph);
-
-        auto *centerLines = new std::vector<std::vector<cv::Point2f>>();
-        CenterLineBuilder::build(approximatedGraph, *centerLines);
-        notify(this, Illustrace::Event::CenterLineBuilt, document, centerLines);
-
-        document->centerLines(centerLines);
-    }
-    else {
-        auto *outlineContours = new std::vector<std::vector<cv::Point>>();
-        auto *outlineHierarchy = new std::vector<cv::Vec4i>();
-        cv::findContours(negativeImage, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-        notify(this, Illustrace::Event::OutlineBuilt, document, outlineContours, outlineHierarchy);
-
-        document->outlineContours(outlineContours);
-        document->outlineHierarchy(outlineHierarchy);
-    }
+    document->outlineContours(outlineContours);
+    document->outlineHierarchy(outlineHierarchy);
 }
 
 void Illustrace::approximateLines(Document *document)
 {
     double _epsilon = epsilon(document);
 
-    if (LineMode::Center == document->mode()) {
-        auto *approximatedCenterLines = new std::vector<std::vector<cv::Point2f>>();    
-
-        for (auto line : *document->centerLines()) {
-            std::vector<cv::Point2f> approx;
-            bool needAdjust = line.front() == line.back();
-            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
-            if (needAdjust && approx.front() != approx.back()) {
-                approx.push_back(approx.front());
-            }
-            approximatedCenterLines->push_back(approx);
-        }
-
-        notify(this, Illustrace::Event::CenterLineApproximated, document, approximatedCenterLines);
-        document->approximatedCenterLines(approximatedCenterLines);
+    auto *approximatedOutlineContours = new std::vector<std::vector<cv::Point2f>>();
+    
+    for (auto line : *document->outlineContours()) {
+        std::vector<cv::Point2f> approx;
+        cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
+        approximatedOutlineContours->push_back(approx);
     }
-    else {
-        auto *approximatedOutlineContours = new std::vector<std::vector<cv::Point2f>>();
-        
-        for (auto line : *document->outlineContours()) {
-            std::vector<cv::Point2f> approx;
-            cv::approxPolyDP(cv::Mat(line), approx, _epsilon, false);
-            approximatedOutlineContours->push_back(approx);
-        }
 
-        notify(this, Illustrace::Event::OutlineApproximated, document, approximatedOutlineContours);
-        document->approximatedOutlineContours(approximatedOutlineContours);
-    }
+    notify(this, Illustrace::Event::OutlineApproximated, document, approximatedOutlineContours);
+    document->approximatedOutlineContours(approximatedOutlineContours);
 }
 
 void Illustrace::buildPaths(Document *document)
 {
-    if (LineMode::Center == document->mode()) {
-        auto *paths = new std::vector<Path *>();
-
-        for (auto line : *document->approximatedCenterLines()) {
-            auto *path = new Path();
-            BezierSplineBuilder::build(line, path, document->smoothing(), false, true);
-            paths->push_back(path);
-        }
-
-        notify(this, Illustrace::Event::CenterLineBezierized, document, paths);
-        document->paths(paths);
+    std::vector<Path *> paths;
+    for (auto line : *document->approximatedOutlineContours()) {
+        auto *path = new Path();
+        BezierSplineBuilder::build(line, path, document->smoothing(), true, false);
+        paths.push_back(path);
     }
-    else {
-        std::vector<Path *> paths;
-        for (auto line : *document->approximatedOutlineContours()) {
-            auto *path = new Path();
-            BezierSplineBuilder::build(line, path, document->smoothing(), true, false);
-            paths.push_back(path);
-        }
 
-        auto &outlineHierarchy = *document->outlineHierarchy();
-        auto *hierarchyPaths = new std::vector<Path *>();
-        buildPathsHierarchy(paths, nullptr, outlineHierarchy, 0, *hierarchyPaths);
+    auto &outlineHierarchy = *document->outlineHierarchy();
+    auto *hierarchyPaths = new std::vector<Path *>();
+    buildPathsHierarchy(paths, nullptr, outlineHierarchy, 0, *hierarchyPaths);
 
-        notify(this, Illustrace::Event::OutlineBezierized, document, hierarchyPaths);
-        document->paths(hierarchyPaths);
-    }
+    notify(this, Illustrace::Event::OutlineBezierized, document, hierarchyPaths);
+    document->paths(hierarchyPaths);
 }
 
 void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, std::vector<cv::Vec4i> &hierarchy, int index, std::vector<Path *> &results)

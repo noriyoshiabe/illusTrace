@@ -41,7 +41,6 @@ private:
     void plotPoints(std::vector<T> &points);
     template <class T>
     void plotPoints(std::vector<std::vector<T>> &lines);
-    void plotGraph(Graph &graph);
     void plotPathsHandle(std::vector<Path *> *paths);
     void plotPathHandle(Path *path);
 };

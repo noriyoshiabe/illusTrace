@@ -3,7 +3,6 @@
 using namespace illustrace;
 
 Document::Document() :
-    _mode(LineMode::Center),
     _brightness(0.0),
     _blur(1.0),
     _detail(1.0),
@@ -15,16 +14,12 @@ Document::Document() :
     _backgroundEnable(false),
     _paths(nullptr),
     _paintPaths(nullptr),
-    _centerLines(nullptr),
-    _approximatedCenterLines(nullptr),
     _outlineContours(nullptr),
     _approximatedOutlineContours(nullptr),
     _outlineHierarchy(nullptr)
 {
     _paths = new std::vector<Path *>();
     _paintPaths = new std::vector<Path *>();
-    _centerLines = new std::vector<std::vector<cv::Point2f>>();
-    _approximatedCenterLines = new std::vector<std::vector<cv::Point2f>>();
     _outlineContours = new std::vector<std::vector<cv::Point>>();
     _approximatedOutlineContours = new std::vector<std::vector<cv::Point2f>>();
     _outlineHierarchy = new std::vector<cv::Vec4i>();
@@ -46,14 +41,6 @@ Document::~Document()
         delete _paintPaths;
     }
 
-    if (_centerLines) {
-        delete _centerLines;
-    }
-
-    if (_approximatedCenterLines) {
-        delete _approximatedCenterLines;
-    }
-
     if (_outlineContours) {
         delete _outlineContours;
     }
@@ -65,11 +52,6 @@ Document::~Document()
     if (_outlineHierarchy) {
         delete _outlineHierarchy;
     }
-}
-
-LineMode Document::mode()
-{
-    return _mode;
 }
 
 double Document::brightness()
@@ -162,16 +144,6 @@ cv::Mat &Document::preprocessedImage()
     return _preprocessedImage;
 }
 
-std::vector<std::vector<cv::Point2f>> *Document::centerLines()
-{
-    return _centerLines;
-}
-
-std::vector<std::vector<cv::Point2f>> *Document::approximatedCenterLines()
-{
-    return _approximatedCenterLines;
-}
-
 std::vector<std::vector<cv::Point>> *Document::outlineContours()
 {
     return _outlineContours;
@@ -185,12 +157,6 @@ std::vector<std::vector<cv::Point2f>> *Document::approximatedOutlineContours()
 std::vector<cv::Vec4i> *Document::outlineHierarchy()
 {
     return _outlineHierarchy;
-}
-
-void Document::mode(LineMode mode)
-{
-    _mode = mode;
-    notify(this, Document::Event::Mode);
 }
 
 void Document::brightness(double brightness)
@@ -325,24 +291,6 @@ void Document::preprocessedImage(cv::Mat &preprocessedImage, cv::Rect *dirtyRect
     notify(this, Document::Event::PreprocessedImage, dirtyRect);
 }
 
-void Document::centerLines(std::vector<std::vector<cv::Point2f>> *centerLines)
-{
-    if (_centerLines) {
-        delete _centerLines;
-    }
-    _centerLines = centerLines;
-    notify(this, Document::Event::CenterLines);
-}
-
-void Document::approximatedCenterLines(std::vector<std::vector<cv::Point2f>> *approximatedCenterLines)
-{
-    if (_approximatedCenterLines) {
-        delete _approximatedCenterLines;
-    }
-    _approximatedCenterLines = approximatedCenterLines;
-    notify(this, Document::Event::ApproximatedCenterLines);
-}
-
 void Document::outlineContours(std::vector<std::vector<cv::Point>> *outlineContours)
 {
     if (_outlineContours) {
@@ -375,7 +323,6 @@ namespace illustrace {
 std::ostream &operator<<(std::ostream &os, Document const &self)
 {
     os << "<Document ";
-    os << "mode: " << LineMode2CString(self._mode) << ", ";
     os << "brightness: " << self._brightness << ", ";
     os << "blur: " << self._blur << ", ";
     os << "detail: " << self._detail << ", ";
@@ -394,8 +341,6 @@ std::ostream &operator<<(std::ostream &os, Document const &self)
     os << "paintPaths: " << self._paintPaths << ", ";
     os << "binarizedImage: " << &self._binarizedImage << ", ";
     os << "preprocessedImage: " << &self._preprocessedImage << ", ";
-    os << "centerLines: " << self._centerLines << ", ";
-    os << "approximatedCenterLines: " << self._approximatedCenterLines << ", ";
     os << "outlineContours: " << self._outlineContours << ", ";
     os << "approximatedOutlineContours: " << self._approximatedOutlineContours << ", ";
     os << "outlineHierarchy: " << self._outlineHierarchy << "";

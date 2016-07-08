@@ -140,18 +140,12 @@ bool SVGWriter::write(const char *filepath, Document *document, const char *comm
         ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "stroke-linecap", BAD_CAST "round");
         CHECK_AND_ABORT;
 
-        if (LineMode::Outline == document->mode()) {
-            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill-rule", BAD_CAST "evenodd");
-            CHECK_AND_ABORT;
+        ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill-rule", BAD_CAST "evenodd");
+        CHECK_AND_ABORT;
 
-            sprintf(str, "#%02X%02X%02X", (int)color[0], (int)color[1], (int)color[2]);
-            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST str);
-            CHECK_AND_ABORT;
-        }
-        else {
-            ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST "none");
-            CHECK_AND_ABORT;
-        }
+        sprintf(str, "#%02X%02X%02X", (int)color[0], (int)color[1], (int)color[2]);
+        ret = xmlTextWriterWriteAttribute(writer, BAD_CAST "fill", BAD_CAST str);
+        CHECK_AND_ABORT;
 
         for (auto *path : *document->paths()) {
             std::stringstream ss = std::stringstream("");

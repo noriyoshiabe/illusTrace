@@ -6,10 +6,7 @@ set(SOURCES
   Illustrace.cpp
   Document.cpp
   Filter.cpp
-  CenterLineBuilder.cpp
   BezierSplineBuilder.cpp
-  FeatureDetector.cpp
-  GraphBuilder.cpp
   osx/PaintMaskBuilder.cpp
   SVGWriter.cpp
   Editor.cpp

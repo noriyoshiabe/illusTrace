@@ -7,20 +7,6 @@
 
 namespace illustrace {
 
-enum class LineMode {
-    Center,
-    Outline,
-};
-
-static inline const char *LineMode2CString(LineMode mode) {
-#define CASE(mode) case LineMode::mode: return #mode
-    switch (mode) {
-    CASE(Center);
-    CASE(Outline);
-    }
-#undef CASE
-}
-
 struct Segment {
     enum Type {
         Move,
@@ -108,7 +94,6 @@ struct Path {
 class Document : public Observable<Document> {
 public:
     enum Event : int {
-        Mode,
         Brightness,
         Blur,
         Detail,
@@ -127,8 +112,6 @@ public:
         PaintPaths,
         BinarizedImage,
         PreprocessedImage,
-        CenterLines,
-        ApproximatedCenterLines,
         OutlineContours,
         ApproximatedOutlineContours,
         OutlineHierarchy,
@@ -137,7 +120,6 @@ public:
     static inline const char *Event2CString(Event event) {
 #define CASE(event) case event: return #event
         switch (event) {
-        CASE(Mode);
         CASE(Brightness);
         CASE(Blur);
         CASE(Detail);
@@ -156,8 +138,6 @@ public:
         CASE(PaintPaths);
         CASE(BinarizedImage);
         CASE(PreprocessedImage);
-        CASE(CenterLines);
-        CASE(ApproximatedCenterLines);
         CASE(OutlineContours);
         CASE(ApproximatedOutlineContours);
         CASE(OutlineHierarchy);
@@ -168,7 +148,6 @@ public:
     Document();
     ~Document();
 
-    LineMode mode();
     double brightness();
     double blur();
     double detail();
@@ -187,13 +166,10 @@ public:
     std::vector<Path *> *paintPaths();
     cv::Mat &binarizedImage();
     cv::Mat &preprocessedImage();
-    std::vector<std::vector<cv::Point2f>> *centerLines();
-    std::vector<std::vector<cv::Point2f>> *approximatedCenterLines();
     std::vector<std::vector<cv::Point>> *outlineContours();
     std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours();
     std::vector<cv::Vec4i> *outlineHierarchy();
 
-    void mode(LineMode mode);
     void brightness(double brightness);
     void blur(double blur);
     void detail(double detail);
@@ -214,8 +190,6 @@ public:
     void binarizedImage(cv::Mat &binarizedImage);
     void preprocessedImage(cv::Mat &preprocessedImage);
     void preprocessedImage(cv::Mat &preprocessedImage, cv::Rect *dirtyRect);
-    void centerLines(std::vector<std::vector<cv::Point2f>> *centerLines);
-    void approximatedCenterLines(std::vector<std::vector<cv::Point2f>> *approximatedCenterLines);
     void outlineContours(std::vector<std::vector<cv::Point>> *outlineContours);
     void approximatedOutlineContours(std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours);
     void outlineHierarchy(std::vector<cv::Vec4i> *outlineHierarchy);
@@ -223,7 +197,6 @@ public:
     friend std::ostream &operator<<(std::ostream &stream, Document const &self);
 
 private:
-    LineMode _mode;
     double _brightness;
     double _blur;
     double _detail;
@@ -244,8 +217,6 @@ private:
     cv::Mat _binarizedImage;
     cv::Mat _preprocessedImage;
 
-    std::vector<std::vector<cv::Point2f>> *_centerLines;
-    std::vector<std::vector<cv::Point2f>> *_approximatedCenterLines;
     std::vector<std::vector<cv::Point>> *_outlineContours;
     std::vector<std::vector<cv::Point2f>> *_approximatedOutlineContours;
     std::vector<cv::Vec4i> *_outlineHierarchy;

@@ -68,78 +68,9 @@ void View::notify(Illustrace *sender, va_list argList)
         imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
         break;
-    case Illustrace::Event::Thinned:
-        imshow(WindowName, *va_arg(argList, cv::Mat *));
-        waitKeyIfNeeded();
-        break;
     case Illustrace::Event::NegativeFilterApplied:
         imshow(WindowName, *va_arg(argList, cv::Mat *));
         waitKeyIfNeeded();
-        break;
-    case Illustrace::Event::CenterLineKeyPointDetected:
-        if (plot) {
-            copyFrom(*va_arg(argList, cv::Mat *));
-            plotPoints(*va_arg(argList, std::vector<cv::Point2f> *));
-            waitKeyIfNeeded();
-        }
-        break;
-    case Illustrace::Event::CenterLineGraphBuilt:
-        if (plot) {
-            clearPreview();
-            plotGraph(*va_arg(argList, Graph *));
-            waitKeyIfNeeded();
-        }
-        break;
-    case Illustrace::Event::CenterLineGraphApproximated:
-        if (plot) {
-            clearPreview();
-            plotGraph(*va_arg(argList, Graph *));
-            waitKeyIfNeeded();
-        }
-        break;
-    case Illustrace::Event::CenterLineBuilt:
-        {
-            auto *centerLines = va_arg(argList, std::vector<std::vector<cv::Point2f>> *);
-            clearPreview();
-            drawLines(*centerLines, 1);
-            waitKeyIfNeeded();
-            if (plot) {
-                plotPoints(*centerLines);
-                waitKeyIfNeeded();
-            }
-        }
-        break;
-    case Illustrace::Event::CenterLineApproximated:
-        {
-            auto *approximatedCenterLines = va_arg(argList, std::vector<std::vector<cv::Point2f>> *);
-            clearPreview();
-            drawLines(*approximatedCenterLines, 1);
-            waitKeyIfNeeded();
-            if (plot) {
-                plotPoints(*approximatedCenterLines);
-                waitKeyIfNeeded();
-            }
-        }
-        break;
-    case Illustrace::Event::CenterLineBezierized:
-        {
-            auto *paths = va_arg(argList, std::vector<Path *> *);
-            if (document->backgroundEnable()) {
-                fillBackground(document->backgroundColor());
-            }
-            else {
-                clearPreview();
-            }
-            drawPaths(paths, document->thickness(), document->color(), document->color());
-            waitKeyIfNeeded();
-            if (plot) {
-                clearPreview();
-                auto color = cv::Scalar(128, 128, 128);
-                drawPaths(paths, 1, color, color);
-                plotPathsHandle(paths);
-                waitKeyIfNeeded();
-            }
-        }
         break;
     case Illustrace::Event::OutlineBuilt:
         {
@@ -498,28 +429,6 @@ void View::plotPoints(std::vector<std::vector<T>> &lines)
     for (auto line : lines) {
         plotPoints(line);
     }
-}
-
-void View::plotGraph(Graph &graph)
-{
-    cairo_set_line_width(cr, 1);
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
-
-    for (auto *vertex : graph.vertices) {
-        cairo_set_source_rgb(cr, 0, 0, 1);
-
-        for (auto *_vertex : vertex->adjacencyList) {
-            cairo_move_to(cr, vertex->point.x, vertex->point.y);
-            cairo_line_to(cr, _vertex->point.x, _vertex->point.y);
-            cairo_stroke(cr);
-        }
-
-        cairo_set_source_rgb(cr, 1, 0, 0);
-        cairo_arc(cr, vertex->point.x, vertex->point.y, 2, 0, 2 * M_PI);
-        cairo_stroke(cr);
-    }
-
-    imshow(WindowName, preview);
 }
 
 void View::plotPathsHandle(std::vector<Path *> *paths)

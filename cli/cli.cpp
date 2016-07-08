@@ -17,7 +17,6 @@ const std::string CLI::VERSION = "0.1.0";
 int CLI::main(int argc, char **argv)
 {
     static struct option _options[] = {
-        {"outline", no_argument, NULL, 'O'},
         {"brightness", required_argument, NULL, 'b'},
         {"blur", required_argument, NULL, 'B'},
         {"detail", required_argument, NULL, 'd'},
@@ -39,11 +38,8 @@ int CLI::main(int argc, char **argv)
     CLI cli;
 
     int opt;
-    while (-1 != (opt = getopt_long(argc, argv, "Ob:B:d:t:s:c:w:Spe:To:hv", _options, NULL))) {
+    while (-1 != (opt = getopt_long(argc, argv, "b:B:d:t:s:c:w:Spe:To:hv", _options, NULL))) {
         switch (opt) {
-        case 'O':
-            cli.document->mode(LineMode::Outline);
-            break;
         case 'b':
             cli.document->brightness(std::stod(optarg));
             break;
@@ -157,7 +153,6 @@ void CLI::usage()
     const std::string USAGE =
         "Usage: illustrace [options] <file>\n"
         "Options:\n"
-        "  -O, --outline               Outline trace mode. Default is center line mode.\n"
         "  -b, --brightness <value>    Adjustment for brightness. -1.0 to 1.0.\n"
         "  -B, --blur <value>          Blur size (%% of short side) of the preprocess for binarize. 0.0 to 1.0\n"
         "  -d, --detail <value>        Adjustment for line detail. 0.0 to 1.0.\n"

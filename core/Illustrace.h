@@ -2,10 +2,7 @@
 
 #include "Observable.h"
 #include "Filter.h"
-#include "CenterLineBuilder.h"
 #include "BezierSplineBuilder.h"
-#include "FeatureDetector.h"
-#include "GraphBuilder.h"
 #include "PaintMaskBuilder.h"
 #include "Document.h"
 
@@ -20,14 +17,7 @@ public:
         BrightnessFilterApplied,
         BlurFilterApplied,
         Binarized,
-        Thinned,
         NegativeFilterApplied,
-        CenterLineKeyPointDetected,
-        CenterLineGraphBuilt,
-        CenterLineGraphApproximated,
-        CenterLineBuilt,
-        CenterLineApproximated,
-        CenterLineBezierized,
         OutlineBuilt,
         OutlineApproximated,
         OutlineBezierized,
@@ -59,14 +49,7 @@ public:
         CASE(BrightnessFilterApplied);
         CASE(BlurFilterApplied);
         CASE(Binarized);
-        CASE(Thinned);
         CASE(NegativeFilterApplied);
-        CASE(CenterLineKeyPointDetected);
-        CASE(CenterLineGraphBuilt);
-        CASE(CenterLineGraphApproximated);
-        CASE(CenterLineBuilt);
-        CASE(CenterLineApproximated);
-        CASE(CenterLineBezierized);
         CASE(OutlineBuilt);
         CASE(OutlineApproximated);
         CASE(OutlineBezierized);

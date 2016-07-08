@@ -25,7 +25,6 @@ public:
     View view;
     Illustrace illustrace;
     Editor *editor;
-    bool outline;
     const char *editFilePath;
     const char *outputFilepath;
 };
