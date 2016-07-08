@@ -4,6 +4,7 @@ using namespace illustrace;
 
 Document::Document() :
     _brightness(0.0),
+    _negative(false),
     _blur(1.0),
     _detail(1.0),
     _smoothing(1.0),
@@ -57,6 +58,11 @@ Document::~Document()
 double Document::brightness()
 {
     return _brightness;
+}
+
+bool Document::negative()
+{
+    return _negative;
 }
 
 double Document::blur()
@@ -163,6 +169,12 @@ void Document::brightness(double brightness)
 {
     _brightness = brightness;
     notify(this, Document::Event::Brightness);
+}
+
+void Document::negative(bool negative)
+{
+    _negative = negative;
+    notify(this, Document::Event::Negative);
 }
 
 void Document::blur(double blur)
@@ -324,6 +336,7 @@ std::ostream &operator<<(std::ostream &os, Document const &self)
 {
     os << "<Document ";
     os << "brightness: " << self._brightness << ", ";
+    os << "negative: " << self._negative << ", ";
     os << "blur: " << self._blur << ", ";
     os << "detail: " << self._detail << ", ";
     os << "smoothing: " << self._smoothing << ", ";

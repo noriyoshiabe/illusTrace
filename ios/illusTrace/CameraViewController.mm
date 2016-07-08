@@ -105,11 +105,23 @@ using namespace illustrace;
              if (imageDataSampleBuffer) {
                  CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
                  CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-                 uint8_t *grayImage = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
                  
-                 NSLog(@"#### %lu %lu", CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer));
+                 uint8_t *grayImage = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                 size_t width = CVPixelBufferGetWidth(pixelBuffer);
+                 size_t height = CVPixelBufferGetHeight(pixelBuffer);
+                 cv::Mat sourceImage((int)height, (int)width, CV_8U, grayImage, width);
+                 
+                 int resizedCols = round(1000.0 * ((CGFloat)width / (CGFloat)height));
+                 cv::Mat resizedImage = cv::Mat::ones(1000, resizedCols, CV_8U);
+                 cv::resize(sourceImage, resizedImage, resizedImage.size(), cv::INTER_CUBIC);
                  
                  CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                 
+                 Document *document = new Document();
+                 document->brightness(_brightnessSlider.value);
+                 document->negative(_negative);
+                 
+                 _illustrace.traceFromImage(resizedImage, document);
              }
          }];
     }
@@ -169,11 +181,11 @@ using namespace illustrace;
     CGPathRelease(pathRef);
     
     CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
-    UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationRight];
-    
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     CGContextRelease(bitmapContext);
     CGColorSpaceRelease(colorSpace);
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    
+    UIImage *image = [UIImage imageWithCGImage:cgImage scale:1.0 orientation:UIImageOrientationRight];
     CGImageRelease(cgImage);
     
     dispatch_async(dispatch_get_main_queue(), ^{

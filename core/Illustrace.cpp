@@ -59,6 +59,10 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
     notify(this, Illustrace::Event::BlurFilterApplied, document, &binarizedImage);
 
     Filter::threshold(binarizedImage);
+    if (document->negative()) {
+        Filter::negative(binarizedImage);
+    }
+
     notify(this, Illustrace::Event::Binarized, document, &binarizedImage);
 
     document->binarizedImage(binarizedImage);

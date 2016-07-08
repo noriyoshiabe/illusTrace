@@ -95,6 +95,7 @@ class Document : public Observable<Document> {
 public:
     enum Event : int {
         Brightness,
+        Negative,
         Blur,
         Detail,
         Smoothing,
@@ -121,6 +122,7 @@ public:
 #define CASE(event) case event: return #event
         switch (event) {
         CASE(Brightness);
+        CASE(Negative);
         CASE(Blur);
         CASE(Detail);
         CASE(Smoothing);
@@ -149,6 +151,7 @@ public:
     ~Document();
 
     double brightness();
+    bool negative();
     double blur();
     double detail();
     double smoothing();
@@ -171,6 +174,7 @@ public:
     std::vector<cv::Vec4i> *outlineHierarchy();
 
     void brightness(double brightness);
+    void negative(bool negative);
     void blur(double blur);
     void detail(double detail);
     void smoothing(double smoothing);
@@ -198,6 +202,7 @@ public:
 
 private:
     double _brightness;
+    bool _negative;
     double _blur;
     double _detail;
     double _smoothing;
