@@ -13,7 +13,16 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    [self setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:1.0 alpha:0.2].CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     self.shadowImage = [UIImage new];
 }
 
