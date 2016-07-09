@@ -167,7 +167,48 @@ using namespace illustrace;
             
             needsDisplay = YES;
         }
+    }
+    
+    if (!_panning && 1.0 <= _transform.a) {
+        CGAffineTransform t = CGAffineTransformConcat(_identity, _transform);
+        CGPoint topLeft = CGPointApplyAffineTransform(CGPointZero, t);
         
+        auto contentRect = _document->contentRect();
+        CGFloat width = self.bounds.size.width;
+        CGFloat height = width * ((CGFloat)contentRect.height / (CGFloat) contentRect.width);
+        CGPoint bottomRight = CGPointApplyAffineTransform(CGPointMake(contentRect.width * _identityScale, contentRect.height * _identityScale), t);
+        
+        topLeft.x /= _identityScale;
+        topLeft.y /= _identityScale;
+        bottomRight.x /= _identityScale;
+        bottomRight.y /= _identityScale;
+        
+        NSLog(@"### [%f:%f, %d:%d]  %f %f %f %f", width, height, contentRect.width, contentRect.height,
+              topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+        
+        
+        CGPoint translate = CGPointZero;
+        
+        if (0 < topLeft.x) {
+            translate.x = 0.01 > topLeft.x ? topLeft.x * -1.0 : topLeft.x * -0.1;
+        }
+        else if (width > bottomRight.x) {
+            translate.x = 0.01 > width - bottomRight.x ? width - bottomRight.x : (width - bottomRight.x) * 0.1;
+        }
+        
+        if (0 < topLeft.y) {
+            translate.y = 0.01 > topLeft.y ? topLeft.y * -1.0 : topLeft.y * -0.1;
+        }
+        else if (height > bottomRight.y) {
+            translate.y = 0.01 > height - bottomRight.y ? height - bottomRight.y : (height - bottomRight.y) * 0.1;
+        }
+        
+        if (!CGPointEqualToPoint(translate, CGPointZero)) {
+            CGAffineTransform t = CGAffineTransformIdentity;
+            t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+            _transform = CGAffineTransformConcat(_transform, t);
+            needsDisplay = YES;
+        }
     }
     
     if (needsDisplay) {
