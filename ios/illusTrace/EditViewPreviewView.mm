@@ -10,15 +10,32 @@
 
 using namespace illustrace;
 
+@interface EditViewPreviewView() {
+    CGAffineTransform _identity;
+}
+@end
+
 @implementation EditViewPreviewView
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    auto contentRect = _document->contentRect();
+    CGFloat contentAspect = (CGFloat)contentRect.height / (CGFloat)contentRect.width;
+    CGFloat viewAspect = self.bounds.size.height / self.bounds.size.width;
+    
+    CGFloat scale = contentAspect < viewAspect ? self.bounds.size.height / contentRect.height : self.bounds.size.width / contentRect.width;
+    CGAffineTransform _scale = CGAffineTransformMakeScale(scale, scale);
+    CGAffineTransform _translation = CGAffineTransformMakeTranslation((self.bounds.size.width - contentRect.width * scale) / 2.0, (self.bounds.size.height - contentRect.height * scale) / 2.0);
+    
+    _identity = CGAffineTransformConcat(_scale, _translation);
+}
 
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // TODO
-    CGAffineTransform transform = CGAffineTransformMakeScale(0.4, 0.4);
-    CGContextConcatCTM(context, transform);
+    CGContextConcatCTM(context, _identity);
     
     [self drawPaths:context];
     
