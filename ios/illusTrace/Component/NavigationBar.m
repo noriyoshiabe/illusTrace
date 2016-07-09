@@ -24,12 +24,7 @@
         return v;
     }
     else {
-        for (UIView *subview in self.subviews) {
-            if (CGRectContainsPoint(subview.frame, point)) {
-                return v;
-            }
-        }
-        return nil;
+        return 80.0 > point.x ? v : nil;
     }
 }
 

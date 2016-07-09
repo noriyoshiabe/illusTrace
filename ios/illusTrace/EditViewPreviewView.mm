@@ -12,10 +12,31 @@ using namespace illustrace;
 
 @interface EditViewPreviewView() {
     CGAffineTransform _identity;
+    CGFloat _identityScale;
+    
+    CGAffineTransform _transform;
+    
+    struct {
+        CGAffineTransform transform;
+        CGPoint point;
+    } _last;
 }
 @end
 
 @implementation EditViewPreviewView
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizerAction:)];
+    [self addGestureRecognizer:panGestureRecognizer];
+    
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
+    [self addGestureRecognizer:pinchGestureRecognizer];
+    
+    _transform = CGAffineTransformIdentity;
+}
 
 - (void)layoutSubviews
 {
@@ -26,16 +47,18 @@ using namespace illustrace;
     CGFloat viewAspect = self.bounds.size.height / self.bounds.size.width;
     
     CGFloat scale = contentAspect < viewAspect ? self.bounds.size.height / contentRect.height : self.bounds.size.width / contentRect.width;
-    CGAffineTransform _scale = CGAffineTransformMakeScale(scale, scale);
-    CGAffineTransform _translation = CGAffineTransformMakeTranslation((self.bounds.size.width - contentRect.width * scale) / 2.0, (self.bounds.size.height - contentRect.height * scale) / 2.0);
+    CGAffineTransform scaleT = CGAffineTransformMakeScale(scale, scale);
+    CGAffineTransform translationT = CGAffineTransformMakeTranslation((self.bounds.size.width - contentRect.width * scale) / 2.0, (self.bounds.size.height - contentRect.height * scale) / 2.0);
     
-    _identity = CGAffineTransformConcat(_scale, _translation);
+    _identity = CGAffineTransformConcat(scaleT, translationT);
+    _identityScale = 1.0 / scale;
 }
 
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextConcatCTM(context, _identity);
+    CGContextConcatCTM(context, _transform);
     
     [self drawPaths:context];
     
@@ -86,6 +109,50 @@ using namespace illustrace;
     for (Path *child : path->children) {
         [self drawPath:child subPath:subPath];
     }
+}
+
+#pragma mark GestureRecognizer
+
+- (void)panGestureRecognizerAction:(UIPanGestureRecognizer *)sender
+{
+    if (UIGestureRecognizerStateBegan == sender.state) {
+        _last.transform = _transform;
+    }
+    
+    CGPoint translate = [sender translationInView:self];
+    
+    CGAffineTransform t = CGAffineTransformIdentity;
+    t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+    _transform = CGAffineTransformConcat(_last.transform, t);
+    
+    [self setNeedsDisplay];
+}
+
+- (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
+{
+    if (2 > sender.numberOfTouches) {
+        return;
+    }
+    
+    if (UIGestureRecognizerStateBegan == sender.state) {
+        _last.transform = _transform;
+        _last.point = [sender locationInView:self];
+    }
+    
+    CGPoint point = [sender locationInView:self];
+    CGPoint translate = {point.x - _last.point.x, point.y - _last.point.y};
+    
+    CGAffineTransform t = CGAffineTransformIdentity;
+    
+    t = CGAffineTransformTranslate(t, point.x * _identityScale, point.y * _identityScale);
+    t = CGAffineTransformScale(t, sender.scale, sender.scale);
+    t = CGAffineTransformTranslate(t, -point.x * _identityScale, -point.y * _identityScale);
+    
+    t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+    
+    _transform = CGAffineTransformConcat(_last.transform, t);
+    
+    [self setNeedsDisplay];
 }
 
 @end
