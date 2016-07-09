@@ -45,11 +45,11 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sE2-mB-bNS" secondAttribute="bottom" id="9eE-j4-5H1"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="FTL-ZY-tZE" secondAttribute="bottom" constant="5" id="ADw-QL-XHW"/>
                             <constraint firstItem="Hly-yG-pDI" firstAttribute="leading" secondItem="vNJ-lm-I88" secondAttribute="leading" id="D5u-ap-3mY"/>
-                            <constraint firstItem="sE2-mB-bNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="KA1-Et-wAq"/>
+                            <constraint firstItem="sE2-mB-bNS" firstAttribute="left" secondItem="8bC-Xf-vdC" secondAttribute="left" id="KA1-Et-wAq"/>
                             <constraint firstItem="Hly-yG-pDI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="KH4-Mk-XGg"/>
                             <constraint firstItem="sE2-mB-bNS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="QRO-kC-aWf"/>
                             <constraint firstItem="FTL-ZY-tZE" firstAttribute="top" secondItem="Hly-yG-pDI" secondAttribute="bottom" constant="20" id="ab2-CY-b3S"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="sE2-mB-bNS" secondAttribute="trailing" constant="-20" id="flO-Pc-Xal"/>
+                            <constraint firstAttribute="right" secondItem="sE2-mB-bNS" secondAttribute="right" id="flO-Pc-Xal"/>
                             <constraint firstItem="Hly-yG-pDI" firstAttribute="top" secondItem="vNJ-lm-I88" secondAttribute="bottom" constant="5" id="guv-1K-4UX"/>
                             <constraint firstItem="FTL-ZY-tZE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="mTi-gq-sNK"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Hly-yG-pDI" secondAttribute="trailing" constant="10" id="oOp-UA-sGe"/>
@@ -114,8 +114,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Ik2-aR-VEW" firstAttribute="top" secondItem="yle-k3-3wN" secondAttribute="topMargin" id="eyg-bX-PYO"/>
-                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="leading" secondItem="yle-k3-3wN" secondAttribute="leadingMargin" constant="-20" id="gog-bJ-hwo"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Ik2-aR-VEW" secondAttribute="trailing" constant="-20" id="hvk-HP-XyV"/>
+                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="left" secondItem="yle-k3-3wN" secondAttribute="left" id="gog-bJ-hwo"/>
+                            <constraint firstAttribute="right" secondItem="Ik2-aR-VEW" secondAttribute="right" id="hvk-HP-XyV"/>
                             <constraint firstItem="X6u-X8-MJW" firstAttribute="top" secondItem="Ik2-aR-VEW" secondAttribute="bottom" id="kSi-0y-dxO"/>
                         </constraints>
                     </view>
