@@ -117,6 +117,8 @@ using namespace illustrace;
                  int resizedCols = round(1000.0 * ((CGFloat)width / (CGFloat)height));
                  cv::Mat resizedImage = cv::Mat::ones(1000, resizedCols, CV_8U);
                  cv::resize(sourceImage, resizedImage, resizedImage.size(), cv::INTER_CUBIC);
+                 cv::transpose(resizedImage, resizedImage);
+                 cv::flip(resizedImage, resizedImage, 1);
                  
                  CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
                  
