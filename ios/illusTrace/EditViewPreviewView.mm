@@ -19,6 +19,8 @@ using namespace illustrace;
     struct {
         CGAffineTransform transform;
         CGPoint point;
+        CGPoint velocity;
+        CFAbsoluteTime time;
     } _last;
 }
 @end
@@ -63,6 +65,10 @@ using namespace illustrace;
     [self drawPaths:context];
     
     CGContextClipToRect(context, rect);
+    
+    CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+    [self inertia:time - _last.time];
+    _last.time = time;
 }
 
 - (void)drawPaths:(CGContextRef)context
@@ -111,11 +117,35 @@ using namespace illustrace;
     }
 }
 
+- (void)inertia:(CFAbsoluteTime)delta
+{
+    bool needsDisplay = NO;
+    
+    if (1 <= _last.velocity.x || 1 <= _last.velocity.y) {
+        CGFloat f = (CGFloat)delta / 1.0;
+        
+        CGAffineTransform t = CGAffineTransformMakeTranslation(_last.velocity.x * f, _last.velocity.y * f);
+        _transform = CGAffineTransformConcat(_transform, t);
+        
+        _last.velocity.x *= 0.95;
+        _last.velocity.y *= 0.95;
+        
+        needsDisplay = YES;
+    }
+    
+    if (needsDisplay) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setNeedsDisplay];
+        });
+    }
+}
+
 #pragma mark GestureRecognizer
 
 - (void)panGestureRecognizerAction:(UIPanGestureRecognizer *)sender
 {
     if (UIGestureRecognizerStateBegan == sender.state) {
+        _last.velocity = CGPointZero;
         _last.transform = _transform;
     }
     
@@ -126,6 +156,10 @@ using namespace illustrace;
     _transform = CGAffineTransformConcat(_last.transform, t);
     
     [self setNeedsDisplay];
+    
+    if (UIGestureRecognizerStateEnded == sender.state) {
+        _last.velocity = [sender velocityInView:self];
+    }
 }
 
 - (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
@@ -135,6 +169,7 @@ using namespace illustrace;
     }
     
     if (UIGestureRecognizerStateBegan == sender.state) {
+        _last.velocity = CGPointZero;
         _last.transform = _transform;
         _last.point = [sender locationInView:self];
     }
