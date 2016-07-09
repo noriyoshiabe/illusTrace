@@ -24,6 +24,7 @@ using namespace illustrace;
     AVCaptureSession *_session;
     BOOL _lightEnable;
     BOOL _negative;
+    CGFloat _zoomScale;
     
     Document *_document;
 }
@@ -59,6 +60,15 @@ using namespace illustrace;
     _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
     _stillImageOutput.outputSettings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)};
     [_session addOutput:_stillImageOutput];
+    
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
+    [_previewView addGestureRecognizer:pinchGestureRecognizer];
+    
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGestureRecognizerAction:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    [_previewView addGestureRecognizer:doubleTapRecognizer];
+    
+    _previewView.userInteractionEnabled = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -207,6 +217,30 @@ using namespace illustrace;
     dispatch_async(dispatch_get_main_queue(), ^{
         _previewView.image = image;
     });
+}
+
+#pragma mark GestureRecognizer
+
+- (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
+{
+    if (UIGestureRecognizerStateBegan == sender.state) {
+        _zoomScale = _camera.videoZoomFactor;
+    }
+    
+    if (UIGestureRecognizerStateChanged == sender.state) {
+        if ([_camera lockForConfiguration:nil]) {
+            _camera.videoZoomFactor = MAX(1.0, MIN(_zoomScale * sender.scale, _camera.activeFormat.videoMaxZoomFactor));
+            [_camera unlockForConfiguration];
+        }
+    }
+}
+
+- (void)doubleTapGestureRecognizerAction:(UITapGestureRecognizer *)sender
+{
+    if ([_camera lockForConfiguration:nil]) {
+        _camera.videoZoomFactor = 1.0;
+        [_camera unlockForConfiguration];
+    }
 }
 
 @end
