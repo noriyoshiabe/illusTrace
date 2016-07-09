@@ -22,6 +22,9 @@ using namespace illustrace;
         CGPoint velocity;
         CFAbsoluteTime time;
     } _last;
+    
+    bool _panning;
+    bool _pinching;
 }
 @end
 
@@ -133,6 +136,43 @@ using namespace illustrace;
         needsDisplay = YES;
     }
     
+    if (!_pinching) {
+        if (1.0 > _transform.a) {
+            if (0.99 < _transform.a) {
+                _transform = CGAffineTransformIdentity;
+            }
+            else {
+                _transform.a = CGAffineTransformIdentity.a + (_transform.a - CGAffineTransformIdentity.a) * 0.9;
+                _transform.b = CGAffineTransformIdentity.b + (_transform.b - CGAffineTransformIdentity.b) * 0.9;
+                _transform.c = CGAffineTransformIdentity.c + (_transform.c - CGAffineTransformIdentity.c) * 0.9;
+                _transform.d = CGAffineTransformIdentity.d + (_transform.d - CGAffineTransformIdentity.d) * 0.9;
+                _transform.tx = CGAffineTransformIdentity.tx + (_transform.tx - CGAffineTransformIdentity.tx) * 0.9;
+                _transform.ty = CGAffineTransformIdentity.ty + (_transform.ty - CGAffineTransformIdentity.ty) * 0.9;
+            }
+            
+            needsDisplay = YES;
+        }
+        else if (3.0 < _transform.a) {
+            if (3.01 > _transform.a) {
+                _transform.a = 3.0;
+                _transform.d = 3.0;
+            }
+            else {
+                CGAffineTransform t = CGAffineTransformIdentity;
+                
+                CGSize size = self.bounds.size;
+                t = CGAffineTransformTranslate(t, size.width / 2.0 * _identityScale, size.height / 2.0 * _identityScale);
+                t = CGAffineTransformScale(t, 0.9, 0.9);
+                t = CGAffineTransformTranslate(t, -size.width / 2.0 * _identityScale, -size.height / 2.0 * _identityScale);
+                
+                _transform = CGAffineTransformConcat(_transform, t);
+            }
+            
+            needsDisplay = YES;
+        }
+        
+    }
+    
     if (needsDisplay) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
@@ -147,6 +187,7 @@ using namespace illustrace;
     if (UIGestureRecognizerStateBegan == sender.state) {
         _last.velocity = CGPointZero;
         _last.transform = _transform;
+        _panning = YES;
     }
     
     CGPoint translate = [sender translationInView:self];
@@ -155,37 +196,41 @@ using namespace illustrace;
     t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
     _transform = CGAffineTransformConcat(_last.transform, t);
     
-    [self setNeedsDisplay];
-    
     if (UIGestureRecognizerStateEnded == sender.state) {
         _last.velocity = [sender velocityInView:self];
+        _panning = NO;
     }
+    
+    [self setNeedsDisplay];
 }
 
 - (void)pinchGestureRecognizerAction:(UIPinchGestureRecognizer *)sender
 {
-    if (2 > sender.numberOfTouches) {
-        return;
-    }
-    
     if (UIGestureRecognizerStateBegan == sender.state) {
         _last.velocity = CGPointZero;
         _last.transform = _transform;
         _last.point = [sender locationInView:self];
+        _pinching = YES;
     }
     
-    CGPoint point = [sender locationInView:self];
-    CGPoint translate = {point.x - _last.point.x, point.y - _last.point.y};
+    if (1 < sender.numberOfTouches) {
+        CGPoint point = [sender locationInView:self];
+        CGPoint translate = {point.x - _last.point.x, point.y - _last.point.y};
+        
+        CGAffineTransform t = CGAffineTransformIdentity;
+        
+        t = CGAffineTransformTranslate(t, point.x * _identityScale, point.y * _identityScale);
+        t = CGAffineTransformScale(t, sender.scale, sender.scale);
+        t = CGAffineTransformTranslate(t, -point.x * _identityScale, -point.y * _identityScale);
+        
+        t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+        
+        _transform = CGAffineTransformConcat(_last.transform, t);
+    }
     
-    CGAffineTransform t = CGAffineTransformIdentity;
-    
-    t = CGAffineTransformTranslate(t, point.x * _identityScale, point.y * _identityScale);
-    t = CGAffineTransformScale(t, sender.scale, sender.scale);
-    t = CGAffineTransformTranslate(t, -point.x * _identityScale, -point.y * _identityScale);
-    
-    t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
-    
-    _transform = CGAffineTransformConcat(_last.transform, t);
+    if (UIGestureRecognizerStateEnded == sender.state) {
+        _pinching = NO;
+    }
     
     [self setNeedsDisplay];
 }
