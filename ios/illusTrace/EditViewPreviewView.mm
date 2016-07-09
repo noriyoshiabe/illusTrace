@@ -48,10 +48,7 @@ using namespace illustrace;
     [super layoutSubviews];
     
     auto contentRect = _document->contentRect();
-    CGFloat contentAspect = (CGFloat)contentRect.height / (CGFloat)contentRect.width;
-    CGFloat viewAspect = self.bounds.size.height / self.bounds.size.width;
-    
-    CGFloat scale = contentAspect < viewAspect ? self.bounds.size.height / contentRect.height : self.bounds.size.width / contentRect.width;
+    CGFloat scale = self.bounds.size.width / contentRect.width;
     CGAffineTransform scaleT = CGAffineTransformMakeScale(scale, scale);
     CGAffineTransform translationT = CGAffineTransformMakeTranslation((self.bounds.size.width - contentRect.width * scale) / 2.0, (self.bounds.size.height - contentRect.height * scale) / 2.0);
     
