@@ -9,6 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "Document.h"
 
+@class PreviewView;
+@protocol PreviewViewDelegate <NSObject>
+- (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;
+- (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;
+- (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;
+- (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;
+@end
+
 @interface PreviewView : UIView
+@property (assign, nonatomic) id<PreviewViewDelegate> delegate;
 @property (assign, nonatomic) illustrace::Document *document;
+@property (assign, nonatomic) BOOL scrollEnabled;
+@property (assign, nonatomic) BOOL zoomEnabled;
+@property (assign, nonatomic) BOOL touchCallbackEnabled;
+- (CGPoint)locationInDocument:(CGPoint)point;
 @end

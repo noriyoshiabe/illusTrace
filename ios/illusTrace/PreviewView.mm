@@ -24,6 +24,9 @@ using namespace illustrace;
     
     bool _panning;
     bool _pinching;
+    
+    UIPanGestureRecognizer *_panGestureRecognizer;
+    UIPinchGestureRecognizer *_pinchGestureRecognizer;
 }
 @end
 
@@ -33,11 +36,11 @@ using namespace illustrace;
 {
     [super awakeFromNib];
     
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizerAction:)];
-    [self addGestureRecognizer:panGestureRecognizer];
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizerAction:)];
+    [self addGestureRecognizer:_panGestureRecognizer];
     
-    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
-    [self addGestureRecognizer:pinchGestureRecognizer];
+    _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
+    [self addGestureRecognizer:_pinchGestureRecognizer];
 }
 
 - (void)layoutSubviews
@@ -214,6 +217,67 @@ using namespace illustrace;
             [self setNeedsDisplay];
         });
     }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    
+    if (_touchCallbackEnabled) {
+        [_delegate previewView:self touchesBegan:touches withEvent:event];
+    }
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    
+    if (_touchCallbackEnabled) {
+        [_delegate previewView:self touchesMoved:touches withEvent:event];
+    }
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    
+    if (_touchCallbackEnabled) {
+        [_delegate previewView:self touchesEnded:touches withEvent:event];
+    }
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+    
+    if (_touchCallbackEnabled) {
+        [_delegate previewView:self touchesCancelled:touches withEvent:event];
+    }
+}
+
+- (BOOL)scrollEnabled
+{
+    return _panGestureRecognizer.enabled;
+}
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled
+{
+    _panGestureRecognizer.enabled = scrollEnabled;
+}
+
+- (BOOL)zoomEnabled
+{
+    return _pinchGestureRecognizer.enabled;
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled
+{
+    _pinchGestureRecognizer.enabled = zoomEnabled;
+}
+
+- (CGPoint)locationInDocument:(CGPoint)point
+{
+    return CGPointApplyAffineTransform(point, CGAffineTransformInvert(_transform));
 }
 
 #pragma mark GestureRecognizer
