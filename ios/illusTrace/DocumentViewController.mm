@@ -1,27 +1,27 @@
 //
-//  EditViewController.mm
+//  DocumentViewController.mm
 //  illusTrace
 //
 //  Created by abechan on 2016/07/09.
 //  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
 //
 
-#import "EditViewController.h"
-#import "EditViewPreviewView.h"
+#import "DocumentViewController.h"
+#import "PreviewView.h"
 #import "NavigationController.h"
 
 using namespace illustrace;
 
-@interface EditViewController () <UINavigationBarDelegate>
-@property (weak, nonatomic) IBOutlet EditViewPreviewView *previewView;
+@interface DocumentViewController () <UINavigationBarDelegate>
+@property (weak, nonatomic) IBOutlet PreviewView *previewView;
 @end
 
-@implementation EditViewController
+@implementation DocumentViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //((NavigationController *)self.navigationController).navigationBarDelegate = self;
+    ((NavigationController *)self.navigationController).navigationBarDelegate = self;
     
     _previewView.document = _document;
 }

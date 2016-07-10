@@ -1,16 +1,16 @@
 //
-//  EditViewPreviewView.m
+//  PreviewView.m
 //  illusTrace
 //
 //  Created by abechan on 2016/07/09.
 //  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
 //
 
-#import "EditViewPreviewView.h"
+#import "PreviewView.h"
 
 using namespace illustrace;
 
-@interface EditViewPreviewView() {
+@interface PreviewView() {
     CGAffineTransform _identity;
     CGAffineTransform _transform;
     
@@ -27,7 +27,7 @@ using namespace illustrace;
 }
 @end
 
-@implementation EditViewPreviewView
+@implementation PreviewView
 
 - (void)awakeFromNib
 {

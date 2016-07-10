@@ -16,8 +16,8 @@
 		024188621D303AF80006C00B /* NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188611D303AF80006C00B /* NavigationBar.m */; };
 		024188651D3040BD0006C00B /* Slider.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188641D3040BD0006C00B /* Slider.m */; };
 		024188681D30470A0006C00B /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188671D30470A0006C00B /* Color.m */; };
-		0241886B1D305A0A0006C00B /* EditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0241886A1D305A0A0006C00B /* EditViewController.mm */; };
-		0241886F1D305DA60006C00B /* EditViewPreviewView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0241886E1D305DA60006C00B /* EditViewPreviewView.mm */; };
+		0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0241886A1D305A0A0006C00B /* DocumentViewController.mm */; };
+		0241886F1D305DA60006C00B /* PreviewView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0241886E1D305DA60006C00B /* PreviewView.mm */; };
 		024188731D30714B0006C00B /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188721D30714B0006C00B /* NavigationController.m */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
@@ -50,10 +50,10 @@
 		024188641D3040BD0006C00B /* Slider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Slider.m; sourceTree = "<group>"; };
 		024188661D30470A0006C00B /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		024188671D30470A0006C00B /* Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
-		024188691D305A0A0006C00B /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
-		0241886A1D305A0A0006C00B /* EditViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditViewController.mm; sourceTree = "<group>"; };
-		0241886D1D305DA60006C00B /* EditViewPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewPreviewView.h; sourceTree = "<group>"; };
-		0241886E1D305DA60006C00B /* EditViewPreviewView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditViewPreviewView.mm; sourceTree = "<group>"; };
+		024188691D305A0A0006C00B /* DocumentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentViewController.h; sourceTree = "<group>"; };
+		0241886A1D305A0A0006C00B /* DocumentViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentViewController.mm; sourceTree = "<group>"; };
+		0241886D1D305DA60006C00B /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
+		0241886E1D305DA60006C00B /* PreviewView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewView.mm; sourceTree = "<group>"; };
 		024188711D30714B0006C00B /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
 		024188721D30714B0006C00B /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
@@ -127,10 +127,10 @@
 				021D2F851D255034008CE5B0 /* AppDelegate.m */,
 				021D2F871D255034008CE5B0 /* CameraViewController.h */,
 				021D2F881D255034008CE5B0 /* CameraViewController.mm */,
-				024188691D305A0A0006C00B /* EditViewController.h */,
-				0241886A1D305A0A0006C00B /* EditViewController.mm */,
-				0241886D1D305DA60006C00B /* EditViewPreviewView.h */,
-				0241886E1D305DA60006C00B /* EditViewPreviewView.mm */,
+				024188691D305A0A0006C00B /* DocumentViewController.h */,
+				0241886A1D305A0A0006C00B /* DocumentViewController.mm */,
+				0241886D1D305DA60006C00B /* PreviewView.h */,
+				0241886E1D305DA60006C00B /* PreviewView.mm */,
 				021D2F8A1D255034008CE5B0 /* Main.storyboard */,
 				021D2F8D1D255034008CE5B0 /* Assets.xcassets */,
 				021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */,
@@ -265,14 +265,14 @@
 				024188731D30714B0006C00B /* NavigationController.m in Sources */,
 				021D2F891D255034008CE5B0 /* CameraViewController.mm in Sources */,
 				021D2F861D255034008CE5B0 /* AppDelegate.m in Sources */,
-				0241886F1D305DA60006C00B /* EditViewPreviewView.mm in Sources */,
+				0241886F1D305DA60006C00B /* PreviewView.mm in Sources */,
 				02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */,
 				024188681D30470A0006C00B /* Color.m in Sources */,
 				02A057B61D257DC000DD16B4 /* Log.cpp in Sources */,
 				02A057B01D257DC000DD16B4 /* Document.cpp in Sources */,
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
-				0241886B1D305A0A0006C00B /* EditViewController.mm in Sources */,
+				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,

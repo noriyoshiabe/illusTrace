@@ -1,5 +1,5 @@
 //
-//  EditViewController.h
+//  PreviewView.h
 //  illusTrace
 //
 //  Created by abechan on 2016/07/09.
@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Document.h"
 
-@interface EditViewController : UIViewController
+@interface PreviewView : UIView
 @property (assign, nonatomic) illustrace::Document *document;
 @end

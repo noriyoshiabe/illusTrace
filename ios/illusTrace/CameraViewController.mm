@@ -9,7 +9,7 @@
 #import "CameraViewController.h"
 #import "Illustrace.h"
 #import "Color.h"
-#import "EditViewController.h"
+#import "DocumentViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -147,7 +147,7 @@ using namespace illustrace;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"Edit"]) {
-        EditViewController *vc = segue.destinationViewController;
+        DocumentViewController *vc = segue.destinationViewController;
         vc.document = _document;
         _document = NULL;
     }
