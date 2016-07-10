@@ -8,12 +8,13 @@
 
 #import "DocumentViewController.h"
 #import "PreviewView.h"
-#import "NavigationController.h"
+#import "EditViewController.h"
 
 using namespace illustrace;
 
-@interface DocumentViewController () <UINavigationBarDelegate>
-@property (weak, nonatomic) IBOutlet PreviewView *previewView;
+@interface DocumentViewController ()
+@property (strong, nonatomic) EditViewController *editorViewController;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *retakeButton;
 @end
 
 @implementation DocumentViewController
@@ -21,9 +22,14 @@ using namespace illustrace;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    ((NavigationController *)self.navigationController).navigationBarDelegate = self;
     
-    _previewView.document = _document;
+    _editorViewController = [EditViewController new];
+    _editorViewController.document = _document;
+    _editorViewController.view.frame = self.view.bounds;
+    [self.view addSubview:_editorViewController.view];
+    
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItems = @[_retakeButton];
 }
 
 - (void)didReceiveMemoryWarning
@@ -32,19 +38,9 @@ using namespace illustrace;
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
+- (IBAction)retakeButtonAction:(id)sender
 {
-    return YES;
+    [self.navigationController popViewControllerAnimated:YES];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

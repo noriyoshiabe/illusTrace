@@ -105,32 +105,25 @@
                     <view key="view" contentMode="scaleToFill" id="yle-k3-3wN">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ik2-aR-VEW" customClass="PreviewView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="top" secondItem="yle-k3-3wN" secondAttribute="topMargin" id="eyg-bX-PYO"/>
-                            <constraint firstItem="Ik2-aR-VEW" firstAttribute="left" secondItem="yle-k3-3wN" secondAttribute="left" id="gog-bJ-hwo"/>
-                            <constraint firstAttribute="right" secondItem="Ik2-aR-VEW" secondAttribute="right" id="hvk-HP-XyV"/>
-                            <constraint firstItem="X6u-X8-MJW" firstAttribute="top" secondItem="Ik2-aR-VEW" secondAttribute="bottom" id="kSi-0y-dxO"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="previewView" destination="Ik2-aR-VEW" id="glH-Ug-ajS"/>
+                        <outlet property="retakeButton" destination="67n-QS-OgP" id="nmU-Yn-ODq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Gb-Nd-iyS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Retake" id="67n-QS-OgP">
+                    <connections>
+                        <action selector="retakeButtonAction:" destination="4Vf-B6-zVR" id="Iap-pj-ZHm"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1861" y="321"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="R0P-Zg-ulq">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rN8-yy-3cY" customClass="NavigationController" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rN8-yy-3cY" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2GU-yv-IsJ" customClass="NavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
