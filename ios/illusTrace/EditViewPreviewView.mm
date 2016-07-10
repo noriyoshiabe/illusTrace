@@ -12,13 +12,12 @@ using namespace illustrace;
 
 @interface EditViewPreviewView() {
     CGAffineTransform _identity;
-    CGFloat _identityScale;
-    
     CGAffineTransform _transform;
     
     struct {
         CGAffineTransform transform;
         CGPoint point;
+        CGPoint pinchCenter;
         CGPoint velocity;
         CFAbsoluteTime time;
     } _last;
@@ -39,8 +38,6 @@ using namespace illustrace;
     
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognizerAction:)];
     [self addGestureRecognizer:pinchGestureRecognizer];
-    
-    _transform = CGAffineTransformIdentity;
 }
 
 - (void)layoutSubviews
@@ -53,13 +50,12 @@ using namespace illustrace;
     CGAffineTransform translationT = CGAffineTransformMakeTranslation((self.bounds.size.width - contentRect.width * scale) / 2.0, (self.bounds.size.height - contentRect.height * scale) / 2.0);
     
     _identity = CGAffineTransformConcat(scaleT, translationT);
-    _identityScale = 1.0 / scale;
+    _transform = _identity;
 }
 
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextConcatCTM(context, _identity);
     CGContextConcatCTM(context, _transform);
     
     [self drawPaths:context];
@@ -121,46 +117,50 @@ using namespace illustrace;
 {
     bool needsDisplay = NO;
     
-    if (1 <= _last.velocity.x || 1 <= _last.velocity.y) {
+    if (1 <= fabs(_last.velocity.x) || 1 <= fabs(_last.velocity.y)) {
+        const CGFloat VELOCITY_DECAY = 0.9;
+        
         CGFloat f = (CGFloat)delta / 1.0;
         
         CGAffineTransform t = CGAffineTransformMakeTranslation(_last.velocity.x * f, _last.velocity.y * f);
         _transform = CGAffineTransformConcat(_transform, t);
         
-        _last.velocity.x *= 0.95;
-        _last.velocity.y *= 0.95;
+        _last.velocity.x *= VELOCITY_DECAY;
+        _last.velocity.y *= VELOCITY_DECAY;
         
         needsDisplay = YES;
     }
     
+    CGAffineTransform normlized = CGAffineTransformConcat(_transform, CGAffineTransformInvert(_identity));
+    
     if (!_pinching) {
-        if (1.0 > _transform.a) {
-            if (0.99 < _transform.a) {
-                _transform = CGAffineTransformIdentity;
+        const CGFloat SCALE_DECAY = 0.9;
+        
+        if (1.0 > normlized.a) {
+            if (0.99 < normlized.a) {
+                _transform = _identity;
             }
             else {
-                _transform.a = CGAffineTransformIdentity.a + (_transform.a - CGAffineTransformIdentity.a) * 0.9;
-                _transform.b = CGAffineTransformIdentity.b + (_transform.b - CGAffineTransformIdentity.b) * 0.9;
-                _transform.c = CGAffineTransformIdentity.c + (_transform.c - CGAffineTransformIdentity.c) * 0.9;
-                _transform.d = CGAffineTransformIdentity.d + (_transform.d - CGAffineTransformIdentity.d) * 0.9;
-                _transform.tx = CGAffineTransformIdentity.tx + (_transform.tx - CGAffineTransformIdentity.tx) * 0.9;
-                _transform.ty = CGAffineTransformIdentity.ty + (_transform.ty - CGAffineTransformIdentity.ty) * 0.9;
+                _transform.a = _identity.a + (_transform.a - _identity.a) * SCALE_DECAY;
+                _transform.b = _identity.b + (_transform.b - _identity.b) * SCALE_DECAY;
+                _transform.c = _identity.c + (_transform.c - _identity.c) * SCALE_DECAY;
+                _transform.d = _identity.d + (_transform.d - _identity.d) * SCALE_DECAY;
+                _transform.tx = _identity.tx + (_transform.tx - _identity.tx) * SCALE_DECAY;
+                _transform.ty = _identity.ty + (_transform.ty - _identity.ty) * SCALE_DECAY;
             }
             
             needsDisplay = YES;
         }
-        else if (3.0 < _transform.a) {
-            if (3.01 > _transform.a) {
-                _transform.a = 3.0;
-                _transform.d = 3.0;
+        else if (3.0 < normlized.a) {
+            if (3.01 > normlized.a) {
+                _transform.a = _identity.a * 3.0;
+                _transform.d = _identity.d * 3.0;
             }
             else {
                 CGAffineTransform t = CGAffineTransformIdentity;
-                
-                CGSize size = self.bounds.size;
-                t = CGAffineTransformTranslate(t, size.width / 2.0 * _identityScale, size.height / 2.0 * _identityScale);
-                t = CGAffineTransformScale(t, 0.9, 0.9);
-                t = CGAffineTransformTranslate(t, -size.width / 2.0 * _identityScale, -size.height / 2.0 * _identityScale);
+                t = CGAffineTransformTranslate(t, _last.point.x, _last.point.y);
+                t = CGAffineTransformScale(t, SCALE_DECAY, SCALE_DECAY);
+                t = CGAffineTransformTranslate(t, -_last.point.x, -_last.point.y);
                 
                 _transform = CGAffineTransformConcat(_transform, t);
             }
@@ -169,43 +169,41 @@ using namespace illustrace;
         }
     }
     
-    if (!_panning && 1.0 <= _transform.a) {
-        CGAffineTransform t = CGAffineTransformConcat(_identity, _transform);
-        CGPoint topLeft = CGPointApplyAffineTransform(CGPointZero, t);
+    if (!_panning && 1.0 <= normlized.a) {
+        const CGFloat SCROLL_DECAY = 0.8;
         
         auto contentRect = _document->contentRect();
-        CGFloat width = self.bounds.size.width;
-        CGFloat height = width * ((CGFloat)contentRect.height / (CGFloat) contentRect.width);
-        CGPoint bottomRight = CGPointApplyAffineTransform(CGPointMake(contentRect.width * _identityScale, contentRect.height * _identityScale), t);
+        CGPoint topLeft = CGPointApplyAffineTransform(CGPointZero, _transform);
+        CGPoint bottomRight = CGPointApplyAffineTransform(CGPointMake(contentRect.width, contentRect.height), _transform);
         
-        topLeft.x /= _identityScale;
-        topLeft.y /= _identityScale;
-        bottomRight.x /= _identityScale;
-        bottomRight.y /= _identityScale;
-        
-        NSLog(@"### [%f:%f, %d:%d]  %f %f %f %f", width, height, contentRect.width, contentRect.height,
-              topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
-        
+        CGFloat height1x = self.bounds.size.width * ((CGFloat)contentRect.height / (CGFloat)contentRect.width);
+        CGFloat top = MAX(0.0, self.center.y - height1x / 2.0 * normlized.a);
+        CGFloat left = 0.0;
+        CGFloat right = self.bounds.size.width;
+        CGFloat bottom = MIN(self.bounds.size.height, self.center.y + height1x / 2.0 * normlized.a);
         
         CGPoint translate = CGPointZero;
         
-        if (0 < topLeft.x) {
-            translate.x = 0.01 > topLeft.x ? topLeft.x * -1.0 : topLeft.x * -0.1;
+        if (left < topLeft.x) {
+            CGFloat decay = left + 0.01 > topLeft.x ? 1.0 : 1.0 - SCROLL_DECAY;
+            translate.x = (left - topLeft.x) * decay;
         }
-        else if (width > bottomRight.x) {
-            translate.x = 0.01 > width - bottomRight.x ? width - bottomRight.x : (width - bottomRight.x) * 0.1;
+        else if (right > bottomRight.x) {
+            CGFloat decay = right - 0.01 < bottomRight.x ? 1.0 : 1.0 - SCROLL_DECAY;
+            translate.x = (right - bottomRight.x) * decay;
         }
         
-        if (0 < topLeft.y) {
-            translate.y = 0.01 > topLeft.y ? topLeft.y * -1.0 : topLeft.y * -0.1;
+        if (top < topLeft.y) {
+            CGFloat decay = top + 0.01 > topLeft.y ? 1.0 : 1.0 - SCROLL_DECAY;
+            translate.y = (top - topLeft.y) * decay;
         }
-        else if (height > bottomRight.y) {
-            translate.y = 0.01 > height - bottomRight.y ? height - bottomRight.y : (height - bottomRight.y) * 0.1;
+        else if (bottom > bottomRight.y) {
+            CGFloat decay = bottom - 0.01 < bottomRight.y ? 1.0 : 1.0 - SCROLL_DECAY;
+            translate.y = (bottom - bottomRight.y) * decay;
         }
         
         if (!CGPointEqualToPoint(translate, CGPointZero)) {
-            CGAffineTransform t = CGAffineTransformIdentity;
-            t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+            CGAffineTransform t = CGAffineTransformMakeTranslation(translate.x, translate.y);
             _transform = CGAffineTransformConcat(_transform, t);
             needsDisplay = YES;
         }
@@ -229,9 +227,7 @@ using namespace illustrace;
     }
     
     CGPoint translate = [sender translationInView:self];
-    
-    CGAffineTransform t = CGAffineTransformIdentity;
-    t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+    CGAffineTransform t = CGAffineTransformMakeTranslation(translate.x, translate.y);
     _transform = CGAffineTransformConcat(_last.transform, t);
     
     if (UIGestureRecognizerStateEnded == sender.state) {
@@ -256,14 +252,13 @@ using namespace illustrace;
         CGPoint translate = {point.x - _last.point.x, point.y - _last.point.y};
         
         CGAffineTransform t = CGAffineTransformIdentity;
-        
-        t = CGAffineTransformTranslate(t, point.x * _identityScale, point.y * _identityScale);
+        t = CGAffineTransformTranslate(t, point.x, point.y);
         t = CGAffineTransformScale(t, sender.scale, sender.scale);
-        t = CGAffineTransformTranslate(t, -point.x * _identityScale, -point.y * _identityScale);
-        
-        t = CGAffineTransformTranslate(t, translate.x * _identityScale, translate.y * _identityScale);
+        t = CGAffineTransformTranslate(t, -point.x, -point.y);
+        t = CGAffineTransformTranslate(t, translate.x, translate.y);
         
         _transform = CGAffineTransformConcat(_last.transform, t);
+        _last.pinchCenter = point;
     }
     
     if (UIGestureRecognizerStateEnded == sender.state) {
