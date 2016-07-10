@@ -114,7 +114,10 @@ using namespace illustrace;
 {
     AVCaptureConnection *videoConnection = [_stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
     if (videoConnection) {
+        [UIApplication.sharedApplication beginIgnoringInteractionEvents];
+        
         [_stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+            
             if (imageDataSampleBuffer) {
                 CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
                 CVPixelBufferLockBaseAddress(pixelBuffer, 0);
@@ -140,6 +143,8 @@ using namespace illustrace;
                 
                 [self performSegueWithIdentifier:@"Edit" sender:self];
             }
+            
+            [UIApplication.sharedApplication endIgnoringInteractionEvents];
         }];
     }
 }
