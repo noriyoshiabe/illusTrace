@@ -115,32 +115,32 @@ using namespace illustrace;
     AVCaptureConnection *videoConnection = [_stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
     if (videoConnection) {
         [_stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-             if (imageDataSampleBuffer) {
-                 CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
-                 CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-                 
-                 uint8_t *grayImage = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
-                 size_t width = CVPixelBufferGetWidth(pixelBuffer);
-                 size_t height = CVPixelBufferGetHeight(pixelBuffer);
-                 cv::Mat sourceImage((int)height, (int)width, CV_8U, grayImage, width);
-                 
-                 int resizedCols = round(1000.0 * ((CGFloat)width / (CGFloat)height));
-                 cv::Mat resizedImage = cv::Mat::ones(1000, resizedCols, CV_8U);
-                 cv::resize(sourceImage, resizedImage, resizedImage.size(), cv::INTER_CUBIC);
-                 cv::transpose(resizedImage, resizedImage);
-                 cv::flip(resizedImage, resizedImage, 1);
-                 
-                 CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-                 
-                 _document = new Document();
-                 _document->brightness(_brightnessSlider.value);
-                 _document->negative(_negative);
-                 
-                 _illustrace.traceFromImage(resizedImage, _document);
-                 
-                 [self performSegueWithIdentifier:@"Edit" sender:self];
-             }
-         }];
+            if (imageDataSampleBuffer) {
+                CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
+                CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+                
+                uint8_t *grayImage = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                size_t width = CVPixelBufferGetWidth(pixelBuffer);
+                size_t height = CVPixelBufferGetHeight(pixelBuffer);
+                cv::Mat sourceImage((int)height, (int)width, CV_8U, grayImage, width);
+                
+                int resizedCols = round(1000.0 * ((CGFloat)width / (CGFloat)height));
+                cv::Mat resizedImage = cv::Mat::ones(1000, resizedCols, CV_8U);
+                cv::resize(sourceImage, resizedImage, resizedImage.size(), cv::INTER_CUBIC);
+                cv::transpose(resizedImage, resizedImage);
+                cv::flip(resizedImage, resizedImage, 1);
+                
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                
+                _document = new Document();
+                _document->brightness(_brightnessSlider.value);
+                _document->negative(_negative);
+                
+                _illustrace.traceFromImage(resizedImage, _document);
+                
+                [self performSegueWithIdentifier:@"Edit" sender:self];
+            }
+        }];
     }
 }
 
