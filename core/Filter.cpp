@@ -6,9 +6,15 @@ void Filter::brightness(cv::Mat &image, double brightness, double contrast)
 {
     brightness *= 255.0;
 
-    int length = image.rows * image.cols;
-    for (int i = 0; i < length; ++i) {
-        image.data[i] = cv::saturate_cast<uchar>(contrast * image.data[i] + brightness);
+    uchar *data = image.data;
+    size_t step = image.step[0];
+    
+    for (int j = 0; j < image.rows; ++j) {
+        data += step;
+        
+        for (int i = 0; i < step; ++i) {
+            data[i] = cv::saturate_cast<uchar>(contrast * data[i] + brightness);
+        }
     }
 }
 
@@ -16,11 +22,17 @@ void Filter::brightnessBGRA(cv::Mat &image, double brightness, double contrast)
 {
     brightness *= 255.0;
 
-    int length = image.rows * image.cols * 4;
-    for (int i = 0; i < length; i += 4) {
-        image.data[i+0] = cv::saturate_cast<uchar>(contrast * image.data[i+0] + brightness);
-        image.data[i+1] = cv::saturate_cast<uchar>(contrast * image.data[i+1] + brightness);
-        image.data[i+2] = cv::saturate_cast<uchar>(contrast * image.data[i+2] + brightness);
+    uchar *data = image.data;
+    size_t step = image.step[0];
+    
+    for (int j = 0; j < image.rows; ++j) {
+        data += step;
+        
+        for (int i = 0; i < step; i += 4) {
+            data[i+0] = cv::saturate_cast<uchar>(contrast * data[i+0] + brightness);
+            data[i+1] = cv::saturate_cast<uchar>(contrast * data[i+1] + brightness);
+            data[i+2] = cv::saturate_cast<uchar>(contrast * data[i+2] + brightness);
+        }
     }
 }
 
@@ -36,8 +48,14 @@ void Filter::threshold(cv::Mat &image)
 
 void Filter::negative(cv::Mat &image)
 {
-    int length = image.rows * image.cols;
-    for (int i = 0; i < length; ++i) {
-        image.data[i] = 255 - image.data[i];
+    uchar *data = image.data;
+    size_t step = image.step[0];
+    
+    for (int j = 0; j < image.rows; ++j) {
+        data += step;
+        
+        for (int i = 0; i < step; ++i) {
+            data[i] = 255 - data[i];
+        }
     }
 }
