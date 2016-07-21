@@ -1,0 +1,28 @@
+//
+//  illusTrace-Prefix.pch
+//  illusTrace
+//
+//  Created by abechan on 2016/07/22.
+//  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
+//
+
+#ifndef illusTrace_Prefix_pch
+#define illusTrace_Prefix_pch
+
+#ifdef __OBJC__
+
+#import <Foundation/Foundation.h>
+
+#undef NSLocalizedString
+#define NSLocalizedString(key, comment) \
+[[NSBundle mainBundle] localizedStringForKey:(key) value:(comment) table:nil]
+
+#ifdef DEBUG
+#define __Trace__ NSLog(@"%s - %d", __func__, __LINE__);
+#else
+#define __Trace__
+#endif
+
+#endif /* __OBJC__ */
+
+#endif /* illusTrace_Prefix_pch */
