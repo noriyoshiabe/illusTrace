@@ -26,17 +26,41 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="p5v-eN-9LT"/>
-                        <barButtonItem image="undo" id="Dtc-vp-G5H"/>
+                        <barButtonItem image="undo" id="Dtc-vp-G5H">
+                            <connections>
+                                <action selector="undoAction:" destination="-1" id="QOl-bM-RpE"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="zfE-rH-dsU"/>
-                        <barButtonItem image="redo" id="qvh-XG-LAl"/>
+                        <barButtonItem image="redo" id="qvh-XG-LAl">
+                            <connections>
+                                <action selector="redoAction:" destination="-1" id="A1j-gj-87x"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="4kg-DL-hDF"/>
-                        <barButtonItem image="shape" id="fj4-dU-nXJ"/>
+                        <barButtonItem image="shape" id="fj4-dU-nXJ">
+                            <connections>
+                                <action selector="shapeAction:" destination="-1" id="M3e-HK-nVL"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="UCh-pB-705"/>
-                        <barButtonItem image="background" id="0Lk-dV-43m"/>
+                        <barButtonItem image="background" id="0Lk-dV-43m">
+                            <connections>
+                                <action selector="backgroundAction:" destination="-1" id="ANh-KE-Phv"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="CBY-Qp-tVR"/>
-                        <barButtonItem image="brush" id="Bje-ok-msM"/>
+                        <barButtonItem image="brush" id="Bje-ok-msM">
+                            <connections>
+                                <action selector="brushAction:" destination="-1" id="Tw3-qT-njs"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="lID-dz-EpX"/>
-                        <barButtonItem image="trimming" id="E19-bH-mBC"/>
+                        <barButtonItem image="trimming" id="E19-bH-mBC">
+                            <connections>
+                                <action selector="trimmingAction:" destination="-1" id="3lp-Gq-OVZ"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="rFb-bn-akM"/>
                     </items>
                 </toolbar>

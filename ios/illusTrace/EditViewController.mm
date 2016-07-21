@@ -34,6 +34,38 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark Toolabar actions
+
+- (IBAction)undoAction:(id)sender
+{
+    __Trace__
+}
+
+- (IBAction)redoAction:(id)sender
+{
+    __Trace__
+}
+
+- (IBAction)shapeAction:(id)sender
+{
+    __Trace__
+}
+
+- (IBAction)backgroundAction:(id)sender
+{
+    __Trace__
+}
+
+- (IBAction)brushAction:(id)sender
+{
+    __Trace__
+}
+
+- (IBAction)trimmingAction:(id)sender
+{
+    __Trace__
+}
+
 #pragma mark PreviewViewDelegate
 
 - (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
