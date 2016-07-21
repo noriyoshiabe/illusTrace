@@ -24,6 +24,7 @@
 		025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */; };
 		025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */; };
 		025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F2D1D41440200666AC9 /* TouchThroughView.m */; };
+		0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
 		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
@@ -71,6 +72,7 @@
 		025B2F2C1D41440200666AC9 /* TouchThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchThroughView.h; sourceTree = "<group>"; };
 		025B2F2D1D41440200666AC9 /* TouchThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchThroughView.m; sourceTree = "<group>"; };
 		029957861D416E3A008A3F34 /* DocumentObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentObserver.h; sourceTree = "<group>"; };
+		0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PaintMaskBuilder.mm; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
@@ -188,9 +190,18 @@
 			path = Component;
 			sourceTree = "<group>";
 		};
+		029957891D417486008A3F34 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
 		02A057911D257DBF00DD16B4 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				029957891D417486008A3F34 /* ios */,
 				02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */,
 				02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */,
 				02A057971D257DBF00DD16B4 /* Document.cpp */,
@@ -299,6 +310,7 @@
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
 				02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
+				0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */,
 				025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */,
 				025B2F211D4135B900666AC9 /* Toolbar.m in Sources */,
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
