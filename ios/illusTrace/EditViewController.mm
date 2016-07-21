@@ -10,6 +10,8 @@
 #import "PreviewView.h"
 
 @interface EditViewController () <PreviewViewDelegate>
+@property (weak, nonatomic) IBOutlet PreviewView *previewView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @end
 
 @implementation EditViewController
@@ -17,22 +19,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.preview.document = _document;
-    self.preview.delegate = self;
-//    self.preview.scrollEnabled = NO;
-//    self.preview.zoomEnabled = NO;
-//    self.preview.touchCallbackEnabled = YES;
+    _previewView.document = _document;
+    _previewView.delegate = self;
+    
+    _previewView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tile"]];
+//    _previewView.scrollEnabled = NO;
+//    _previewView.zoomEnabled = NO;
+//    _previewView.touchCallbackEnabled = YES;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (PreviewView *)preview
-{
-    return (PreviewView *)self.view;
 }
 
 #pragma mark PreviewViewDelegate

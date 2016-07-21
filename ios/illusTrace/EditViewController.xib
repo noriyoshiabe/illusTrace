@@ -7,14 +7,59 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditViewController">
             <connections>
+                <outlet property="previewView" destination="h27-oC-Kj9" id="LuN-eO-kov"/>
+                <outlet property="toolbar" destination="5zj-Cx-wOa" id="KaX-es-eJV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" customClass="PreviewView">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h27-oC-Kj9" customClass="PreviewView">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5zj-Cx-wOa" customClass="Toolbar">
+                    <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="p5v-eN-9LT"/>
+                        <barButtonItem image="undo" id="Dtc-vp-G5H"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zfE-rH-dsU"/>
+                        <barButtonItem image="redo" id="qvh-XG-LAl"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="4kg-DL-hDF"/>
+                        <barButtonItem image="shape" id="fj4-dU-nXJ"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="UCh-pB-705"/>
+                        <barButtonItem image="background" id="0Lk-dV-43m"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="CBY-Qp-tVR"/>
+                        <barButtonItem image="brush" id="Bje-ok-msM"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="lID-dz-EpX"/>
+                        <barButtonItem image="trimming" id="E19-bH-mBC"/>
+                        <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="rFb-bn-akM"/>
+                    </items>
+                </toolbar>
+            </subviews>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="5zj-Cx-wOa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="1An-aN-qwB"/>
+                <constraint firstAttribute="trailing" secondItem="5zj-Cx-wOa" secondAttribute="trailing" id="3SD-2z-bMS"/>
+                <constraint firstItem="h27-oC-Kj9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="A5l-iU-PLG"/>
+                <constraint firstAttribute="bottom" secondItem="h27-oC-Kj9" secondAttribute="bottom" id="B9O-q0-vFs"/>
+                <constraint firstAttribute="trailing" secondItem="h27-oC-Kj9" secondAttribute="trailing" id="edF-1u-nq4"/>
+                <constraint firstAttribute="bottom" secondItem="5zj-Cx-wOa" secondAttribute="bottom" id="lkf-Gj-Iew"/>
+                <constraint firstItem="h27-oC-Kj9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sn5-Xw-4hg"/>
+            </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="background" width="21" height="21"/>
+        <image name="brush" width="22" height="22"/>
+        <image name="redo" width="22" height="22"/>
+        <image name="shape" width="22" height="22"/>
+        <image name="trimming" width="21" height="21"/>
+        <image name="undo" width="22" height="22"/>
+    </resources>
 </document>

@@ -20,6 +20,7 @@
 		0241886F1D305DA60006C00B /* PreviewView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0241886E1D305DA60006C00B /* PreviewView.mm */; };
 		02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02425BAE1D329C5E0063B409 /* EditViewController.mm */; };
 		02425BB11D329C5E0063B409 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02425BAF1D329C5E0063B409 /* EditViewController.xib */; };
+		025B2F211D4135B900666AC9 /* Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F201D4135B900666AC9 /* Toolbar.m */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
 		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
@@ -58,6 +59,8 @@
 		02425BAD1D329C5E0063B409 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
 		02425BAE1D329C5E0063B409 /* EditViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditViewController.mm; sourceTree = "<group>"; };
 		02425BAF1D329C5E0063B409 /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
+		025B2F1F1D4135B900666AC9 /* Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbar.h; sourceTree = "<group>"; };
+		025B2F201D4135B900666AC9 /* Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Toolbar.m; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
@@ -162,6 +165,8 @@
 				024188641D3040BD0006C00B /* Slider.m */,
 				024188661D30470A0006C00B /* Color.h */,
 				024188671D30470A0006C00B /* Color.m */,
+				025B2F1F1D4135B900666AC9 /* Toolbar.h */,
+				025B2F201D4135B900666AC9 /* Toolbar.m */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -276,6 +281,7 @@
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
 				02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
+				025B2F211D4135B900666AC9 /* Toolbar.m in Sources */,
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
