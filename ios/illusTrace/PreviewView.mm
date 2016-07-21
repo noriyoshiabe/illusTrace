@@ -29,7 +29,7 @@ using namespace illustrace;
     UIPanGestureRecognizer *_panGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
     
-    DocumentObserverBridge documentObserverbridge;
+    DocumentObserverBridge _documentObserverbridge;
 }
 @end
 
@@ -58,7 +58,8 @@ using namespace illustrace;
     _identity = CGAffineTransformConcat(scaleT, translationT);
     _transform = _identity;
     
-    documentObserverbridge.observer = self;
+    _documentObserverbridge.observer = self;
+    _document->addObserver(&_documentObserverbridge);
 }
 
 - (void)drawRect:(CGRect)rect

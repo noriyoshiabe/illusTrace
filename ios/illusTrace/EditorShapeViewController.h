@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EditorShapeViewController : UIViewController
+#import "Editor.h"
 
+@interface EditorShapeViewController : UIViewController
+@property (assign, nonatomic) illustrace::Editor *editor;
 @end

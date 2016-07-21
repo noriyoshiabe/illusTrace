@@ -8,11 +8,13 @@
 
 #import "EditorShapeViewController.h"
 #import "DocumentObserver.h"
+#import "EditorObderver.h"
 
 using namespace illustrace;
 
-@interface EditorShapeViewController () <DocumentObserver> {
-    DocumentObserverBridge documentObserverBridge;
+@interface EditorShapeViewController () <DocumentObserver, EditorObserver> {
+    DocumentObserverBridge _documentObserverBridge;
+    EditorObserverBridge _editorObserverBridge;
 }
 
 @property (weak, nonatomic) IBOutlet UISlider *detailSlider;
@@ -24,7 +26,11 @@ using namespace illustrace;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    documentObserverBridge.observer = self;
+    
+    _editorObserverBridge.observer = self;
+    _documentObserverBridge.observer = self;
+    _editor->addObserver(&_editorObserverBridge);
+    _editor->document->addObserver(&_documentObserverBridge);
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,12 +68,12 @@ using namespace illustrace;
 
 - (IBAction)detailSliderAction:(id)sender
 {
-    __Trace__
+    _editor->detail(_detailSlider.value);
 }
 
 - (IBAction)thicknessSliderAction:(id)sender
 {
-    __Trace__
+    _editor->thickness(_thicknessSlider.value);
 }
 
 #pragma mark DocumentObserver
@@ -86,6 +92,13 @@ using namespace illustrace;
         default:
             break;
     }
+}
+
+#pragma mark EditorObserver
+
+- (void)editor:(Editor *)editor notify:(va_list)argList
+{
+    // TODO
 }
 
 @end

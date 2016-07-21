@@ -73,6 +73,7 @@
 		025B2F2D1D41440200666AC9 /* TouchThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchThroughView.m; sourceTree = "<group>"; };
 		029957861D416E3A008A3F34 /* DocumentObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentObserver.h; sourceTree = "<group>"; };
 		0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PaintMaskBuilder.mm; sourceTree = "<group>"; };
+		0299578C1D417A8A008A3F34 /* EditorObderver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditorObderver.h; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 				021D2F841D255034008CE5B0 /* AppDelegate.h */,
 				021D2F851D255034008CE5B0 /* AppDelegate.m */,
 				029957861D416E3A008A3F34 /* DocumentObserver.h */,
+				0299578C1D417A8A008A3F34 /* EditorObderver.h */,
 				021D2F871D255034008CE5B0 /* CameraViewController.h */,
 				021D2F881D255034008CE5B0 /* CameraViewController.mm */,
 				024188691D305A0A0006C00B /* DocumentViewController.h */,

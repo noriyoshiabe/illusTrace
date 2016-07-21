@@ -9,8 +9,18 @@
 #import "EditViewController.h"
 #import "PreviewView.h"
 #import "EditorShapeViewController.h"
+#import "Illustrace.h"
+#import "Editor.h"
+#import "EditorObderver.h"
 
-@interface EditViewController () <PreviewViewDelegate>
+using namespace illustrace;
+
+@interface EditViewController () <PreviewViewDelegate, EditorObserver> {
+    Illustrace _illustrace;
+    Editor *_editor;
+    
+    EditorObserverBridge _editorObserverBridge;
+}
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) EditorShapeViewController *shapeVC;
@@ -27,7 +37,12 @@
     
     _previewView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tile"]];
     
+    _editor = new Editor(&_illustrace, _document);
+    _editor->addObserver(&_editorObserverBridge);
+    _editorObserverBridge.observer = self;
+    
     _shapeVC = [EditorShapeViewController new];
+    _shapeVC.editor = _editor;
     _shapeVC.view.frame = _paletContainer.bounds;
     [_paletContainer addSubview:_shapeVC.view];
     
@@ -42,16 +57,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)update
+{
+    // TODO;
+}
+
 #pragma mark Toolbar actions
 
 - (IBAction)undoAction:(id)sender
 {
-    __Trace__
+    _editor->undo();
 }
 
 - (IBAction)redoAction:(id)sender
 {
-    __Trace__
+    _editor->redo();
 }
 
 - (IBAction)shapeAction:(id)sender
@@ -98,6 +118,13 @@
 {
     CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
     printf("%s %f %f\n", __func__, point.x, point.y);
+}
+
+#pragma mark EditorObserver
+
+- (void)editor:(Editor *)editor notify:(va_list)argList
+{
+    // TODO
 }
 
 @end
