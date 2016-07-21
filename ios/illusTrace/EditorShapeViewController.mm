@@ -7,8 +7,14 @@
 //
 
 #import "EditorShapeViewController.h"
+#import "DocumentObserver.h"
 
-@interface EditorShapeViewController ()
+using namespace illustrace;
+
+@interface EditorShapeViewController () <DocumentObserver> {
+    DocumentObserverBridge documentObserverBridge;
+}
+
 @property (weak, nonatomic) IBOutlet UISlider *detailSlider;
 @property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @end
@@ -18,7 +24,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    documentObserverBridge.observer = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,6 +68,24 @@
 - (IBAction)thicknessSliderAction:(id)sender
 {
     __Trace__
+}
+
+#pragma mark DocumentObserver
+
+- (void)document:(illustrace::Document *)document notify:(va_list)argList
+{
+    Document::Event event = static_cast<Document::Event>(va_arg(argList, int));
+    
+    switch (event) {
+        case Document::Event::Detail:
+            _detailSlider.value = document->detail();
+            break;
+        case Document::Event::Thickness:
+            _thicknessSlider.value = document->thickness();
+            break;
+        default:
+            break;
+    }
 }
 
 @end

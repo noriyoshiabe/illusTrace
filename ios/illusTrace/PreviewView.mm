@@ -7,10 +7,11 @@
 //
 
 #import "PreviewView.h"
+#import "DocumentObserver.h"
 
 using namespace illustrace;
 
-@interface PreviewView() {
+@interface PreviewView() <DocumentObserver> {
     CGAffineTransform _identity;
     CGAffineTransform _transform;
     
@@ -27,6 +28,8 @@ using namespace illustrace;
     
     UIPanGestureRecognizer *_panGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    
+    DocumentObserverBridge documentObserverbridge;
 }
 @end
 
@@ -54,6 +57,8 @@ using namespace illustrace;
     
     _identity = CGAffineTransformConcat(scaleT, translationT);
     _transform = _identity;
+    
+    documentObserverbridge.observer = self;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -330,6 +335,26 @@ using namespace illustrace;
     }
     
     [self setNeedsDisplay];
+}
+
+#pragma mark DocumentObserver
+
+- (void)document:(Document *)document notify:(va_list)argList
+{
+    Document::Event event = static_cast<Document::Event>(va_arg(argList, int));
+    
+    switch (event) {
+        case Document::Event::Thickness:
+        case Document::Event::Color:
+        case Document::Event::BackgroundColor:
+        case Document::Event::BackgroundEnable:
+        case Document::Event::Paths:
+        case Document::Event::PaintPaths:
+            [self setNeedsDisplay];
+            break;
+        default:
+            break;
+    }
 }
 
 @end
