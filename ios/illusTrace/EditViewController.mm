@@ -15,7 +15,7 @@
 
 using namespace illustrace;
 
-@interface EditViewController () <PreviewViewDelegate, EditorObserver> {
+@interface EditViewController () <EditorObserver> {
     Illustrace _illustrace;
     Editor *_editor;
     
@@ -23,8 +23,14 @@ using namespace illustrace;
 }
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (strong, nonatomic) EditorShapeViewController *shapeVC;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *undoButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *redoButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *backgroundButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *brushButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *trimmingButtonItem;
 @property (weak, nonatomic) IBOutlet UIView *paletContainer;
+@property (weak, nonatomic) UIViewController *activePaletVC;
+@property (strong, nonatomic) EditorShapeViewController *shapeVC;
 @end
 
 @implementation EditViewController
@@ -33,8 +39,6 @@ using namespace illustrace;
 {
     [super viewDidLoad];
     _previewView.document = _document;
-    _previewView.delegate = self;
-    
     _previewView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tile"]];
     
     _editor = new Editor(&_illustrace, _document);
@@ -43,12 +47,11 @@ using namespace illustrace;
     
     _shapeVC = [EditorShapeViewController new];
     _shapeVC.editor = _editor;
-    _shapeVC.view.frame = _paletContainer.bounds;
-    [_paletContainer addSubview:_shapeVC.view];
+    _shapeVC.previewView = _previewView;
     
-//    _previewView.scrollEnabled = NO;
-//    _previewView.zoomEnabled = NO;
-//    _previewView.touchCallbackEnabled = YES;
+    self.activePaletVC = _shapeVC;
+    
+    [self update];
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,9 +60,25 @@ using namespace illustrace;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)setActivePaletVC:(UIViewController *)activePaletVC
+{
+    [_activePaletVC viewWillDisappear:NO];
+    [activePaletVC viewWillAppear:NO];
+    
+    [_activePaletVC.view removeFromSuperview];
+    activePaletVC.view.frame = _paletContainer.bounds;
+    [_paletContainer addSubview:activePaletVC.view];
+    
+    [_activePaletVC viewDidDisappear:NO];
+    [activePaletVC viewDidAppear:NO];
+    
+    _activePaletVC = activePaletVC;
+}
+
 - (void)update
 {
-    // TODO;
+    _undoButtonItem.enabled = _editor->canUndo();
+    _redoButtonItem.enabled = _editor->canRedo();
 }
 
 #pragma mark Toolbar actions
@@ -94,37 +113,27 @@ using namespace illustrace;
     __Trace__
 }
 
-#pragma mark PreviewViewDelegate
-
-- (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
 #pragma mark EditorObserver
 
 - (void)editor:(Editor *)editor notify:(va_list)argList
 {
-    // TODO
+    Editor::Event event = static_cast<Editor::Event>(va_arg(argList, int));
+
+    switch (event) {
+        case Editor::Event::Mode:
+            // TODO
+            break;
+        case Editor::Event::Execute:
+        case Editor::Event::Undo:
+        case Editor::Event::Redo:
+            [self update];
+            break;
+        case Editor::Event::Save:
+            // TODO;
+            break;
+        default:
+            break;
+    }
 }
 
 @end

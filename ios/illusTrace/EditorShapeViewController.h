@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "Editor.h"
+#import "PreviewView.h"
 
 @interface EditorShapeViewController : UIViewController
 @property (assign, nonatomic) illustrace::Editor *editor;
+@property (strong, nonatomic) PreviewView *previewView;
 @end

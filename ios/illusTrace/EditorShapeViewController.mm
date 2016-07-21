@@ -12,7 +12,7 @@
 
 using namespace illustrace;
 
-@interface EditorShapeViewController () <DocumentObserver, EditorObserver> {
+@interface EditorShapeViewController () <DocumentObserver, EditorObserver, PreviewViewDelegate> {
     DocumentObserverBridge _documentObserverBridge;
     EditorObserverBridge _editorObserverBridge;
 }
@@ -29,14 +29,40 @@ using namespace illustrace;
     
     _editorObserverBridge.observer = self;
     _documentObserverBridge.observer = self;
-    _editor->addObserver(&_editorObserverBridge);
-    _editor->document->addObserver(&_documentObserverBridge);
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    _editor->addObserver(&_editorObserverBridge);
+    _editor->document->addObserver(&_documentObserverBridge);
+    _editor->lineState(Editor::LineState::Line);
+    
+    _previewView.delegate = self;
+    
+    [self update];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    _editor->removeObserver(&_editorObserverBridge);
+    _editor->document->removeObserver(&_documentObserverBridge);
+    
+    _previewView.delegate = nil;
+}
+
+- (void)update
+{
+    // TODO
 }
 
 #pragma mark Tool actions
@@ -76,6 +102,32 @@ using namespace illustrace;
     _editor->thickness(_thicknessSlider.value);
 }
 
+#pragma mark PreviewViewDelegate
+
+- (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
+    printf("%s %f %f\n", __func__, point.x, point.y);
+}
+
+- (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
+    printf("%s %f %f\n", __func__, point.x, point.y);
+}
+
+- (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
+    printf("%s %f %f\n", __func__, point.x, point.y);
+}
+
+- (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
+    printf("%s %f %f\n", __func__, point.x, point.y);
+}
+
 #pragma mark DocumentObserver
 
 - (void)document:(illustrace::Document *)document notify:(va_list)argList
@@ -98,7 +150,24 @@ using namespace illustrace;
 
 - (void)editor:(Editor *)editor notify:(va_list)argList
 {
-    // TODO
+    Editor::Event event = static_cast<Editor::Event>(va_arg(argList, int));
+    
+    switch (event) {
+        case Editor::Event::LineState:
+            switch (_editor->lineState()) {
+                case Editor::LineState::Line:
+                    _previewView.scrollEnabled = YES;
+                    _previewView.zoomEnabled = YES;
+                    _previewView.touchCallbackEnabled = NO;
+                    break;
+                default:
+                    // TODO
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 @end

@@ -7,9 +7,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditViewController">
             <connections>
+                <outlet property="backgroundButtonItem" destination="fj4-dU-nXJ" id="Dba-2A-0uz"/>
+                <outlet property="brushButtonItem" destination="Bje-ok-msM" id="A2Z-7Z-gX4"/>
                 <outlet property="paletContainer" destination="MUn-PK-lXf" id="gTb-Yp-RsG"/>
                 <outlet property="previewView" destination="h27-oC-Kj9" id="LuN-eO-kov"/>
+                <outlet property="redoButtonItem" destination="qvh-XG-LAl" id="fWT-Ml-8rv"/>
                 <outlet property="toolbar" destination="5zj-Cx-wOa" id="KaX-es-eJV"/>
+                <outlet property="trimmingButtonItem" destination="E19-bH-mBC" id="x46-av-CFD"/>
+                <outlet property="undoButtonItem" destination="Dtc-vp-G5H" id="4Tt-7l-MVP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
