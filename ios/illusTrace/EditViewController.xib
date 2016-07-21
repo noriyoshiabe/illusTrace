@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditViewController">
             <connections>
+                <outlet property="paletContainer" destination="MUn-PK-lXf" id="gTb-Yp-RsG"/>
                 <outlet property="previewView" destination="h27-oC-Kj9" id="LuN-eO-kov"/>
                 <outlet property="toolbar" destination="5zj-Cx-wOa" id="KaX-es-eJV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -64,6 +65,10 @@
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="rFb-bn-akM"/>
                     </items>
                 </toolbar>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MUn-PK-lXf" customClass="TouchThroughView">
+                    <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -72,9 +77,13 @@
                 <constraint firstAttribute="trailing" secondItem="5zj-Cx-wOa" secondAttribute="trailing" id="3SD-2z-bMS"/>
                 <constraint firstItem="h27-oC-Kj9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="A5l-iU-PLG"/>
                 <constraint firstAttribute="bottom" secondItem="h27-oC-Kj9" secondAttribute="bottom" id="B9O-q0-vFs"/>
+                <constraint firstItem="5zj-Cx-wOa" firstAttribute="top" secondItem="MUn-PK-lXf" secondAttribute="bottom" id="Qmm-cF-KwE"/>
                 <constraint firstAttribute="trailing" secondItem="h27-oC-Kj9" secondAttribute="trailing" id="edF-1u-nq4"/>
+                <constraint firstAttribute="trailing" secondItem="MUn-PK-lXf" secondAttribute="trailing" id="hQo-WQ-iDM"/>
                 <constraint firstAttribute="bottom" secondItem="5zj-Cx-wOa" secondAttribute="bottom" id="lkf-Gj-Iew"/>
                 <constraint firstItem="h27-oC-Kj9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sn5-Xw-4hg"/>
+                <constraint firstItem="MUn-PK-lXf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tn6-sv-8DF"/>
+                <constraint firstItem="MUn-PK-lXf" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="w6G-iL-bMn"/>
             </constraints>
         </view>
     </objects>

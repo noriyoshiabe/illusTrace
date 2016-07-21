@@ -8,10 +8,13 @@
 
 #import "EditViewController.h"
 #import "PreviewView.h"
+#import "EditorShapeViewController.h"
 
 @interface EditViewController () <PreviewViewDelegate>
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (strong, nonatomic) EditorShapeViewController *shapeVC;
+@property (weak, nonatomic) IBOutlet UIView *paletContainer;
 @end
 
 @implementation EditViewController
@@ -23,6 +26,11 @@
     _previewView.delegate = self;
     
     _previewView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tile"]];
+    
+    _shapeVC = [EditorShapeViewController new];
+    _shapeVC.view.frame = _paletContainer.bounds;
+    [_paletContainer addSubview:_shapeVC.view];
+    
 //    _previewView.scrollEnabled = NO;
 //    _previewView.zoomEnabled = NO;
 //    _previewView.touchCallbackEnabled = YES;
@@ -34,7 +42,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark Toolabar actions
+#pragma mark Toolbar actions
 
 - (IBAction)undoAction:(id)sender
 {

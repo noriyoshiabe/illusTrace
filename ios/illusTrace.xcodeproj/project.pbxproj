@@ -21,6 +21,9 @@
 		02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02425BAE1D329C5E0063B409 /* EditViewController.mm */; };
 		02425BB11D329C5E0063B409 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02425BAF1D329C5E0063B409 /* EditViewController.xib */; };
 		025B2F211D4135B900666AC9 /* Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F201D4135B900666AC9 /* Toolbar.m */; };
+		025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */; };
+		025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */; };
+		025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F2D1D41440200666AC9 /* TouchThroughView.m */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
 		02A057B11D257DC000DD16B4 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057991D257DBF00DD16B4 /* Editor.cpp */; };
@@ -62,6 +65,11 @@
 		025B2F1F1D4135B900666AC9 /* Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbar.h; sourceTree = "<group>"; };
 		025B2F201D4135B900666AC9 /* Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Toolbar.m; sourceTree = "<group>"; };
 		025B2F231D41386B00666AC9 /* illusTrace-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "illusTrace-Prefix.pch"; sourceTree = "<group>"; };
+		025B2F271D41410A00666AC9 /* EditorShapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapeViewController.h; sourceTree = "<group>"; };
+		025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapeViewController.mm; sourceTree = "<group>"; };
+		025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeViewController.xib; sourceTree = "<group>"; };
+		025B2F2C1D41440200666AC9 /* TouchThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchThroughView.h; sourceTree = "<group>"; };
+		025B2F2D1D41440200666AC9 /* TouchThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchThroughView.m; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
 		02A057971D257DBF00DD16B4 /* Document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Document.cpp; sourceTree = "<group>"; };
@@ -141,6 +149,9 @@
 				02425BAD1D329C5E0063B409 /* EditViewController.h */,
 				02425BAE1D329C5E0063B409 /* EditViewController.mm */,
 				02425BAF1D329C5E0063B409 /* EditViewController.xib */,
+				025B2F271D41410A00666AC9 /* EditorShapeViewController.h */,
+				025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */,
+				025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */,
 				021D2F8D1D255034008CE5B0 /* Assets.xcassets */,
 				021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */,
 				021D2F921D255034008CE5B0 /* Info.plist */,
@@ -169,6 +180,8 @@
 				024188671D30470A0006C00B /* Color.m */,
 				025B2F1F1D4135B900666AC9 /* Toolbar.h */,
 				025B2F201D4135B900666AC9 /* Toolbar.m */,
+				025B2F2C1D41440200666AC9 /* TouchThroughView.h */,
+				025B2F2D1D41440200666AC9 /* TouchThroughView.m */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -261,6 +274,7 @@
 				021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */,
 				021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */,
 				021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */,
+				025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,11 +297,13 @@
 				021D2F831D255034008CE5B0 /* main.m in Sources */,
 				02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */,
 				02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */,
+				025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */,
 				025B2F211D4135B900666AC9 /* Toolbar.m in Sources */,
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
+				025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
