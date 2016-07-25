@@ -78,8 +78,13 @@ using namespace illustrace;
 
 - (void)drawPaths:(CGContextRef)context
 {
-    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
-    CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
+    auto &color = _document->color();
+    CGFloat r = color[0] / 255.0;
+    CGFloat g = color[1] / 255.0;
+    CGFloat b = color[2] / 255.0;
+    
+    CGContextSetRGBStrokeColor(context, r, g, b, 1.0);
+    CGContextSetRGBFillColor(context, r, g, b, 1.0);
     
     CGContextSetLineWidth(context, _document->thickness());
     CGContextSetLineCap(context, kCGLineCapRound);

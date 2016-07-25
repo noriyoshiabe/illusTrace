@@ -8,6 +8,7 @@
 
 #import "EditorShapeViewController.h"
 #import "EditorShapeLineViewController.h"
+#import "EditorShapeColorViewController.h"
 #import "EditorObderver.h"
 #import "Color.h"
 
@@ -24,6 +25,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditorShapeLineViewController *lineVC;
+@property (strong, nonatomic) EditorShapeColorViewController *colorVC;
 @end
 
 @implementation EditorShapeViewController
@@ -37,6 +39,10 @@ using namespace illustrace;
     _lineVC = [EditorShapeLineViewController new];
     _lineVC.editor = _editor;
     _lineVC.previewView = _previewView;
+    
+    _colorVC = [EditorShapeColorViewController new];
+    _colorVC.editor = _editor;
+    _colorVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,6 +70,10 @@ using namespace illustrace;
 
 - (void)setActiveVC:(UIViewController *)activeVC
 {
+    if (_activeVC == activeVC) {
+        return;
+    }
+    
     activeVC.view.frame = _childContainer.bounds;
     
     [_activeVC viewWillDisappear:NO];
@@ -105,12 +115,14 @@ using namespace illustrace;
 
 - (IBAction)lineAction:(id)sender
 {
-    __Trace__
+    _editor->lineState(Editor::LineState::Line);
+    self.activeVC = _lineVC;
 }
 
 - (IBAction)colorAction:(id)sender
 {
-    __Trace__
+    _editor->lineState(Editor::LineState::Color);
+    self.activeVC = _colorVC;
 }
 
 - (IBAction)pencilAction:(id)sender

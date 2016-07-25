@@ -63,6 +63,10 @@ using namespace illustrace;
 
 - (void)setActiveVC:(UIViewController *)activeVC
 {
+    if (_activeVC == activeVC) {
+        return;
+    }
+    
     activeVC.view.frame = _childContainer.bounds;
     
     [_activeVC viewWillDisappear:NO];
