@@ -89,11 +89,8 @@ using namespace illustrace;
         case Editor::LineState::Line:
             _lineButton.tintColor = [Color systemBlueColor];
             break;
-        case Editor::LineState::PencilBlack:
+        case Editor::LineState::Pencil:
             _pencilButton.tintColor = [Color systemBlueColor];
-            break;
-        case Editor::LineState::PencilWhite:
-            // TODO remove state
             break;
         case Editor::LineState::Eraser:
              _eraserButton.tintColor = [Color systemBlueColor];

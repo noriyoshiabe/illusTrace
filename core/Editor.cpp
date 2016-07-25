@@ -433,11 +433,8 @@ void Editor::draw(float x, float y)
     switch (_mode) {
     case Mode::Shape:
         switch (_lineState) {
-        case LineState::PencilBlack:
+        case LineState::Pencil:
             illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
-            break;
-        case LineState::PencilWhite:
-            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 255, document);
             break;
         case LineState::Eraser:
             illustrace->eraseCircleOnPreprocessedImage(point, preprocessedImageRadius, document);

@@ -74,8 +74,7 @@ public:
 
     enum class LineState {
         Line,
-        PencilBlack,
-        PencilWhite,
+        Pencil,
         Eraser,
         Color,
     };
@@ -84,8 +83,7 @@ public:
 #define CASE(state) case LineState::state: return #state
         switch (state) {
         CASE(Line);
-        CASE(PencilBlack);
-        CASE(PencilWhite);
+        CASE(Pencil);
         CASE(Eraser);
         CASE(Color);
         }
