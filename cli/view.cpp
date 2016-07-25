@@ -160,8 +160,8 @@ void View::notify(Editor *sender, va_list argList)
     case Editor::Event::Mode:
         printf("Editor::Mode: -> %s\n", Editor::Mode2CString(sender->mode()));
         break;
-    case Editor::Event::LineState:
-        printf("Editor::LineState: -> %s\n", Editor::LineState2CString(sender->lineState()));
+    case Editor::Event::ShapeState:
+        printf("Editor::ShapeState: -> %s\n", Editor::ShapeState2CString(sender->shapeState()));
         break;
     case Editor::Event::PaintState:
         printf("Editor::PaintState: -> %s\n", Editor::PaintState2CString(sender->paintState()));

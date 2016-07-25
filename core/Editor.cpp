@@ -182,7 +182,7 @@ public:
 
 Editor::Editor(Illustrace *illustrace, Document *document)
     : illustrace(illustrace), document(document),
-      _mode(Editor::Mode::Shape), _lineState(Editor::LineState::Line),
+      _mode(Editor::Mode::Shape), _shapeState(Editor::ShapeState::Line),
       _paintState(Editor::PaintState::Brush),
       _clipState(Editor::ClipState::Trimming),
       preprocessedImageRadius(5),
@@ -208,9 +208,9 @@ Editor::Mode Editor::mode()
     return _mode;
 }
 
-Editor::LineState Editor::lineState()
+Editor::ShapeState Editor::shapeState()
 {
-    return _lineState;
+    return _shapeState;
 }
 
 Editor::PaintState Editor::paintState()
@@ -247,11 +247,11 @@ void Editor::mode(Mode mode)
     notify(this, Event::Mode);
 }
 
-void Editor::lineState(LineState state)
+void Editor::shapeState(ShapeState state)
 {
     lastCommand = nullptr;
-    _lineState = state;
-    notify(this, Event::LineState);
+    _shapeState = state;
+    notify(this, Event::ShapeState);
 }
 
 void Editor::paintState(PaintState state)
@@ -432,11 +432,11 @@ void Editor::draw(float x, float y)
 
     switch (_mode) {
     case Mode::Shape:
-        switch (_lineState) {
-        case LineState::Pencil:
+        switch (_shapeState) {
+        case ShapeState::Pencil:
             illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
             break;
-        case LineState::Eraser:
+        case ShapeState::Eraser:
             illustrace->eraseCircleOnPreprocessedImage(point, preprocessedImageRadius, document);
             break;
         default:
@@ -624,7 +624,7 @@ std::ostream &operator<<(std::ostream &os, Editor const &self)
     os << "<Editor ";
 
     os << "mode: " << Editor::Mode2CString(self._mode) << ", ";
-    os << "lineState: " << Editor::LineState2CString(self._lineState) << ", ";
+    os << "ShapeState: " << Editor::ShapeState2CString(self._shapeState) << ", ";
     os << "paintState: " << Editor::PaintState2CString(self._paintState) << ", ";
     os << "clipState: " << Editor::ClipState2CString(self._clipState) << ", ";
     os << "preprocessedImageRadius: " << self.preprocessedImageRadius << ", ";

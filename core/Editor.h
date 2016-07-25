@@ -23,7 +23,7 @@ public:
 
     enum class Event : int {
         Mode,
-        LineState,
+        ShapeState,
         PaintState,
         ClipState,
         PreprocessedImageRadius,
@@ -40,7 +40,7 @@ public:
 #define CASE(event) case Event::event: return #event
         switch (event) {
         CASE(Mode);
-        CASE(LineState);
+        CASE(ShapeState);
         CASE(PaintState);
         CASE(ClipState);
         CASE(PreprocessedImageRadius);
@@ -72,15 +72,15 @@ public:
 #undef CASE
     }
 
-    enum class LineState {
+    enum class ShapeState {
         Line,
         Pencil,
         Eraser,
         Color,
     };
 
-    static inline const char *LineState2CString(LineState state) {
-#define CASE(state) case LineState::state: return #state
+    static inline const char *ShapeState2CString(ShapeState state) {
+#define CASE(state) case ShapeState::state: return #state
         switch (state) {
         CASE(Line);
         CASE(Pencil);
@@ -126,7 +126,7 @@ public:
     ~Editor();
 
     void mode(Mode mode);
-    void lineState(LineState state);
+    void shapeState(ShapeState state);
     void paintState(PaintState state);
     void clipState(ClipState state);
 
@@ -134,7 +134,7 @@ public:
     cv::Scalar &paintColor();
     
     Mode mode();
-    LineState lineState();
+    ShapeState shapeState();
     PaintState paintState();
     ClipState clipState();
 
@@ -182,7 +182,7 @@ private:
     void trimming(Func func);
 
     Mode _mode;
-    LineState _lineState;
+    ShapeState _shapeState;
     PaintState _paintState;
     ClipState _clipState;
     int preprocessedImageRadius;

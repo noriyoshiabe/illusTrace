@@ -56,7 +56,7 @@ using namespace illustrace;
     [super viewWillAppear:animated];
     
     _editor->addObserver(&_editorObserverBridge);
-    _editor->lineState(Editor::LineState::Line);
+    _editor->shapeState(Editor::ShapeState::Line);
     
     self.activeVC = _lineVC;
 }
@@ -95,17 +95,17 @@ using namespace illustrace;
     _pencilButton.tintColor = nil;
     _eraserButton.tintColor = nil;
     
-    switch (_editor->lineState()) {
-        case Editor::LineState::Line:
+    switch (_editor->shapeState()) {
+        case Editor::ShapeState::Line:
             _lineButton.tintColor = [Color systemBlueColor];
             break;
-        case Editor::LineState::Pencil:
+        case Editor::ShapeState::Pencil:
             _pencilButton.tintColor = [Color systemBlueColor];
             break;
-        case Editor::LineState::Eraser:
+        case Editor::ShapeState::Eraser:
              _eraserButton.tintColor = [Color systemBlueColor];
             break;
-        case Editor::LineState::Color:
+        case Editor::ShapeState::Color:
              _colorButton.tintColor = [Color systemBlueColor];
             break;
     }
@@ -115,13 +115,13 @@ using namespace illustrace;
 
 - (IBAction)lineAction:(id)sender
 {
-    _editor->lineState(Editor::LineState::Line);
+    _editor->shapeState(Editor::ShapeState::Line);
     self.activeVC = _lineVC;
 }
 
 - (IBAction)colorAction:(id)sender
 {
-    _editor->lineState(Editor::LineState::Color);
+    _editor->shapeState(Editor::ShapeState::Color);
     self.activeVC = _colorVC;
 }
 
@@ -147,7 +147,7 @@ using namespace illustrace;
     Editor::Event event = static_cast<Editor::Event>(va_arg(argList, int));
     
     switch (event) {
-        case Editor::Event::LineState:
+        case Editor::Event::ShapeState:
             [self update];
             break;
         default:
