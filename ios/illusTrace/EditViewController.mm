@@ -62,11 +62,12 @@ using namespace illustrace;
 
 - (void)setActivePaletVC:(UIViewController *)activePaletVC
 {
+    activePaletVC.view.frame = _paletContainer.bounds;
+    
     [_activePaletVC viewWillDisappear:NO];
     [activePaletVC viewWillAppear:NO];
     
     [_activePaletVC.view removeFromSuperview];
-    activePaletVC.view.frame = _paletContainer.bounds;
     [_paletContainer addSubview:activePaletVC.view];
     
     [_activePaletVC viewDidDisappear:NO];
