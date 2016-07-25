@@ -7,18 +7,23 @@
 //
 
 #import "EditorShapeViewController.h"
-#import "DocumentObserver.h"
+#import "EditorShapeLineViewController.h"
 #import "EditorObderver.h"
+#import "Color.h"
 
 using namespace illustrace;
 
-@interface EditorShapeViewController () <DocumentObserver, EditorObserver, PreviewViewDelegate> {
-    DocumentObserverBridge _documentObserverBridge;
+@interface EditorShapeViewController () <EditorObserver> {
     EditorObserverBridge _editorObserverBridge;
 }
-
-@property (weak, nonatomic) IBOutlet UISlider *detailSlider;
-@property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
+@property (weak, nonatomic) IBOutlet UIButton *lineButton;
+@property (weak, nonatomic) IBOutlet UIButton *colorButton;
+@property (weak, nonatomic) IBOutlet UIButton *pencilButton;
+@property (weak, nonatomic) IBOutlet UIButton *eraserButton;
+@property (weak, nonatomic) IBOutlet UIButton *reloadButton;
+@property (weak, nonatomic) IBOutlet UIView *childContainer;
+@property (weak, nonatomic) UIViewController *activeVC;
+@property (strong, nonatomic) EditorShapeLineViewController *lineVC;
 @end
 
 @implementation EditorShapeViewController
@@ -28,13 +33,10 @@ using namespace illustrace;
     [super viewDidLoad];
     
     _editorObserverBridge.observer = self;
-    _documentObserverBridge.observer = self;
     
-    _detailSlider.maximumValue = 1.0;
-    _detailSlider.minimumValue = 0.1;
-    
-    _thicknessSlider.minimumValue = 1.0;
-    _thicknessSlider.maximumValue = 50.0;
+    _lineVC = [EditorShapeLineViewController new];
+    _lineVC.editor = _editor;
+    _lineVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,12 +50,9 @@ using namespace illustrace;
     [super viewWillAppear:animated];
     
     _editor->addObserver(&_editorObserverBridge);
-    _editor->document->addObserver(&_documentObserverBridge);
     _editor->lineState(Editor::LineState::Line);
     
-    _previewView.delegate = self;
-    
-    [self update];
+    self.activeVC = _lineVC;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -61,20 +60,53 @@ using namespace illustrace;
     [super viewWillDisappear:animated];
     
     _editor->removeObserver(&_editorObserverBridge);
-    _editor->document->removeObserver(&_documentObserverBridge);
+}
+
+- (void)setActiveVC:(UIViewController *)activeVC
+{
+    activeVC.view.frame = _childContainer.bounds;
     
-    _previewView.delegate = nil;
+    [_activeVC viewWillDisappear:NO];
+    [activeVC viewWillAppear:NO];
+    
+    [_activeVC.view removeFromSuperview];
+    [_childContainer addSubview:activeVC.view];
+    
+    [_activeVC viewDidDisappear:NO];
+    [activeVC viewDidAppear:NO];
+    
+    _activeVC = activeVC;
 }
 
 - (void)update
 {
-    _detailSlider.value = _editor->document->detail();
-    _thicknessSlider.value = _editor->document->thickness();
+    _lineButton.tintColor = nil;
+    _colorButton.tintColor = nil;
+    _pencilButton.tintColor = nil;
+    _eraserButton.tintColor = nil;
+    
+    switch (_editor->lineState()) {
+        case Editor::LineState::Line:
+            _lineButton.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::LineState::PencilBlack:
+            _pencilButton.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::LineState::PencilWhite:
+            // TODO remove state
+            break;
+        case Editor::LineState::Eraser:
+             _eraserButton.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::LineState::Color:
+             _colorButton.tintColor = [Color systemBlueColor];
+            break;
+    }
 }
 
 #pragma mark Tool actions
 
-- (IBAction)pathAction:(id)sender
+- (IBAction)lineAction:(id)sender
 {
     __Trace__
 }
@@ -99,58 +131,6 @@ using namespace illustrace;
     __Trace__
 }
 
-- (IBAction)detailSliderAction:(id)sender
-{
-    _editor->detail(_detailSlider.value);
-}
-
-- (IBAction)thicknessSliderAction:(id)sender
-{
-    _editor->thickness(_thicknessSlider.value);
-}
-
-#pragma mark PreviewViewDelegate
-
-- (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-- (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [previewView locationInDocument:[touches.anyObject locationInView:previewView]];
-    printf("%s %f %f\n", __func__, point.x, point.y);
-}
-
-#pragma mark DocumentObserver
-
-- (void)document:(illustrace::Document *)document notify:(va_list)argList
-{
-    Document::Event event = static_cast<Document::Event>(va_arg(argList, int));
-    
-    switch (event) {
-        case Document::Event::Detail:
-        case Document::Event::Thickness:
-            [self update];
-            break;
-        default:
-            break;
-    }
-}
-
 #pragma mark EditorObserver
 
 - (void)editor:(Editor *)editor notify:(va_list)argList
@@ -159,16 +139,7 @@ using namespace illustrace;
     
     switch (event) {
         case Editor::Event::LineState:
-            switch (_editor->lineState()) {
-                case Editor::LineState::Line:
-                    _previewView.scrollEnabled = YES;
-                    _previewView.zoomEnabled = YES;
-                    _previewView.touchCallbackEnabled = NO;
-                    break;
-                default:
-                    // TODO
-                    break;
-            }
+            [self update];
             break;
         default:
             break;

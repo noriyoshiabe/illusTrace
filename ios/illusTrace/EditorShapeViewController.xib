@@ -7,8 +7,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapeViewController">
             <connections>
-                <outlet property="detailSlider" destination="w8t-QE-OdA" id="l2u-fe-lg9"/>
-                <outlet property="thicknessSlider" destination="GsS-X2-onf" id="pHX-3e-r73"/>
+                <outlet property="childContainer" destination="VZc-LR-cYe" id="RIE-ev-Sww"/>
+                <outlet property="colorButton" destination="kZ6-GM-6cx" id="qYn-sd-KBH"/>
+                <outlet property="eraserButton" destination="hXl-DV-HuQ" id="S13-2n-coc"/>
+                <outlet property="lineButton" destination="Gkb-cI-6ui" id="HiO-0B-HFm"/>
+                <outlet property="pencilButton" destination="ZIS-3e-fK3" id="EKf-A8-Omg"/>
+                <outlet property="reloadButton" destination="r2L-Cl-Klb" id="x1L-13-9AB"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,6 +21,9 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VZc-LR-cYe" customClass="TouchThroughView">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YPq-2y-n2O">
                     <rect key="frame" x="554" y="50" width="38" height="190"/>
                     <subviews>
@@ -28,7 +35,7 @@
                             </constraints>
                             <state key="normal" image="path"/>
                             <connections>
-                                <action selector="pathAction:" destination="-1" eventType="touchUpInside" id="49E-ee-jLk"/>
+                                <action selector="lineAction:" destination="-1" eventType="touchUpInside" id="wCF-YF-809"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ6-GM-6cx">
@@ -92,44 +99,14 @@
                         <constraint firstItem="kZ6-GM-6cx" firstAttribute="centerX" secondItem="YPq-2y-n2O" secondAttribute="centerX" id="yfJ-Ua-oJi"/>
                     </constraints>
                 </view>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="w8t-QE-OdA" customClass="Slider">
-                    <rect key="frame" x="28" y="490" width="544" height="31"/>
-                    <connections>
-                        <action selector="detailSliderAction:" destination="-1" eventType="valueChanged" id="hPb-XO-en7"/>
-                    </connections>
-                </slider>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oL2-Ct-Jvb">
-                    <rect key="frame" x="30" y="468" width="38" height="17"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="GsS-X2-onf" customClass="Slider">
-                    <rect key="frame" x="28" y="550" width="544" height="31"/>
-                    <connections>
-                        <action selector="thicknessSliderAction:" destination="-1" eventType="valueChanged" id="v9h-9D-tb4"/>
-                    </connections>
-                </slider>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thickness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PVF-Qm-UOv">
-                    <rect key="frame" x="30" y="528" width="66" height="17"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <constraints>
-                <constraint firstItem="GsS-X2-onf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="04R-oq-seD"/>
-                <constraint firstItem="PVF-Qm-UOv" firstAttribute="top" secondItem="w8t-QE-OdA" secondAttribute="bottom" constant="8" id="5G1-6G-aDc"/>
-                <constraint firstItem="w8t-QE-OdA" firstAttribute="leading" secondItem="oL2-Ct-Jvb" secondAttribute="leading" id="9lH-gn-nq5"/>
-                <constraint firstItem="w8t-QE-OdA" firstAttribute="top" secondItem="oL2-Ct-Jvb" secondAttribute="bottom" constant="5" id="Eva-Ia-4jv"/>
-                <constraint firstAttribute="trailing" secondItem="w8t-QE-OdA" secondAttribute="trailing" constant="30" id="FTc-ZP-nHv"/>
-                <constraint firstItem="w8t-QE-OdA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="MeW-RM-r8X"/>
-                <constraint firstAttribute="trailing" secondItem="GsS-X2-onf" secondAttribute="trailing" constant="30" id="SeZ-Pi-Off"/>
+                <constraint firstAttribute="bottom" secondItem="VZc-LR-cYe" secondAttribute="bottom" id="7Us-oL-G7U"/>
+                <constraint firstItem="VZc-LR-cYe" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="J5L-RV-SaV"/>
+                <constraint firstItem="VZc-LR-cYe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="OAv-es-U8U"/>
+                <constraint firstAttribute="trailing" secondItem="VZc-LR-cYe" secondAttribute="trailing" id="UX2-SN-ZQL"/>
                 <constraint firstAttribute="trailing" secondItem="YPq-2y-n2O" secondAttribute="trailing" constant="8" id="ae1-6Y-zD3"/>
-                <constraint firstItem="GsS-X2-onf" firstAttribute="top" secondItem="PVF-Qm-UOv" secondAttribute="bottom" constant="5" id="eqd-nP-l6q"/>
                 <constraint firstItem="YPq-2y-n2O" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="50" id="rL6-OB-Zah"/>
-                <constraint firstItem="GsS-X2-onf" firstAttribute="leading" secondItem="PVF-Qm-UOv" secondAttribute="leading" id="yMh-Nl-VXZ"/>
-                <constraint firstAttribute="bottom" secondItem="GsS-X2-onf" secondAttribute="bottom" constant="20" id="zrS-qz-9dy"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
         </view>

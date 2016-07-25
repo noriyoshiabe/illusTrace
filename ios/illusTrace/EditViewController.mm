@@ -12,6 +12,7 @@
 #import "Illustrace.h"
 #import "Editor.h"
 #import "EditorObderver.h"
+#import "Color.h"
 
 using namespace illustrace;
 
@@ -25,6 +26,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *undoButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *redoButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *shapeButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backgroundButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *brushButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *trimmingButtonItem;
@@ -49,9 +51,8 @@ using namespace illustrace;
     _shapeVC.editor = _editor;
     _shapeVC.previewView = _previewView;
     
+    _editor->mode(Editor::Mode::Shape);
     self.activeVC = _shapeVC;
-    
-    [self update];
 }
 
 - (void)didReceiveMemoryWarning
@@ -80,6 +81,26 @@ using namespace illustrace;
 {
     _undoButtonItem.enabled = _editor->canUndo();
     _redoButtonItem.enabled = _editor->canRedo();
+    
+    _shapeButtonItem.tintColor = nil;
+    _backgroundButtonItem.tintColor = nil;
+    _brushButtonItem.tintColor = nil;
+    _trimmingButtonItem.tintColor = nil;
+    
+    switch (_editor->mode()) {
+        case Editor::Mode::Shape:
+            _shapeButtonItem.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::Mode::BG:
+            _backgroundButtonItem.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::Mode::Paint:
+            _brushButtonItem.tintColor = [Color systemBlueColor];
+            break;
+        case Editor::Mode::Clip:
+            _trimmingButtonItem.tintColor = [Color systemBlueColor];
+            break;
+    }
 }
 
 #pragma mark Toolbar actions
@@ -122,8 +143,6 @@ using namespace illustrace;
 
     switch (event) {
         case Editor::Event::Mode:
-            // TODO
-            break;
         case Editor::Event::Execute:
         case Editor::Event::Undo:
         case Editor::Event::Redo:
