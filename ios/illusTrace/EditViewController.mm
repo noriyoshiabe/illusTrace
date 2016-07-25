@@ -28,8 +28,8 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backgroundButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *brushButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *trimmingButtonItem;
-@property (weak, nonatomic) IBOutlet UIView *paletContainer;
-@property (weak, nonatomic) UIViewController *activePaletVC;
+@property (weak, nonatomic) IBOutlet UIView *childContainer;
+@property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditorShapeViewController *shapeVC;
 @end
 
@@ -49,7 +49,7 @@ using namespace illustrace;
     _shapeVC.editor = _editor;
     _shapeVC.previewView = _previewView;
     
-    self.activePaletVC = _shapeVC;
+    self.activeVC = _shapeVC;
     
     [self update];
 }
@@ -60,20 +60,20 @@ using namespace illustrace;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setActivePaletVC:(UIViewController *)activePaletVC
+- (void)setActiveVC:(UIViewController *)activeVC
 {
-    activePaletVC.view.frame = _paletContainer.bounds;
+    activeVC.view.frame = _childContainer.bounds;
     
-    [_activePaletVC viewWillDisappear:NO];
-    [activePaletVC viewWillAppear:NO];
+    [_activeVC viewWillDisappear:NO];
+    [activeVC viewWillAppear:NO];
     
-    [_activePaletVC.view removeFromSuperview];
-    [_paletContainer addSubview:activePaletVC.view];
+    [_activeVC.view removeFromSuperview];
+    [_childContainer addSubview:activeVC.view];
     
-    [_activePaletVC viewDidDisappear:NO];
-    [activePaletVC viewDidAppear:NO];
+    [_activeVC viewDidDisappear:NO];
+    [activeVC viewDidAppear:NO];
     
-    _activePaletVC = activePaletVC;
+    _activeVC = activeVC;
 }
 
 - (void)update

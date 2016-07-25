@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="backgroundButtonItem" destination="fj4-dU-nXJ" id="Dba-2A-0uz"/>
                 <outlet property="brushButtonItem" destination="Bje-ok-msM" id="A2Z-7Z-gX4"/>
-                <outlet property="paletContainer" destination="MUn-PK-lXf" id="gTb-Yp-RsG"/>
+                <outlet property="childContainer" destination="MUn-PK-lXf" id="Xsm-6a-3pa"/>
                 <outlet property="previewView" destination="h27-oC-Kj9" id="LuN-eO-kov"/>
                 <outlet property="redoButtonItem" destination="qvh-XG-LAl" id="fWT-Ml-8rv"/>
                 <outlet property="toolbar" destination="5zj-Cx-wOa" id="KaX-es-eJV"/>
@@ -25,11 +25,9 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h27-oC-Kj9" customClass="PreviewView">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5zj-Cx-wOa" customClass="Toolbar">
                     <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="p5v-eN-9LT"/>
                         <barButtonItem image="undo" id="Dtc-vp-G5H">
@@ -69,14 +67,12 @@
                         </barButtonItem>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="rFb-bn-akM"/>
                     </items>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MUn-PK-lXf" customClass="TouchThroughView">
                     <rect key="frame" x="0.0" y="64" width="600" height="492"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="5zj-Cx-wOa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="1An-aN-qwB"/>
                 <constraint firstAttribute="trailing" secondItem="5zj-Cx-wOa" secondAttribute="trailing" id="3SD-2z-bMS"/>

@@ -92,6 +92,7 @@ using namespace illustrace;
 
 - (IBAction)infoButtonAction:(id)sender
 {
+    __Trace__
 }
 
 - (IBAction)lightButtonAction:(id)sender
