@@ -97,6 +97,7 @@
 		02C884161D25566300BBB439 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		02C884181D25568600BBB439 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		02C8841A1D2556A500BBB439 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		02CC91B01D461EF500E212D1 /* Define.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Define.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +144,7 @@
 				0241885F1D303ADF0006C00B /* Component */,
 				021D2F841D255034008CE5B0 /* AppDelegate.h */,
 				021D2F851D255034008CE5B0 /* AppDelegate.m */,
+				02CC91B01D461EF500E212D1 /* Define.h */,
 				029957861D416E3A008A3F34 /* DocumentObserver.h */,
 				0299578C1D417A8A008A3F34 /* EditorObderver.h */,
 				021D2F871D255034008CE5B0 /* CameraViewController.h */,

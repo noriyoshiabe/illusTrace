@@ -29,6 +29,12 @@ using namespace illustrace;
     
     _editorObserverBridge.observer = self;
     _documentObserverBridge.observer = self;
+    
+    _detailSlider.maximumValue = 1.0;
+    _detailSlider.minimumValue = 0.1;
+    
+    _thicknessSlider.minimumValue = 1.0;
+    _thicknessSlider.maximumValue = 50.0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,7 +68,8 @@ using namespace illustrace;
 
 - (void)update
 {
-    // TODO
+    _detailSlider.value = _editor->document->detail();
+    _thicknessSlider.value = _editor->document->thickness();
 }
 
 #pragma mark Tool actions
@@ -136,10 +143,8 @@ using namespace illustrace;
     
     switch (event) {
         case Document::Event::Detail:
-            _detailSlider.value = document->detail();
-            break;
         case Document::Event::Thickness:
-            _thicknessSlider.value = document->thickness();
+            [self update];
             break;
         default:
             break;

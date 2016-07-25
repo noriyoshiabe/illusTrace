@@ -10,6 +10,7 @@
 #import "Illustrace.h"
 #import "Color.h"
 #import "DocumentViewController.h"
+#import "Define.h"
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -138,6 +139,8 @@ using namespace illustrace;
                 _document = new Document();
                 _document->brightness(_brightnessSlider.value);
                 _document->negative(_negative);
+                _document->detail(kDocumentInitialDetail);
+                _document->thickness(kDocumentInitialThickness);
                 
                 _illustrace.traceFromImage(resizedImage, _document);
                 
