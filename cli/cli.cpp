@@ -283,7 +283,7 @@ void CLI::executeCommand(char *commandLine, int line)
                 const char *name;
                 Editor::Mode mode;
             } table[] = {
-                {"Line", Editor::Mode::Line},
+                {"Shape", Editor::Mode::Shape},
                 {"BG", Editor::Mode::BG},
                 {"Paint", Editor::Mode::Paint},
                 {"Clip", Editor::Mode::Clip},

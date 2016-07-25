@@ -55,7 +55,7 @@ public:
     }
 
     enum class Mode {
-        Line,
+        Shape,
         BG,
         Paint,
         Clip,
@@ -64,7 +64,7 @@ public:
     static inline const char *Mode2CString(Mode mode) {
 #define CASE(mode) case Mode::mode: return #mode
         switch (mode) {
-        CASE(Line);
+        CASE(Shape);
         CASE(BG);
         CASE(Paint);
         CASE(Clip);

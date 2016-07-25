@@ -182,7 +182,7 @@ public:
 
 Editor::Editor(Illustrace *illustrace, Document *document)
     : illustrace(illustrace), document(document),
-      _mode(Editor::Mode::Line), _lineState(Editor::LineState::Line),
+      _mode(Editor::Mode::Shape), _lineState(Editor::LineState::Line),
       _paintState(Editor::PaintState::Brush),
       _clipState(Editor::ClipState::Trimming),
       preprocessedImageRadius(5),
@@ -226,7 +226,7 @@ Editor::ClipState Editor::clipState()
 int Editor::radius()
 {
     switch (_mode) {
-    case Mode::Line:
+    case Mode::Shape:
         return preprocessedImageRadius;
     case Mode::Paint:
         return paintLayerRadius;
@@ -271,7 +271,7 @@ void Editor::clipState(ClipState state)
 void Editor::radius(int radius)
 {
     switch (_mode) {
-    case Mode::Line:
+    case Mode::Shape:
         preprocessedImageRadius = radius;
         notify(this, Event::PreprocessedImageRadius);
         break;
@@ -410,7 +410,7 @@ void Editor::draw(float x, float y)
 
     if (!(command = dynamic_cast<DrawCommand *>(lastCommand))) {
         switch (_mode) {
-        case Mode::Line:
+        case Mode::Shape:
             command = new PreprocessedImageCommand(this);
             command->oldCanvas = document->preprocessedImage();
             command->newCanvas = command->oldCanvas.clone();
@@ -431,7 +431,7 @@ void Editor::draw(float x, float y)
     auto point = cv::Point(x, y);
 
     switch (_mode) {
-    case Mode::Line:
+    case Mode::Shape:
         switch (_lineState) {
         case LineState::PencilBlack:
             illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
@@ -524,7 +524,7 @@ void Editor::color(int colorIndex, double value)
 
         if (!(command = dynamic_cast<ColorCommand *>(lastCommand))) {
             switch (_mode) {
-            case Mode::Line:
+            case Mode::Shape:
                 command = new LineColorCommand(this);
                 command->oldValue = document->color();
                 break;
