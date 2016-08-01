@@ -9,7 +9,8 @@
 #import "EditorShapeViewController.h"
 #import "EditorShapeLineViewController.h"
 #import "EditorShapeColorViewController.h"
-#import "EditorObderver.h"
+#import "EditorShapePencilViewController.h"
+#import "EditorObserver.h"
 #import "Color.h"
 
 using namespace illustrace;
@@ -26,6 +27,7 @@ using namespace illustrace;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditorShapeLineViewController *lineVC;
 @property (strong, nonatomic) EditorShapeColorViewController *colorVC;
+@property (strong, nonatomic) EditorShapePencilViewController *pencilVC;
 @end
 
 @implementation EditorShapeViewController
@@ -43,6 +45,10 @@ using namespace illustrace;
     _colorVC = [EditorShapeColorViewController new];
     _colorVC.editor = _editor;
     _colorVC.previewView = _previewView;
+    
+    _pencilVC = [EditorShapePencilViewController new];
+    _pencilVC.editor = _editor;
+    _pencilVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -127,7 +133,8 @@ using namespace illustrace;
 
 - (IBAction)pencilAction:(id)sender
 {
-    __Trace__
+    _editor->shapeState(Editor::ShapeState::Pencil);
+    self.activeVC = _pencilVC;
 }
 
 - (IBAction)eraserAction:(id)sender

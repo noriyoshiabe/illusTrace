@@ -42,6 +42,7 @@ using namespace illustrace;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -50,7 +51,6 @@ using namespace illustrace;
     
     _previewView.scrollEnabled = YES;
     _previewView.zoomEnabled = YES;
-    _previewView.touchCallbackEnabled = NO;
     
     [self update];
 }

@@ -233,37 +233,25 @@ using namespace illustrace;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    
-    if (_touchCallbackEnabled) {
-        [_delegate previewView:self touchesBegan:touches withEvent:event];
-    }
+    [_delegate previewView:self touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
-    
-    if (_touchCallbackEnabled) {
-        [_delegate previewView:self touchesMoved:touches withEvent:event];
-    }
+    [_delegate previewView:self touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-    
-    if (_touchCallbackEnabled) {
-        [_delegate previewView:self touchesEnded:touches withEvent:event];
-    }
+    [_delegate previewView:self touchesEnded:touches withEvent:event];
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [super touchesCancelled:touches withEvent:event];
-    
-    if (_touchCallbackEnabled) {
-        [_delegate previewView:self touchesCancelled:touches withEvent:event];
-    }
+    [_delegate previewView:self touchesCancelled:touches withEvent:event];
 }
 
 - (BOOL)scrollEnabled

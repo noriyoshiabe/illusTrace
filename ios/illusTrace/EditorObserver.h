@@ -1,5 +1,5 @@
 //
-//  EditorObderver.h
+//  EditorObserver.h
 //  illusTrace
 //
 //  Created by abechan on 2016/07/22.

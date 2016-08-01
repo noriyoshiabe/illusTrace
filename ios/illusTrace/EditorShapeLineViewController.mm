@@ -48,7 +48,6 @@ using namespace illustrace;
     
     _previewView.scrollEnabled = YES;
     _previewView.zoomEnabled = YES;
-    _previewView.touchCallbackEnabled = NO;
     
     [self update];
 }

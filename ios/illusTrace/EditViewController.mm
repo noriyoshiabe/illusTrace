@@ -11,7 +11,7 @@
 #import "EditorShapeViewController.h"
 #import "Illustrace.h"
 #import "Editor.h"
-#import "EditorObderver.h"
+#import "EditorObserver.h"
 #import "Color.h"
 
 using namespace illustrace;
