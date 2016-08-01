@@ -46,6 +46,7 @@ using namespace illustrace;
     _previewView.scrollEnabled = YES;
     _previewView.zoomEnabled = YES;
     _previewView.delegate = self;
+    _previewView.drawPreprocessedImage = YES;
     
     [self update];
 }
@@ -56,6 +57,7 @@ using namespace illustrace;
     
     _editor->removeObserver(&_editorObserverBridge);
     _previewView.delegate = nil;
+    _previewView.drawPreprocessedImage = NO;
 }
 
 - (void)update
@@ -82,22 +84,22 @@ using namespace illustrace;
 
 - (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    
+    __Trace__
 }
 
 - (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    
+    __Trace__
 }
 
 - (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    
+    __Trace__
 }
 
 - (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    
+    __Trace__
 }
 
 @end

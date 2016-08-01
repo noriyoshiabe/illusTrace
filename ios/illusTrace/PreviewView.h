@@ -22,5 +22,6 @@
 @property (assign, nonatomic) illustrace::Document *document;
 @property (assign, nonatomic) BOOL scrollEnabled;
 @property (assign, nonatomic) BOOL zoomEnabled;
+@property (assign, nonatomic) BOOL drawPreprocessedImage;
 - (CGPoint)locationInDocument:(CGPoint)point;
 @end

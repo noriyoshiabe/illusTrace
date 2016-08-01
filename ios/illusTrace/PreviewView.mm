@@ -62,12 +62,23 @@ using namespace illustrace;
     _document->addObserver(&_documentObserverbridge);
 }
 
+- (void)setDrawPreprocessedImage:(BOOL)drawPreprocessedImage
+{
+    _drawPreprocessedImage = drawPreprocessedImage;
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextConcatCTM(context, _transform);
     
-    [self drawPaths:context];
+    if (_drawPreprocessedImage) {
+        [self drawPreprocessedImage:context];
+    }
+    else {
+        [self drawPaths:context];
+    }
     
     CGContextClipToRect(context, rect);
     
@@ -125,6 +136,27 @@ using namespace illustrace;
     for (Path *child : path->children) {
         [self drawPath:child subPath:subPath];
     }
+}
+
+- (void)drawPreprocessedImage:(CGContextRef)context
+{
+    auto &_image = _document->preprocessedImage();
+    CFDataRef data = CFDataCreate(NULL, _image.data, _image.step[0] * _image.rows);
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGImageRef image = CGImageCreate(_image.cols, _image.rows, 8, 8, _image.step[0], colorSpace, kCGBitmapByteOrderDefault, provider, NULL, NO, kCGRenderingIntentDefault);
+    
+    CGContextConcatCTM(context, CGAffineTransformMake(1, 0, 0, -1, 0, _image.rows));
+    
+    CGRect rect = CGRectMake(0, 0, _image.cols, _image.rows);
+    CGContextClipToMask(context, rect, image);
+    CGContextSetRGBFillColor(context, 0, 0, 0, 1.0);
+    CGContextFillRect(context, rect);
+    
+    CGImageRelease(image);
+    CGColorSpaceRelease(colorSpace);
+    CGDataProviderRelease(provider);
+    CFRelease(data);
 }
 
 - (void)inertia:(CFAbsoluteTime)delta
