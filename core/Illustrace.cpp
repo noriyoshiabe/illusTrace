@@ -180,41 +180,6 @@ void Illustrace::drawCircleOnPreprocessedImage(cv::Point &point, int radius, int
     document->preprocessedImage(preprocessedImage, &dirtyRect);
 }
 
-void Illustrace::eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Document *document)
-{
-    cv::Mat &preprocessedImage = document->preprocessedImage();
-    cv::Mat &binarizedImage = document->binarizedImage();
-    uint8_t *dstData = (uint8_t *)preprocessedImage.data;
-    uint8_t *srcData = (uint8_t *)binarizedImage.data;
-
-    int sideLength = radius * 2 + 1;
-    cv::Mat circle = cv::Mat::zeros(sideLength, sideLength, CV_8UC1);
-    cv::circle(circle, cv::Point(radius, radius), radius, cv::Scalar(255), -1);
-
-    int dstStartFromX = point.x - radius;
-    int dstStartFromY = point.y - radius;
-
-    for (int y = 0; y < sideLength; ++y) {
-        int dstY = dstStartFromY + y;
-        if (0 <= dstY && dstY < preprocessedImage.rows) {
-            int yOffset = sideLength * y;
-            int yDstOffset = dstY * preprocessedImage.cols;
-            for (int x = 0; x < sideLength; ++x) {
-                int dstX = dstStartFromX + x;
-                if (0 <= dstX && dstX < preprocessedImage.cols) {
-                    if (0 != circle.data[yOffset + x]) {
-                        dstData[yDstOffset + dstX] = srcData[yDstOffset + dstX];
-                    }
-                }
-            }
-        }
-    }
-
-    auto dirtyRect = circleRect(point, radius, preprocessedImage);
-    notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
-    document->preprocessedImage(preprocessedImage, &dirtyRect);
-}
-
 void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
 {
     bool changed = false;

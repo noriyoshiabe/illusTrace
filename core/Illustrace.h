@@ -36,7 +36,6 @@ public:
     void buildPaths(Document *document);
     void buildPaintMask(Document *document);
     void drawCircleOnPreprocessedImage(cv::Point &point, int radius, int color, Document *document);
-    void eraseCircleOnPreprocessedImage(cv::Point &point, int radius, Document *document);
     void drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
     void fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
     void buildPaintPaths(Document *document);

@@ -311,6 +311,11 @@ using namespace illustrace;
     return CGPointApplyAffineTransform(point, CGAffineTransformInvert(_transform));
 }
 
+- (CGPoint)locationInDocumentWithTouch:(UITouch *)touch
+{
+    return [self locationInDocument:[touch locationInView:self]];
+}
+
 #pragma mark GestureRecognizer
 
 - (void)panGestureRecognizerAction:(UIPanGestureRecognizer *)sender
@@ -377,6 +382,11 @@ using namespace illustrace;
         case Document::Event::Paths:
         case Document::Event::PaintPaths:
             [self setNeedsDisplay];
+            break;
+        case Document::Event::PreprocessedImage:
+            if (_drawPreprocessedImage) {
+                [self setNeedsDisplay];
+            }
             break;
         default:
             break;

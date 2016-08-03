@@ -24,4 +24,5 @@
 @property (assign, nonatomic) BOOL zoomEnabled;
 @property (assign, nonatomic) BOOL drawPreprocessedImage;
 - (CGPoint)locationInDocument:(CGPoint)point;
+- (CGPoint)locationInDocumentWithTouch:(UITouch *)touch;
 @end

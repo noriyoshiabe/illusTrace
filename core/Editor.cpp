@@ -434,10 +434,10 @@ void Editor::draw(float x, float y)
     case Mode::Shape:
         switch (_shapeState) {
         case ShapeState::Pencil:
-            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
+            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 255, document);
             break;
         case ShapeState::Eraser:
-            illustrace->eraseCircleOnPreprocessedImage(point, preprocessedImageRadius, document);
+            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
             break;
         default:
             break;
@@ -459,7 +459,7 @@ void Editor::drawFinish()
 {
     DrawCommand *command;
 
-    if (!(command = dynamic_cast<DrawCommand *>(lastCommand))) {
+    if ((command = dynamic_cast<DrawCommand *>(lastCommand))) {
         command->apply();
     }
 

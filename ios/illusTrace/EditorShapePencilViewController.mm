@@ -112,22 +112,23 @@ using namespace illustrace;
 
 - (void)previewView:(PreviewView *)previewView touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    __Trace__
+    CGPoint point = [previewView locationInDocumentWithTouch:touches.anyObject];
+    _editor->draw(point.x, point.y);
 }
 
 - (void)previewView:(PreviewView *)previewView touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    __Trace__
+    CGPoint point = [previewView locationInDocumentWithTouch:touches.anyObject];
+    _editor->draw(point.x, point.y);
 }
 
 - (void)previewView:(PreviewView *)previewView touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    __Trace__
+    _editor->drawFinish();
 }
 
 - (void)previewView:(PreviewView *)previewView touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    __Trace__
 }
 
 @end

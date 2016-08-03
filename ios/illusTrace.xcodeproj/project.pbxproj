@@ -24,8 +24,6 @@
 		025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */; };
 		025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */; };
 		025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F2D1D41440200666AC9 /* TouchThroughView.m */; };
-		02740B221D52024C00937FB1 /* EditorShapeEraserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02740B201D52024C00937FB1 /* EditorShapeEraserViewController.mm */; };
-		02740B231D52024C00937FB1 /* EditorShapeEraserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02740B211D52024C00937FB1 /* EditorShapeEraserViewController.xib */; };
 		0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
@@ -79,9 +77,6 @@
 		025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeViewController.xib; sourceTree = "<group>"; };
 		025B2F2C1D41440200666AC9 /* TouchThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchThroughView.h; sourceTree = "<group>"; };
 		025B2F2D1D41440200666AC9 /* TouchThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchThroughView.m; sourceTree = "<group>"; };
-		02740B1F1D52024C00937FB1 /* EditorShapeEraserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapeEraserViewController.h; sourceTree = "<group>"; };
-		02740B201D52024C00937FB1 /* EditorShapeEraserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapeEraserViewController.mm; sourceTree = "<group>"; };
-		02740B211D52024C00937FB1 /* EditorShapeEraserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeEraserViewController.xib; sourceTree = "<group>"; };
 		029957861D416E3A008A3F34 /* DocumentObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentObserver.h; sourceTree = "<group>"; };
 		0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PaintMaskBuilder.mm; sourceTree = "<group>"; };
 		0299578C1D417A8A008A3F34 /* EditorObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditorObserver.h; sourceTree = "<group>"; };
@@ -189,9 +184,6 @@
 				02AA1D871D4F51E6001DB96E /* EditorShapePencilViewController.h */,
 				02AA1D881D4F51E6001DB96E /* EditorShapePencilViewController.mm */,
 				02AA1D891D4F51E6001DB96E /* EditorShapePencilViewController.xib */,
-				02740B1F1D52024C00937FB1 /* EditorShapeEraserViewController.h */,
-				02740B201D52024C00937FB1 /* EditorShapeEraserViewController.mm */,
-				02740B211D52024C00937FB1 /* EditorShapeEraserViewController.xib */,
 				021D2F8D1D255034008CE5B0 /* Assets.xcassets */,
 				021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */,
 				021D2F921D255034008CE5B0 /* Info.plist */,
@@ -321,7 +313,6 @@
 			files = (
 				02425BB11D329C5E0063B409 /* EditViewController.xib in Resources */,
 				02A2932A1D463BEC00DC35A0 /* EditorShapeLineViewController.xib in Resources */,
-				02740B231D52024C00937FB1 /* EditorShapeEraserViewController.xib in Resources */,
 				021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */,
 				021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */,
 				021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */,
@@ -361,7 +352,6 @@
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
 				025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */,
-				02740B221D52024C00937FB1 /* EditorShapeEraserViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

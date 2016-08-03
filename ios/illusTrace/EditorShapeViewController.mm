@@ -10,7 +10,6 @@
 #import "EditorShapeLineViewController.h"
 #import "EditorShapeColorViewController.h"
 #import "EditorShapePencilViewController.h"
-#import "EditorShapeEraserViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
@@ -29,7 +28,7 @@ using namespace illustrace;
 @property (strong, nonatomic) EditorShapeLineViewController *lineVC;
 @property (strong, nonatomic) EditorShapeColorViewController *colorVC;
 @property (strong, nonatomic) EditorShapePencilViewController *pencilVC;
-@property (strong, nonatomic) EditorShapeEraserViewController *eraserVC;
+@property (strong, nonatomic) EditorShapePencilViewController *eraserVC;
 @end
 
 @implementation EditorShapeViewController
@@ -52,7 +51,7 @@ using namespace illustrace;
     _pencilVC.editor = _editor;
     _pencilVC.previewView = _previewView;
     
-    _eraserVC = [EditorShapeEraserViewController new];
+    _eraserVC = [EditorShapePencilViewController new];
     _eraserVC.editor = _editor;
     _eraserVC.previewView = _previewView;
 }
