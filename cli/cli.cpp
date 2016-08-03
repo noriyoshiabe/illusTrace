@@ -200,8 +200,6 @@ bool CLI::execute(const char *inputFilePath)
             return EXIT_FAILURE;
         }
 
-        illustrace.buildPaintMask(document);
-
         if (!outputFilepath) {
             illustrace.removeObserver(&view);
             document->addObserver(&view);

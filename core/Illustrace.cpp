@@ -46,6 +46,7 @@ void Illustrace::traceFromImage(cv::Mat &sourceImage, Document *document)
     buildLines(document);
     approximateLines(document);
     buildPaths(document);
+    buildPaintMask(document);
 }
 
 void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
@@ -81,14 +82,14 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
 
 void Illustrace::buildLines(Document *document)
 {
-    cv::Mat negativeImage = document->negativeImage();
+    cv::Mat image = document->preprocessedImage().clone();
 
-    cv::Rect boundingRect = cv::boundingRect(negativeImage);
+    cv::Rect boundingRect = cv::boundingRect(image);
     document->boundingRect(boundingRect);
 
     auto *outlineContours = new std::vector<std::vector<cv::Point>>();
     auto *outlineHierarchy = new std::vector<cv::Vec4i>();
-    cv::findContours(negativeImage, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+    cv::findContours(image, *outlineContours, *outlineHierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
     notify(this, Illustrace::Event::OutlineBuilt, document, outlineContours, outlineHierarchy);
 
     document->outlineContours(outlineContours);
