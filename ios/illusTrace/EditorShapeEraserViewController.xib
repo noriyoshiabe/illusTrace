@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapePencilViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapeEraserViewController">
             <connections>
                 <outlet property="moveButton" destination="fY4-99-zdV" id="Mdg-2S-k1S"/>
                 <outlet property="radiusSlider" destination="1vt-1I-FRn" id="gQl-OK-S5R"/>
@@ -26,7 +26,7 @@
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1vt-1I-FRn" customClass="Slider">
                     <rect key="frame" x="28" y="550" width="544" height="31"/>
                     <connections>
-                        <action selector="radiusSliderAction:" destination="-1" eventType="valueChanged" id="niM-Rg-gh5"/>
+                        <action selector="radiusSliderAction:" destination="-1" eventType="valueChanged" id="L40-Ka-leG"/>
                     </connections>
                 </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fY4-99-zdV">

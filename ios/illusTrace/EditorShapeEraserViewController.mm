@@ -1,18 +1,18 @@
 //
-//  EditorShapePencilViewController.mm
+//  EditorShapeEraserViewController.mm
 //  illusTrace
 //
 //  Created by abechan on 2016/08/01.
 //  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
 //
 
-#import "EditorShapePencilViewController.h"
+#import "EditorShapeEraserViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
 using namespace illustrace;
 
-@interface EditorShapePencilViewController () <EditorObserver, PreviewViewDelegate> {
+@interface EditorShapeEraserViewController () <EditorObserver, PreviewViewDelegate> {
     EditorObserverBridge _editorObserverBridge;
 }
 
@@ -21,7 +21,7 @@ using namespace illustrace;
 @property (assign, nonatomic) BOOL move;
 @end
 
-@implementation EditorShapePencilViewController
+@implementation EditorShapeEraserViewController
 
 - (void)viewDidLoad
 {
