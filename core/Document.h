@@ -112,6 +112,7 @@ public:
         Paths,
         PaintPaths,
         BinarizedImage,
+        NegativeImage,
         PreprocessedImage,
         OutlineContours,
         ApproximatedOutlineContours,
@@ -139,6 +140,7 @@ public:
         CASE(Paths);
         CASE(PaintPaths);
         CASE(BinarizedImage);
+        CASE(NegativeImage);
         CASE(PreprocessedImage);
         CASE(OutlineContours);
         CASE(ApproximatedOutlineContours);
@@ -168,6 +170,7 @@ public:
     std::vector<Path *> *paths();
     std::vector<Path *> *paintPaths();
     cv::Mat &binarizedImage();
+    cv::Mat &negativeImage();
     cv::Mat &preprocessedImage();
     std::vector<std::vector<cv::Point>> *outlineContours();
     std::vector<std::vector<cv::Point2f>> *approximatedOutlineContours();
@@ -192,6 +195,7 @@ public:
     void paths(std::vector<Path *> *paths);
     void paintPaths(std::vector<Path *> *paintPaths);
     void binarizedImage(cv::Mat &binarizedImage);
+    void negativeImage(cv::Mat &negativeImage);
     void preprocessedImage(cv::Mat &preprocessedImage);
     void preprocessedImage(cv::Mat &preprocessedImage, cv::Rect *dirtyRect);
     void outlineContours(std::vector<std::vector<cv::Point>> *outlineContours);
@@ -220,6 +224,7 @@ private:
     std::vector<Path *> *_paintPaths;
 
     cv::Mat _binarizedImage;
+    cv::Mat _negativeImage;
     cv::Mat _preprocessedImage;
 
     std::vector<std::vector<cv::Point>> *_outlineContours;

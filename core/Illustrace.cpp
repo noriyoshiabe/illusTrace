@@ -64,10 +64,15 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
     }
 
     notify(this, Illustrace::Event::Binarized, document, &binarizedImage);
-
     document->binarizedImage(binarizedImage);
 
-    cv::Mat preprocessedImage = binarizedImage.clone();
+    cv::Mat negativeImage = binarizedImage.clone();
+    Filter::negative(negativeImage);
+
+    notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
+    document->negativeImage(negativeImage);
+
+    cv::Mat preprocessedImage = negativeImage.clone();
     document->preprocessedImage(preprocessedImage);
 
     cv::Mat paintLayer = cv::Mat::zeros(sourceImage.rows, sourceImage.cols, CV_8UC4);
@@ -76,10 +81,7 @@ void Illustrace::binarize(cv::Mat &sourceImage, Document *document)
 
 void Illustrace::buildLines(Document *document)
 {
-    cv::Mat preprocessedImage = document->preprocessedImage();
-    cv::Mat negativeImage = preprocessedImage.clone();
-    Filter::negative(negativeImage);
-    notify(this, Illustrace::Event::NegativeFilterApplied, document, &negativeImage);
+    cv::Mat negativeImage = document->negativeImage();
 
     cv::Rect boundingRect = cv::boundingRect(negativeImage);
     document->boundingRect(boundingRect);

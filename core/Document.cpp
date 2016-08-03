@@ -145,6 +145,11 @@ cv::Mat &Document::binarizedImage()
     return _binarizedImage;
 }
 
+cv::Mat &Document::negativeImage()
+{
+    return _negativeImage;
+}
+
 cv::Mat &Document::preprocessedImage()
 {
     return _preprocessedImage;
@@ -291,6 +296,12 @@ void Document::binarizedImage(cv::Mat &binarizedImage)
     notify(this, Document::Event::BinarizedImage);
 }
 
+void Document::negativeImage(cv::Mat &negativeImage)
+{
+    _negativeImage = negativeImage;
+    notify(this, Document::Event::NegativeImage);
+}
+
 void Document::preprocessedImage(cv::Mat &preprocessedImage)
 {
     _preprocessedImage = preprocessedImage;
@@ -353,6 +364,7 @@ std::ostream &operator<<(std::ostream &os, Document const &self)
     os << "paths: " << self._paths << ", ";
     os << "paintPaths: " << self._paintPaths << ", ";
     os << "binarizedImage: " << &self._binarizedImage << ", ";
+    os << "negativeImage: " << &self._negativeImage << ", ";
     os << "preprocessedImage: " << &self._preprocessedImage << ", ";
     os << "outlineContours: " << self._outlineContours << ", ";
     os << "approximatedOutlineContours: " << self._approximatedOutlineContours << ", ";
