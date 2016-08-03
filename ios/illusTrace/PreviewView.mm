@@ -385,7 +385,12 @@ using namespace illustrace;
             break;
         case Document::Event::PreprocessedImage:
             if (_drawPreprocessedImage) {
-                [self setNeedsDisplay];
+                auto *_rect = va_arg(argList, cv::Rect *);
+                if (_rect) {
+                    CGRect rect = CGRectMake(_rect->x, _rect->y, _rect->width, _rect->height);
+                    rect = CGRectApplyAffineTransform(rect, _transform);
+                    [self setNeedsDisplayInRect:rect];
+                }
             }
             break;
         default:

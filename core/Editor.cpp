@@ -81,6 +81,8 @@ public:
 
     cv::Mat newCanvas;
     cv::Mat oldCanvas;
+
+    cv::Point prevPoint;
 };
 
 class PreprocessedImageCommand : public DrawCommand {
@@ -406,6 +408,9 @@ void Editor::backgroundEnable(bool enable)
 
 void Editor::draw(float x, float y)
 {
+    cv::Point point = cv::Point(x, y);
+    cv::Point *prevPoint = nullptr;
+
     DrawCommand *command;
 
     if (!(command = dynamic_cast<DrawCommand *>(lastCommand))) {
@@ -427,17 +432,18 @@ void Editor::draw(float x, float y)
             return;
         }
     }
-
-    auto point = cv::Point(x, y);
+    else {
+        prevPoint = &command->prevPoint;
+    }
 
     switch (_mode) {
     case Mode::Shape:
         switch (_shapeState) {
         case ShapeState::Pencil:
-            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 255, document);
+            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageRadius, 255, document);
             break;
         case ShapeState::Eraser:
-            illustrace->drawCircleOnPreprocessedImage(point, preprocessedImageRadius, 0, document);
+            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageRadius, 0, document);
             break;
         default:
             break;
@@ -445,6 +451,7 @@ void Editor::draw(float x, float y)
         break;
     case Mode::Paint:
         if (PaintState::Brush == _paintState) {
+            // TODO Line
             illustrace->drawCircleOnPaintLayer(point, paintLayerRadius, _paintColor, document);
         }
         break;
@@ -453,6 +460,7 @@ void Editor::draw(float x, float y)
     }
 
     execute(command);
+    command->prevPoint = point;
 }
 
 void Editor::drawFinish()

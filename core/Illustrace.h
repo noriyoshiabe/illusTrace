@@ -35,7 +35,8 @@ public:
     void approximateLines(Document *document);
     void buildPaths(Document *document);
     void buildPaintMask(Document *document);
-    void drawCircleOnPreprocessedImage(cv::Point &point, int radius, int color, Document *document);
+    void drawLineOnPreprocessedImage(cv::Point &point1, cv::Point &point2, int thickness, int color, Document *document);
+    void drawLineOnPaintLayer(cv::Point &point, cv::Point &point2, int thickness, cv::Scalar &color, Document *document);
     void drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document);
     void fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Document *document);
     void buildPaintPaths(Document *document);

@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapePencilViewController">
             <connections>
                 <outlet property="moveButton" destination="fY4-99-zdV" id="Mdg-2S-k1S"/>
-                <outlet property="radiusSlider" destination="1vt-1I-FRn" id="gQl-OK-S5R"/>
+                <outlet property="thicknessSlider" destination="1vt-1I-FRn" id="k0j-TE-rdI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,8 +17,8 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SdV-4n-HNX">
-                    <rect key="frame" x="30" y="528" width="44" height="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thickness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SdV-4n-HNX">
+                    <rect key="frame" x="30" y="528" width="66" height="17"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -26,7 +26,7 @@
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1vt-1I-FRn" customClass="Slider">
                     <rect key="frame" x="28" y="550" width="544" height="31"/>
                     <connections>
-                        <action selector="radiusSliderAction:" destination="-1" eventType="valueChanged" id="niM-Rg-gh5"/>
+                        <action selector="thicknessSliderAction:" destination="-1" eventType="valueChanged" id="GHo-TD-gy1"/>
                     </connections>
                 </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fY4-99-zdV">

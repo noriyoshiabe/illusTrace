@@ -16,7 +16,7 @@ using namespace illustrace;
     EditorObserverBridge _editorObserverBridge;
 }
 
-@property (weak, nonatomic) IBOutlet UISlider *radiusSlider;
+@property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
 @property (weak, nonatomic) IBOutlet UIButton *moveButton;
 @property (assign, nonatomic) BOOL move;
 @end
@@ -29,8 +29,8 @@ using namespace illustrace;
     
     _editorObserverBridge.observer = self;
     
-    _radiusSlider.minimumValue = 5.0;
-    _radiusSlider.maximumValue = 50.0;
+    _thicknessSlider.minimumValue = 5.0;
+    _thicknessSlider.maximumValue = 100.0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,7 +62,7 @@ using namespace illustrace;
 
 - (void)update
 {
-    _radiusSlider.value = _editor->radius();
+    _thicknessSlider.value = _editor->radius();
 }
 
 - (void)setMove:(BOOL)move
@@ -83,9 +83,9 @@ using namespace illustrace;
     _move = move;
 }
 
-- (IBAction)radiusSliderAction:(id)sender
+- (IBAction)thicknessSliderAction:(id)sender
 {
-    _editor->radius(_radiusSlider.value);
+    _editor->radius(_thicknessSlider.value);
 }
 
 - (IBAction)moveButtonAction:(id)sender

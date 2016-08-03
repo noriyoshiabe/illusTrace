@@ -165,17 +165,28 @@ inline cv::Rect circleRect(cv::Point &point, int radius, cv::Mat &canvas)
 {
     int minX = MAX(0, point.x - radius);
     int minY = MAX(0, point.y - radius);
-    int maxX = MIN(point.y + radius, canvas.cols - 1);
+    int maxX = MIN(point.x + radius, canvas.cols - 1);
     int maxY = MIN(point.y + radius, canvas.rows - 1);
     return cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
 }
 
-void Illustrace::drawCircleOnPreprocessedImage(cv::Point &point, int radius, int color, Document *document)
+inline cv::Rect lineRect(cv::Point &point1, cv::Point &point2, int thickness, cv::Mat &canvas)
+{
+    int radius = thickness / 2 + 1;
+
+    int minX = MAX(0, MIN(point1.x, point2.x) - radius);
+    int minY = MAX(0, MIN(point1.y, point2.y) - radius);
+    int maxX = MIN(MAX(point1.x, point2.x) + radius, canvas.cols - 1);
+    int maxY = MIN(MAX(point1.y, point2.y) + radius, canvas.rows - 1);
+    return cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+}
+
+void Illustrace::drawLineOnPreprocessedImage(cv::Point &point1, cv::Point &point2, int thickness, int color, Document *document)
 {
     cv::Mat &preprocessedImage = document->preprocessedImage();
-    cv::circle(preprocessedImage, point, radius, cv::Scalar(color), -1);
+    cv::line(preprocessedImage, point1, point2, cv::Scalar(color), thickness);
 
-    auto dirtyRect = circleRect(point, radius, preprocessedImage);
+    auto dirtyRect = lineRect(point1, point2, thickness, preprocessedImage);
     notify(this, Illustrace::Event::PreprocessedImageUpdated, document, &preprocessedImage, &dirtyRect);
     document->preprocessedImage(preprocessedImage, &dirtyRect);
 }
