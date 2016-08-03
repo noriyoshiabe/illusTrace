@@ -147,6 +147,7 @@ public:
 
     void draw(float x, float y);
     void drawFinish();
+    void reload();
     void fill(float x, float y);
 
     void R(double red);

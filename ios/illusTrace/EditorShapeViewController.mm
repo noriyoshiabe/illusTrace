@@ -150,7 +150,7 @@ using namespace illustrace;
 
 - (IBAction)reloadAction:(id)sender
 {
-    __Trace__
+    _editor->reload();
 }
 
 #pragma mark EditorObserver

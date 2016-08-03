@@ -132,6 +132,31 @@ public:
     }
 };
 
+class ReloadCommand : public Editor::Command {
+public:
+    ReloadCommand(Editor *editor) : Command(editor) {}
+
+    cv::Mat newCanvas;
+    cv::Mat oldCanvas;
+
+    void apply() {
+        illustrace->buildLines(document);
+        illustrace->approximateLines(document);
+        illustrace->buildPaths(document);
+        illustrace->buildPaintMask(document);
+    }
+
+    void execute() {
+        document->preprocessedImage(newCanvas, &document->contentRect());
+        apply();
+    }
+
+    void undo() {
+        document->preprocessedImage(oldCanvas, &document->contentRect());
+        apply();
+    }
+};
+
 class ColorCommand : public Editor::Command {
 public:
     ColorCommand(Editor *editor) : Command(editor) {}
@@ -471,6 +496,14 @@ void Editor::drawFinish()
     }
 
     lastCommand = nullptr;
+}
+
+void Editor::reload()
+{
+    ReloadCommand *command = new ReloadCommand(this);
+    command->oldCanvas = document->preprocessedImage();
+    command->newCanvas = document->negativeImage().clone();
+    execute(command);
 }
 
 void Editor::fill(float x, float y)
