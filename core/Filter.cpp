@@ -52,10 +52,10 @@ void Filter::negative(cv::Mat &image)
     size_t step = image.step[0];
     
     for (int j = 0; j < image.rows; ++j) {
-        data += step;
-        
         for (int i = 0; i < step; ++i) {
             data[i] = 255 - data[i];
         }
+
+        data += step;
     }
 }
