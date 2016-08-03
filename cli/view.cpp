@@ -169,11 +169,11 @@ void View::notify(Editor *sender, va_list argList)
     case Editor::Event::ClipState:
         printf("Editor::ClipState: -> %s\n", Editor::ClipState2CString(sender->clipState()));
         break;
-    case Editor::Event::PreprocessedImageRadius:
-        printf("Editor::PreprocessedImageRadius: -> %d\n", sender->radius());
+    case Editor::Event::PreprocessedImageThickness:
+        printf("Editor::PreprocessedImageThickness: -> %d\n", sender->drawThickness());
         break;
-    case Editor::Event::PaintLayerRadius:
-        printf("Editor::PaintLayerRadius: -> %d\n", sender->radius());
+    case Editor::Event::PaintLayerThickness:
+        printf("Editor::PaintLayerThickness: -> %d\n", sender->drawThickness());
         break;
     case Editor::Event::PaintColor:
         printf("Editor::PaintColor: -> %d,%d,%d\n", (int)sender->paintColor()[0], (int)sender->paintColor()[1], (int)sender->paintColor()[2]);

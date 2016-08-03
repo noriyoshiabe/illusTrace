@@ -187,8 +187,8 @@ Editor::Editor(Illustrace *illustrace, Document *document)
       _mode(Editor::Mode::Shape), _shapeState(Editor::ShapeState::Line),
       _paintState(Editor::PaintState::Brush),
       _clipState(Editor::ClipState::Trimming),
-      preprocessedImageRadius(5),
-      paintLayerRadius(5),
+      preprocessedImageThickness(5),
+      paintLayerThickness(5),
       _paintColor(cv::Scalar(255, 255, 255, 255)),
       lastCommand(nullptr),
       currentPoint(0),
@@ -225,13 +225,13 @@ Editor::ClipState Editor::clipState()
     return _clipState;
 }
 
-int Editor::radius()
+int Editor::drawThickness()
 {
     switch (_mode) {
     case Mode::Shape:
-        return preprocessedImageRadius;
+        return preprocessedImageThickness;
     case Mode::Paint:
-        return paintLayerRadius;
+        return paintLayerThickness;
     default:
         return 0;
     }
@@ -270,16 +270,16 @@ void Editor::clipState(ClipState state)
     notify(this, Event::ClipState);
 }
 
-void Editor::radius(int radius)
+void Editor::drawThickness(int drawThickness)
 {
     switch (_mode) {
     case Mode::Shape:
-        preprocessedImageRadius = radius;
-        notify(this, Event::PreprocessedImageRadius);
+        preprocessedImageThickness = drawThickness;
+        notify(this, Event::PreprocessedImageThickness);
         break;
     case Mode::Paint:
-        paintLayerRadius = radius;
-        notify(this, Event::PaintLayerRadius);
+        paintLayerThickness = drawThickness;
+        notify(this, Event::PaintLayerThickness);
         break;
     default:
         break;
@@ -440,10 +440,10 @@ void Editor::draw(float x, float y)
     case Mode::Shape:
         switch (_shapeState) {
         case ShapeState::Pencil:
-            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageRadius, 255, document);
+            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageThickness, 255, document);
             break;
         case ShapeState::Eraser:
-            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageRadius, 0, document);
+            illustrace->drawLineOnPreprocessedImage(prevPoint ? *prevPoint : point, point, preprocessedImageThickness, 0, document);
             break;
         default:
             break;
@@ -451,8 +451,7 @@ void Editor::draw(float x, float y)
         break;
     case Mode::Paint:
         if (PaintState::Brush == _paintState) {
-            // TODO Line
-            illustrace->drawCircleOnPaintLayer(point, paintLayerRadius, _paintColor, document);
+            illustrace->drawLineOnPaintLayer(prevPoint ? *prevPoint : point, point, paintLayerThickness, _paintColor, document);
         }
         break;
     default:
@@ -635,8 +634,8 @@ std::ostream &operator<<(std::ostream &os, Editor const &self)
     os << "ShapeState: " << Editor::ShapeState2CString(self._shapeState) << ", ";
     os << "paintState: " << Editor::PaintState2CString(self._paintState) << ", ";
     os << "clipState: " << Editor::ClipState2CString(self._clipState) << ", ";
-    os << "preprocessedImageRadius: " << self.preprocessedImageRadius << ", ";
-    os << "paintLayerRadius: " << self.paintLayerRadius << ", ";
+    os << "preprocessedImageThickness: " << self.preprocessedImageThickness << ", ";
+    os << "paintLayerThickness: " << self.paintLayerThickness << ", ";
     os << "paintColor: " << self._paintColor << ", ";
     os << "undoStack: " << self.undoStack.size() << ", ";
     os << "redoStack: " << self.redoStack.size() << ", ";

@@ -26,8 +26,8 @@ public:
         ShapeState,
         PaintState,
         ClipState,
-        PreprocessedImageRadius,
-        PaintLayerRadius,
+        PreprocessedImageThickness,
+        PaintLayerThickness,
         PaintColor,
         Execute,
         Undo,
@@ -43,8 +43,8 @@ public:
         CASE(ShapeState);
         CASE(PaintState);
         CASE(ClipState);
-        CASE(PreprocessedImageRadius);
-        CASE(PaintLayerRadius);
+        CASE(PreprocessedImageThickness);
+        CASE(PaintLayerThickness);
         CASE(PaintColor);
         CASE(Execute);
         CASE(Undo);
@@ -130,7 +130,7 @@ public:
     void paintState(PaintState state);
     void clipState(ClipState state);
 
-    void radius(int radius);
+    void drawThickness(int drawThickness);
     cv::Scalar &paintColor();
     
     Mode mode();
@@ -138,7 +138,7 @@ public:
     PaintState paintState();
     ClipState clipState();
 
-    int radius();
+    int drawThickness();
 
     void detail(double detail);
     void thickness(double thickness);
@@ -185,8 +185,8 @@ private:
     ShapeState _shapeState;
     PaintState _paintState;
     ClipState _clipState;
-    int preprocessedImageRadius;
-    int paintLayerRadius;
+    int preprocessedImageThickness;
+    int paintLayerThickness;
     cv::Scalar _paintColor;
 
     std::stack<Command *> undoStack;

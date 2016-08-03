@@ -62,7 +62,7 @@ using namespace illustrace;
 
 - (void)update
 {
-    _thicknessSlider.value = _editor->radius();
+    _thicknessSlider.value = _editor->drawThickness();
 }
 
 - (void)setMove:(BOOL)move
@@ -85,7 +85,7 @@ using namespace illustrace;
 
 - (IBAction)thicknessSliderAction:(id)sender
 {
-    _editor->radius(_thicknessSlider.value);
+    _editor->drawThickness(_thicknessSlider.value);
 }
 
 - (IBAction)moveButtonAction:(id)sender
@@ -100,7 +100,7 @@ using namespace illustrace;
     Editor::Event event = static_cast<Editor::Event>(va_arg(argList, int));
     
     switch (event) {
-        case Editor::Event::PreprocessedImageRadius:
+        case Editor::Event::PreprocessedImageThickness:
             [self update];
             break;
         default:

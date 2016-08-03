@@ -161,15 +161,6 @@ void Illustrace::buildPaintMask(Document *document)
     document->paintMask(paintMask);
 }
 
-inline cv::Rect circleRect(cv::Point &point, int radius, cv::Mat &canvas)
-{
-    int minX = MAX(0, point.x - radius);
-    int minY = MAX(0, point.y - radius);
-    int maxX = MIN(point.x + radius, canvas.cols - 1);
-    int maxY = MIN(point.y + radius, canvas.rows - 1);
-    return cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
-}
-
 inline cv::Rect lineRect(cv::Point &point1, cv::Point &point2, int thickness, cv::Mat &canvas)
 {
     int radius = thickness / 2 + 1;
@@ -191,7 +182,7 @@ void Illustrace::drawLineOnPreprocessedImage(cv::Point &point1, cv::Point &point
     document->preprocessedImage(preprocessedImage, &dirtyRect);
 }
 
-void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar &color, Document *document)
+void Illustrace::drawLineOnPaintLayer(cv::Point &point1, cv::Point &point2, int thickness, cv::Scalar &color, Document *document)
 {
     bool changed = false;
 
@@ -203,23 +194,20 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
 
     uint32_t newColor = (int)color[0] | (int)color[1] << 8 | (int)color[2] << 16 | (int)color[3] << 24;
 
-    int sideLength = radius * 2 + 1;
-    cv::Mat circle = cv::Mat::zeros(sideLength, sideLength, CV_8UC1);
+    cv::Rect rect = lineRect(point1, point2, thickness, paintLayer);
+    cv::Mat line = cv::Mat::zeros(rect.width, rect.height, CV_8UC1);
 
-    cv::circle(circle, cv::Point(radius, radius), radius, cv::Scalar(255), -1);
+    cv::line(line, cv::Point(point1.x - rect.x, point1.y - rect.y), cv::Point(point2.x - rect.x, point2.y - rect.y), cv::Scalar(255), thickness);
 
-    int dstStartFromX = point.x - radius;
-    int dstStartFromY = point.y - radius;
-
-    for (int y = 0; y < sideLength; ++y) {
-        int dstY = dstStartFromY + y;
+    for (int y = 0; y < rect.height; ++y) {
+        int dstY = rect.y + y;
         if (0 <= dstY && dstY < paintLayer.rows) {
-            int yOffset = sideLength * y;
+            int yOffset = rect.width * y;
             int yDstOffset = dstY * paintLayer.cols;
-            for (int x = 0; x < sideLength; ++x) {
-                int dstX = dstStartFromX + x;
+            for (int x = 0; x < rect.width; ++x) {
+                int dstX = rect.x + x;
                 if (0 <= dstX && dstX < paintLayer.cols) {
-                    if (0 != circle.data[yOffset + x] && 0 == paintMaskData[yDstOffset + dstX]) {
+                    if (0 != line.data[yOffset + x] && 0 == paintMaskData[yDstOffset + dstX]) {
                         if (data[yDstOffset + dstX] != newColor) {
                             data[yDstOffset + dstX] = newColor;
                             changed = true;
@@ -231,9 +219,8 @@ void Illustrace::drawCircleOnPaintLayer(cv::Point &point, int radius, cv::Scalar
     }
 
     if (changed) {
-        auto dirtyRect = circleRect(point, radius, paintLayer);
-        notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &dirtyRect);
-        document->paintLayer(paintLayer, &dirtyRect);
+        notify(this, Illustrace::Event::PaintLayerUpdated, document, &paintLayer, &rect);
+        document->paintLayer(paintLayer, &rect);
     }
 }
 
