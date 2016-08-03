@@ -8,6 +8,7 @@
 
 #import "EditorShapePencilViewController.h"
 #import "EditorObserver.h"
+#import "Color.h"
 
 using namespace illustrace;
 
@@ -16,7 +17,8 @@ using namespace illustrace;
 }
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusSlider;
-
+@property (weak, nonatomic) IBOutlet UIButton *moveButton;
+@property (assign, nonatomic) BOOL move;
 @end
 
 @implementation EditorShapePencilViewController
@@ -27,8 +29,8 @@ using namespace illustrace;
     
     _editorObserverBridge.observer = self;
     
-    _radiusSlider.minimumValue = 0.0;
-    _radiusSlider.maximumValue = 1.0;
+    _radiusSlider.minimumValue = 5.0;
+    _radiusSlider.maximumValue = 50.0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,10 +45,8 @@ using namespace illustrace;
     
     _editor->addObserver(&_editorObserverBridge);
     
-    _previewView.scrollEnabled = YES;
-    _previewView.zoomEnabled = YES;
-    _previewView.delegate = self;
     _previewView.drawPreprocessedImage = YES;
+    self.move = NO;
     
     [self update];
 }
@@ -63,6 +63,29 @@ using namespace illustrace;
 - (void)update
 {
     _radiusSlider.value = _editor->radius();
+}
+
+- (void)setMove:(BOOL)move
+{
+    if (move) {
+        _previewView.scrollEnabled = YES;
+        _previewView.zoomEnabled = YES;
+        _previewView.delegate = nil;
+        _moveButton.tintColor = [Color systemBlueColor];
+    }
+    else {
+        _previewView.scrollEnabled = NO;
+        _previewView.zoomEnabled = NO;
+        _previewView.delegate = self;
+        _moveButton.tintColor = [UIColor darkGrayColor];
+    }
+    
+    _move = move;
+}
+
+- (IBAction)moveButtonAction:(id)sender
+{
+    self.move = !_move;
 }
 
 #pragma mark EditorObserver
