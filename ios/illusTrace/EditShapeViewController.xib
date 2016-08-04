@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapeViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditShapeViewController">
             <connections>
                 <outlet property="childContainer" destination="VZc-LR-cYe" id="RIE-ev-Sww"/>
                 <outlet property="colorButton" destination="kZ6-GM-6cx" id="qYn-sd-KBH"/>

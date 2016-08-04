@@ -1,21 +1,21 @@
 //
-//  EditorShapeViewController.mm
+//  EditShapeViewController.mm
 //  illusTrace
 //
 //  Created by abechan on 2016/07/22.
 //  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
 //
 
-#import "EditorShapeViewController.h"
-#import "EditorShapeLineViewController.h"
-#import "EditorShapeColorViewController.h"
-#import "EditorShapePencilViewController.h"
+#import "EditShapeViewController.h"
+#import "EditShapeLineViewController.h"
+#import "EditShapeColorViewController.h"
+#import "EditShapePencilViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
 using namespace illustrace;
 
-@interface EditorShapeViewController () <EditorObserver> {
+@interface EditShapeViewController () <EditorObserver> {
     EditorObserverBridge _editorObserverBridge;
 }
 @property (weak, nonatomic) IBOutlet UIButton *lineButton;
@@ -25,13 +25,13 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIButton *reloadButton;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
-@property (strong, nonatomic) EditorShapeLineViewController *lineVC;
-@property (strong, nonatomic) EditorShapeColorViewController *colorVC;
-@property (strong, nonatomic) EditorShapePencilViewController *pencilVC;
-@property (strong, nonatomic) EditorShapePencilViewController *eraserVC;
+@property (strong, nonatomic) EditShapeLineViewController *lineVC;
+@property (strong, nonatomic) EditShapeColorViewController *colorVC;
+@property (strong, nonatomic) EditShapePencilViewController *pencilVC;
+@property (strong, nonatomic) EditShapePencilViewController *eraserVC;
 @end
 
-@implementation EditorShapeViewController
+@implementation EditShapeViewController
 
 - (void)viewDidLoad
 {
@@ -39,19 +39,19 @@ using namespace illustrace;
     
     _editorObserverBridge.observer = self;
     
-    _lineVC = [EditorShapeLineViewController new];
+    _lineVC = [EditShapeLineViewController new];
     _lineVC.editor = _editor;
     _lineVC.previewView = _previewView;
     
-    _colorVC = [EditorShapeColorViewController new];
+    _colorVC = [EditShapeColorViewController new];
     _colorVC.editor = _editor;
     _colorVC.previewView = _previewView;
     
-    _pencilVC = [EditorShapePencilViewController new];
+    _pencilVC = [EditShapePencilViewController new];
     _pencilVC.editor = _editor;
     _pencilVC.previewView = _previewView;
     
-    _eraserVC = [EditorShapePencilViewController new];
+    _eraserVC = [EditShapePencilViewController new];
     _eraserVC.editor = _editor;
     _eraserVC.previewView = _previewView;
 }

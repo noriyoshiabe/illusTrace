@@ -8,7 +8,7 @@
 
 #import "EditViewController.h"
 #import "PreviewView.h"
-#import "EditorShapeViewController.h"
+#import "EditShapeViewController.h"
 #import "Illustrace.h"
 #import "Editor.h"
 #import "EditorObserver.h"
@@ -32,7 +32,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *trimmingButtonItem;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
-@property (strong, nonatomic) EditorShapeViewController *shapeVC;
+@property (strong, nonatomic) EditShapeViewController *shapeVC;
 @end
 
 @implementation EditViewController
@@ -47,7 +47,7 @@ using namespace illustrace;
     _editor->addObserver(&_editorObserverBridge);
     _editorObserverBridge.observer = self;
     
-    _shapeVC = [EditorShapeViewController new];
+    _shapeVC = [EditShapeViewController new];
     _shapeVC.editor = _editor;
     _shapeVC.previewView = _previewView;
     

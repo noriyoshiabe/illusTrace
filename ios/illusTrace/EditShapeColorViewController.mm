@@ -1,25 +1,27 @@
 //
-//  EditorShapeLineViewController.mm
+//  EditShapeColorViewController.mm
 //  illusTrace
 //
-//  Created by abechan on 2016/07/22.
+//  Created by abechan on 2016/07/25.
 //  Copyright © 2016年 Noriyoshi Abe. All rights reserved.
 //
 
-#import "EditorShapeLineViewController.h"
+#import "EditShapeColorViewController.h"
 #import "DocumentObserver.h"
 
 using namespace illustrace;
 
-@interface EditorShapeLineViewController () <DocumentObserver> {
+@interface EditShapeColorViewController () <DocumentObserver> {
     DocumentObserverBridge _documentObserverBridge;
 }
 
-@property (weak, nonatomic) IBOutlet UISlider *detailSlider;
-@property (weak, nonatomic) IBOutlet UISlider *thicknessSlider;
+@property (weak, nonatomic) IBOutlet UISlider *redSlider;
+@property (weak, nonatomic) IBOutlet UISlider *greenSlider;
+@property (weak, nonatomic) IBOutlet UISlider *blueSlider;
+
 @end
 
-@implementation EditorShapeLineViewController
+@implementation EditShapeColorViewController
 
 - (void)viewDidLoad
 {
@@ -27,11 +29,12 @@ using namespace illustrace;
     
     _documentObserverBridge.observer = self;
     
-    _detailSlider.maximumValue = 1.0;
-    _detailSlider.minimumValue = 0.1;
-    
-    _thicknessSlider.minimumValue = 1.0;
-    _thicknessSlider.maximumValue = 50.0;
+    _redSlider.minimumValue = 0.0;
+    _redSlider.maximumValue = 1.0;
+    _greenSlider.minimumValue = 0.0;
+    _greenSlider.maximumValue = 1.0;
+    _blueSlider.minimumValue = 0.0;
+    _blueSlider.maximumValue = 1.0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,18 +64,26 @@ using namespace illustrace;
 
 - (void)update
 {
-    _detailSlider.value = _editor->document->detail();
-    _thicknessSlider.value = _editor->document->thickness();
+    auto &color = _editor->document->color();
+    
+    _redSlider.value = color[0] / 255.0;
+    _greenSlider.value = color[1] / 255.0;
+    _blueSlider.value = color[2] / 255.0;
 }
 
-- (IBAction)detailSliderAction:(id)sender
+- (IBAction)redSliderAction:(id)sender
 {
-    _editor->detail(_detailSlider.value);
+    _editor->R(_redSlider.value);
 }
 
-- (IBAction)thicknessSliderAction:(id)sender
+- (IBAction)greenSliderAction:(id)sender
 {
-    _editor->thickness(_thicknessSlider.value);
+    _editor->G(_greenSlider.value);
+}
+
+- (IBAction)blueSliderAction:(id)sender
+{
+    _editor->B(_blueSlider.value);
 }
 
 #pragma mark DocumentObserver
@@ -82,8 +93,7 @@ using namespace illustrace;
     Document::Event event = static_cast<Document::Event>(va_arg(argList, int));
     
     switch (event) {
-        case Document::Event::Detail:
-        case Document::Event::Thickness:
+        case Document::Event::Color:
             [self update];
             break;
         default:

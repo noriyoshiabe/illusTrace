@@ -1,5 +1,5 @@
 //
-//  EditorShapeColorViewController.h
+//  EditShapeColorViewController.h
 //  illusTrace
 //
 //  Created by abechan on 2016/07/25.
@@ -11,7 +11,7 @@
 #import "Editor.h"
 #import "PreviewView.h"
 
-@interface EditorShapeColorViewController : UIViewController
+@interface EditShapeColorViewController : UIViewController
 @property (assign, nonatomic) illustrace::Editor *editor;
 @property (strong, nonatomic) PreviewView *previewView;
 @end

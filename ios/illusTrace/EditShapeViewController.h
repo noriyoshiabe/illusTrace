@@ -1,5 +1,5 @@
 //
-//  EditorShapeLineViewController.h
+//  EditShapeViewController.h
 //  illusTrace
 //
 //  Created by abechan on 2016/07/22.
@@ -11,7 +11,7 @@
 #import "Editor.h"
 #import "PreviewView.h"
 
-@interface EditorShapeLineViewController : UIViewController
+@interface EditShapeViewController : UIViewController
 @property (assign, nonatomic) illustrace::Editor *editor;
 @property (strong, nonatomic) PreviewView *previewView;
 @end

@@ -21,8 +21,8 @@
 		02425BB01D329C5E0063B409 /* EditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02425BAE1D329C5E0063B409 /* EditViewController.mm */; };
 		02425BB11D329C5E0063B409 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02425BAF1D329C5E0063B409 /* EditViewController.xib */; };
 		025B2F211D4135B900666AC9 /* Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F201D4135B900666AC9 /* Toolbar.m */; };
-		025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */; };
-		025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */; };
+		025B2F2A1D41410A00666AC9 /* EditShapeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F281D41410A00666AC9 /* EditShapeViewController.mm */; };
+		025B2F2B1D41410A00666AC9 /* EditShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025B2F291D41410A00666AC9 /* EditShapeViewController.xib */; };
 		025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = 025B2F2D1D41440200666AC9 /* TouchThroughView.m */; };
 		0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
@@ -33,12 +33,12 @@
 		02A057B61D257DC000DD16B4 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057A31D257DBF00DD16B4 /* Log.cpp */; };
 		02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057AA1D257DBF00DD16B4 /* SVGWriter.cpp */; };
 		02A057BA1D257E5300DD16B4 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A057B91D257E5300DD16B4 /* libxml2.tbd */; };
-		02A293291D463BEC00DC35A0 /* EditorShapeLineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02A293271D463BEC00DC35A0 /* EditorShapeLineViewController.mm */; };
-		02A2932A1D463BEC00DC35A0 /* EditorShapeLineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02A293281D463BEC00DC35A0 /* EditorShapeLineViewController.xib */; };
-		02A2932E1D46493200DC35A0 /* EditorShapeColorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02A2932C1D46493200DC35A0 /* EditorShapeColorViewController.mm */; };
-		02A2932F1D46493200DC35A0 /* EditorShapeColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02A2932D1D46493200DC35A0 /* EditorShapeColorViewController.xib */; };
-		02AA1D8A1D4F51E6001DB96E /* EditorShapePencilViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02AA1D881D4F51E6001DB96E /* EditorShapePencilViewController.mm */; };
-		02AA1D8B1D4F51E6001DB96E /* EditorShapePencilViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02AA1D891D4F51E6001DB96E /* EditorShapePencilViewController.xib */; };
+		02A293291D463BEC00DC35A0 /* EditShapeLineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02A293271D463BEC00DC35A0 /* EditShapeLineViewController.mm */; };
+		02A2932A1D463BEC00DC35A0 /* EditShapeLineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02A293281D463BEC00DC35A0 /* EditShapeLineViewController.xib */; };
+		02A2932E1D46493200DC35A0 /* EditShapeColorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02A2932C1D46493200DC35A0 /* EditShapeColorViewController.mm */; };
+		02A2932F1D46493200DC35A0 /* EditShapeColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02A2932D1D46493200DC35A0 /* EditShapeColorViewController.xib */; };
+		02AA1D8A1D4F51E6001DB96E /* EditShapePencilViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02AA1D881D4F51E6001DB96E /* EditShapePencilViewController.mm */; };
+		02AA1D8B1D4F51E6001DB96E /* EditShapePencilViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02AA1D891D4F51E6001DB96E /* EditShapePencilViewController.xib */; };
 		02C884151D25555600BBB439 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884141D25555600BBB439 /* opencv2.framework */; };
 		02C884171D25566300BBB439 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884161D25566300BBB439 /* AVFoundation.framework */; };
 		02C884191D25568600BBB439 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C884181D25568600BBB439 /* CoreMedia.framework */; };
@@ -72,9 +72,9 @@
 		025B2F1F1D4135B900666AC9 /* Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbar.h; sourceTree = "<group>"; };
 		025B2F201D4135B900666AC9 /* Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Toolbar.m; sourceTree = "<group>"; };
 		025B2F231D41386B00666AC9 /* illusTrace-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "illusTrace-Prefix.pch"; sourceTree = "<group>"; };
-		025B2F271D41410A00666AC9 /* EditorShapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapeViewController.h; sourceTree = "<group>"; };
-		025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapeViewController.mm; sourceTree = "<group>"; };
-		025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeViewController.xib; sourceTree = "<group>"; };
+		025B2F271D41410A00666AC9 /* EditShapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditShapeViewController.h; sourceTree = "<group>"; };
+		025B2F281D41410A00666AC9 /* EditShapeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditShapeViewController.mm; sourceTree = "<group>"; };
+		025B2F291D41410A00666AC9 /* EditShapeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditShapeViewController.xib; sourceTree = "<group>"; };
 		025B2F2C1D41440200666AC9 /* TouchThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchThroughView.h; sourceTree = "<group>"; };
 		025B2F2D1D41440200666AC9 /* TouchThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchThroughView.m; sourceTree = "<group>"; };
 		029957861D416E3A008A3F34 /* DocumentObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentObserver.h; sourceTree = "<group>"; };
@@ -99,15 +99,15 @@
 		02A057AB1D257DBF00DD16B4 /* SVGWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGWriter.h; sourceTree = "<group>"; };
 		02A057AC1D257DBF00DD16B4 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		02A057B91D257E5300DD16B4 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		02A293261D463BEC00DC35A0 /* EditorShapeLineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapeLineViewController.h; sourceTree = "<group>"; };
-		02A293271D463BEC00DC35A0 /* EditorShapeLineViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapeLineViewController.mm; sourceTree = "<group>"; };
-		02A293281D463BEC00DC35A0 /* EditorShapeLineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeLineViewController.xib; sourceTree = "<group>"; };
-		02A2932B1D46493200DC35A0 /* EditorShapeColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapeColorViewController.h; sourceTree = "<group>"; };
-		02A2932C1D46493200DC35A0 /* EditorShapeColorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapeColorViewController.mm; sourceTree = "<group>"; };
-		02A2932D1D46493200DC35A0 /* EditorShapeColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapeColorViewController.xib; sourceTree = "<group>"; };
-		02AA1D871D4F51E6001DB96E /* EditorShapePencilViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorShapePencilViewController.h; sourceTree = "<group>"; };
-		02AA1D881D4F51E6001DB96E /* EditorShapePencilViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditorShapePencilViewController.mm; sourceTree = "<group>"; };
-		02AA1D891D4F51E6001DB96E /* EditorShapePencilViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorShapePencilViewController.xib; sourceTree = "<group>"; };
+		02A293261D463BEC00DC35A0 /* EditShapeLineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditShapeLineViewController.h; sourceTree = "<group>"; };
+		02A293271D463BEC00DC35A0 /* EditShapeLineViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditShapeLineViewController.mm; sourceTree = "<group>"; };
+		02A293281D463BEC00DC35A0 /* EditShapeLineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditShapeLineViewController.xib; sourceTree = "<group>"; };
+		02A2932B1D46493200DC35A0 /* EditShapeColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditShapeColorViewController.h; sourceTree = "<group>"; };
+		02A2932C1D46493200DC35A0 /* EditShapeColorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditShapeColorViewController.mm; sourceTree = "<group>"; };
+		02A2932D1D46493200DC35A0 /* EditShapeColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditShapeColorViewController.xib; sourceTree = "<group>"; };
+		02AA1D871D4F51E6001DB96E /* EditShapePencilViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditShapePencilViewController.h; sourceTree = "<group>"; };
+		02AA1D881D4F51E6001DB96E /* EditShapePencilViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditShapePencilViewController.mm; sourceTree = "<group>"; };
+		02AA1D891D4F51E6001DB96E /* EditShapePencilViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditShapePencilViewController.xib; sourceTree = "<group>"; };
 		02C884141D25555600BBB439 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		02C884161D25566300BBB439 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		02C884181D25568600BBB439 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -172,18 +172,18 @@
 				02425BAD1D329C5E0063B409 /* EditViewController.h */,
 				02425BAE1D329C5E0063B409 /* EditViewController.mm */,
 				02425BAF1D329C5E0063B409 /* EditViewController.xib */,
-				025B2F271D41410A00666AC9 /* EditorShapeViewController.h */,
-				025B2F281D41410A00666AC9 /* EditorShapeViewController.mm */,
-				025B2F291D41410A00666AC9 /* EditorShapeViewController.xib */,
-				02A293261D463BEC00DC35A0 /* EditorShapeLineViewController.h */,
-				02A293271D463BEC00DC35A0 /* EditorShapeLineViewController.mm */,
-				02A293281D463BEC00DC35A0 /* EditorShapeLineViewController.xib */,
-				02A2932B1D46493200DC35A0 /* EditorShapeColorViewController.h */,
-				02A2932C1D46493200DC35A0 /* EditorShapeColorViewController.mm */,
-				02A2932D1D46493200DC35A0 /* EditorShapeColorViewController.xib */,
-				02AA1D871D4F51E6001DB96E /* EditorShapePencilViewController.h */,
-				02AA1D881D4F51E6001DB96E /* EditorShapePencilViewController.mm */,
-				02AA1D891D4F51E6001DB96E /* EditorShapePencilViewController.xib */,
+				025B2F271D41410A00666AC9 /* EditShapeViewController.h */,
+				025B2F281D41410A00666AC9 /* EditShapeViewController.mm */,
+				025B2F291D41410A00666AC9 /* EditShapeViewController.xib */,
+				02A293261D463BEC00DC35A0 /* EditShapeLineViewController.h */,
+				02A293271D463BEC00DC35A0 /* EditShapeLineViewController.mm */,
+				02A293281D463BEC00DC35A0 /* EditShapeLineViewController.xib */,
+				02A2932B1D46493200DC35A0 /* EditShapeColorViewController.h */,
+				02A2932C1D46493200DC35A0 /* EditShapeColorViewController.mm */,
+				02A2932D1D46493200DC35A0 /* EditShapeColorViewController.xib */,
+				02AA1D871D4F51E6001DB96E /* EditShapePencilViewController.h */,
+				02AA1D881D4F51E6001DB96E /* EditShapePencilViewController.mm */,
+				02AA1D891D4F51E6001DB96E /* EditShapePencilViewController.xib */,
 				021D2F8D1D255034008CE5B0 /* Assets.xcassets */,
 				021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */,
 				021D2F921D255034008CE5B0 /* Info.plist */,
@@ -312,13 +312,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				02425BB11D329C5E0063B409 /* EditViewController.xib in Resources */,
-				02A2932A1D463BEC00DC35A0 /* EditorShapeLineViewController.xib in Resources */,
+				02A2932A1D463BEC00DC35A0 /* EditShapeLineViewController.xib in Resources */,
 				021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */,
 				021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */,
 				021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */,
-				02A2932F1D46493200DC35A0 /* EditorShapeColorViewController.xib in Resources */,
-				02AA1D8B1D4F51E6001DB96E /* EditorShapePencilViewController.xib in Resources */,
-				025B2F2B1D41410A00666AC9 /* EditorShapeViewController.xib in Resources */,
+				02A2932F1D46493200DC35A0 /* EditShapeColorViewController.xib in Resources */,
+				02AA1D8B1D4F51E6001DB96E /* EditShapePencilViewController.xib in Resources */,
+				025B2F2B1D41410A00666AC9 /* EditShapeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,14 +344,14 @@
 				0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */,
 				025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */,
 				025B2F211D4135B900666AC9 /* Toolbar.m in Sources */,
-				02AA1D8A1D4F51E6001DB96E /* EditorShapePencilViewController.mm in Sources */,
-				02A293291D463BEC00DC35A0 /* EditorShapeLineViewController.mm in Sources */,
-				02A2932E1D46493200DC35A0 /* EditorShapeColorViewController.mm in Sources */,
+				02AA1D8A1D4F51E6001DB96E /* EditShapePencilViewController.mm in Sources */,
+				02A293291D463BEC00DC35A0 /* EditShapeLineViewController.mm in Sources */,
+				02A2932E1D46493200DC35A0 /* EditShapeColorViewController.mm in Sources */,
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
-				025B2F2A1D41410A00666AC9 /* EditorShapeViewController.mm in Sources */,
+				025B2F2A1D41410A00666AC9 /* EditShapeViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

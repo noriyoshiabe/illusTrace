@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorShapeLineViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditShapeLineViewController">
             <connections>
                 <outlet property="detailSlider" destination="w8t-QE-OdA" id="l2u-fe-lg9"/>
                 <outlet property="thicknessSlider" destination="GsS-X2-onf" id="pHX-3e-r73"/>
