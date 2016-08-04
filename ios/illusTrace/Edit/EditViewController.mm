@@ -9,6 +9,7 @@
 #import "EditViewController.h"
 #import "PreviewView.h"
 #import "EditShapeViewController.h"
+#import "EditBGViewController.h"
 #import "Illustrace.h"
 #import "Editor.h"
 #import "EditorObserver.h"
@@ -33,6 +34,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditShapeViewController *shapeVC;
+@property (strong, nonatomic) EditBGViewController *bgVC;
 @end
 
 @implementation EditViewController
@@ -50,6 +52,10 @@ using namespace illustrace;
     _shapeVC = [EditShapeViewController new];
     _shapeVC.editor = _editor;
     _shapeVC.previewView = _previewView;
+    
+    _bgVC = [EditBGViewController new];
+    _bgVC.editor = _editor;
+    _bgVC.previewView = _previewView;
     
     _editor->mode(Editor::Mode::Shape);
     self.activeVC = _shapeVC;
@@ -121,12 +127,14 @@ using namespace illustrace;
 
 - (IBAction)shapeAction:(id)sender
 {
-    __Trace__
+    _editor->mode(Editor::Mode::Shape);
+    self.activeVC = _shapeVC;
 }
 
 - (IBAction)backgroundAction:(id)sender
 {
-    __Trace__
+    _editor->mode(Editor::Mode::BG);
+    self.activeVC = _bgVC;
 }
 
 - (IBAction)brushAction:(id)sender

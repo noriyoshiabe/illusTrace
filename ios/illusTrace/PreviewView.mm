@@ -71,6 +71,9 @@ using namespace illustrace;
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    [self drawBackground:context];
+    
     CGContextConcatCTM(context, _transform);
     
     if (_drawPreprocessedImage) {
@@ -85,6 +88,18 @@ using namespace illustrace;
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     [self inertia:time - _last.time];
     _last.time = time;
+}
+
+- (void)drawBackground:(CGContextRef)context
+{
+    if (!_drawPreprocessedImage && _document->backgroundEnable()) {
+        auto &color = _document->backgroundColor();
+        CGFloat r = color[0] / 255.0;
+        CGFloat g = color[1] / 255.0;
+        CGFloat b = color[2] / 255.0;
+        CGContextSetRGBFillColor(context, r, g, b, 1.0);
+        CGContextFillRect(context, self.bounds);
+    }
 }
 
 - (void)drawPaths:(CGContextRef)context

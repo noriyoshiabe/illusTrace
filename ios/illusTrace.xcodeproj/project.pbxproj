@@ -30,6 +30,8 @@
 		028387E71D533C58008776AC /* EditShapeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 028387D91D533C58008776AC /* EditShapeViewController.xib */; };
 		028387E81D533C58008776AC /* EditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 028387DB1D533C58008776AC /* EditViewController.mm */; };
 		028387E91D533C58008776AC /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 028387DC1D533C58008776AC /* EditViewController.xib */; };
+		028387ED1D533D20008776AC /* EditBGViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 028387EB1D533D20008776AC /* EditBGViewController.mm */; };
+		028387EE1D533D20008776AC /* EditBGViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 028387EC1D533D20008776AC /* EditBGViewController.xib */; };
 		0299578B1D41749F008A3F34 /* PaintMaskBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */; };
 		02A057AD1D257DC000DD16B4 /* BezierSplineBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */; };
 		02A057B01D257DC000DD16B4 /* Document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A057971D257DBF00DD16B4 /* Document.cpp */; };
@@ -88,6 +90,9 @@
 		028387DC1D533C58008776AC /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
 		028387DE1D533C58008776AC /* DocumentObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentObserver.h; sourceTree = "<group>"; };
 		028387DF1D533C58008776AC /* EditorObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorObserver.h; sourceTree = "<group>"; };
+		028387EA1D533D20008776AC /* EditBGViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditBGViewController.h; sourceTree = "<group>"; };
+		028387EB1D533D20008776AC /* EditBGViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditBGViewController.mm; sourceTree = "<group>"; };
+		028387EC1D533D20008776AC /* EditBGViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditBGViewController.xib; sourceTree = "<group>"; };
 		0299578A1D41749F008A3F34 /* PaintMaskBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PaintMaskBuilder.mm; sourceTree = "<group>"; };
 		02A057921D257DBF00DD16B4 /* BezierSplineBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BezierSplineBuilder.cpp; sourceTree = "<group>"; };
 		02A057931D257DBF00DD16B4 /* BezierSplineBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierSplineBuilder.h; sourceTree = "<group>"; };
@@ -206,6 +211,9 @@
 		028387CD1D533C58008776AC /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				028387EA1D533D20008776AC /* EditBGViewController.h */,
+				028387EB1D533D20008776AC /* EditBGViewController.mm */,
+				028387EC1D533D20008776AC /* EditBGViewController.xib */,
 				028387CE1D533C58008776AC /* EditShapeColorViewController.h */,
 				028387CF1D533C58008776AC /* EditShapeColorViewController.mm */,
 				028387D01D533C58008776AC /* EditShapeColorViewController.xib */,
@@ -332,6 +340,7 @@
 				028387E31D533C58008776AC /* EditShapeLineViewController.xib in Resources */,
 				021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */,
 				028387E91D533C58008776AC /* EditViewController.xib in Resources */,
+				028387EE1D533D20008776AC /* EditBGViewController.xib in Resources */,
 				028387E71D533C58008776AC /* EditShapeViewController.xib in Resources */,
 				021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */,
 				028387E51D533C58008776AC /* EditShapePencilViewController.xib in Resources */,
@@ -352,6 +361,7 @@
 				021D2F861D255034008CE5B0 /* AppDelegate.m in Sources */,
 				0241886F1D305DA60006C00B /* PreviewView.mm in Sources */,
 				02A057B31D257DC000DD16B4 /* Filter.cpp in Sources */,
+				028387ED1D533D20008776AC /* EditBGViewController.mm in Sources */,
 				024188681D30470A0006C00B /* Color.m in Sources */,
 				028387E61D533C58008776AC /* EditShapeViewController.mm in Sources */,
 				02A057B61D257DC000DD16B4 /* Log.cpp in Sources */,
