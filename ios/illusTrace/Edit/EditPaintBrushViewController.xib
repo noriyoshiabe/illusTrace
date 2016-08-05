@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditPaintBrushViewController">
+            <connections>
+                <outlet property="moveButton" destination="fY4-99-zdV" id="Mdg-2S-k1S"/>
+                <outlet property="thicknessSlider" destination="1vt-1I-FRn" id="k0j-TE-rdI"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" customClass="TouchThroughView">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thickness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SdV-4n-HNX">
+                    <rect key="frame" x="30" y="528" width="66" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1vt-1I-FRn" customClass="Slider">
+                    <rect key="frame" x="28" y="550" width="544" height="31"/>
+                    <connections>
+                        <action selector="thicknessSliderAction:" destination="-1" eventType="valueChanged" id="GHo-TD-gy1"/>
+                    </connections>
+                </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fY4-99-zdV">
+                    <rect key="frame" x="540" y="502" width="38" height="38"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="38" id="cXe-7H-J9h"/>
+                        <constraint firstAttribute="height" constant="38" id="lmy-5z-7g4"/>
+                    </constraints>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="move"/>
+                    <connections>
+                        <action selector="moveButtonAction:" destination="-1" eventType="touchUpInside" id="qAl-dC-PzU"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="1vt-1I-FRn" firstAttribute="top" secondItem="fY4-99-zdV" secondAttribute="bottom" constant="10" id="340-KA-jze"/>
+                <constraint firstAttribute="bottom" secondItem="1vt-1I-FRn" secondAttribute="bottom" constant="20" id="8hH-tp-Qsp"/>
+                <constraint firstAttribute="trailing" secondItem="1vt-1I-FRn" secondAttribute="trailing" constant="30" id="H2K-aN-d0l"/>
+                <constraint firstItem="1vt-1I-FRn" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="JQJ-BA-ztK"/>
+                <constraint firstItem="fY4-99-zdV" firstAttribute="trailing" secondItem="1vt-1I-FRn" secondAttribute="trailing" constant="8" id="YiF-le-elo"/>
+                <constraint firstItem="1vt-1I-FRn" firstAttribute="leading" secondItem="SdV-4n-HNX" secondAttribute="leading" id="aDA-Kt-aGf"/>
+                <constraint firstItem="1vt-1I-FRn" firstAttribute="top" secondItem="SdV-4n-HNX" secondAttribute="bottom" constant="5" id="kXK-CI-tdf"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="move" width="22" height="22"/>
+    </resources>
+</document>

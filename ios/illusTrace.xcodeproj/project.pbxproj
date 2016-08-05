@@ -17,6 +17,8 @@
 		022D60131D5484AC003C8837 /* EditPaintViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022D60111D5484AC003C8837 /* EditPaintViewController.xib */; };
 		022D60171D548889003C8837 /* EditPaintColorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 022D60151D548889003C8837 /* EditPaintColorViewController.mm */; };
 		022D60181D548889003C8837 /* EditPaintColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022D60161D548889003C8837 /* EditPaintColorViewController.xib */; };
+		022D601C1D548CF0003C8837 /* EditPaintBrushViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 022D601A1D548CF0003C8837 /* EditPaintBrushViewController.mm */; };
+		022D601D1D548CF0003C8837 /* EditPaintBrushViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022D601B1D548CF0003C8837 /* EditPaintBrushViewController.xib */; };
 		024188621D303AF80006C00B /* NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188611D303AF80006C00B /* NavigationBar.m */; };
 		024188651D3040BD0006C00B /* Slider.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188641D3040BD0006C00B /* Slider.m */; };
 		024188681D30470A0006C00B /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188671D30470A0006C00B /* Color.m */; };
@@ -68,6 +70,9 @@
 		022D60141D548889003C8837 /* EditPaintColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPaintColorViewController.h; sourceTree = "<group>"; };
 		022D60151D548889003C8837 /* EditPaintColorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditPaintColorViewController.mm; sourceTree = "<group>"; };
 		022D60161D548889003C8837 /* EditPaintColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditPaintColorViewController.xib; sourceTree = "<group>"; };
+		022D60191D548CF0003C8837 /* EditPaintBrushViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPaintBrushViewController.h; sourceTree = "<group>"; };
+		022D601A1D548CF0003C8837 /* EditPaintBrushViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditPaintBrushViewController.mm; sourceTree = "<group>"; };
+		022D601B1D548CF0003C8837 /* EditPaintBrushViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditPaintBrushViewController.xib; sourceTree = "<group>"; };
 		024188601D303AF80006C00B /* NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationBar.h; sourceTree = "<group>"; };
 		024188611D303AF80006C00B /* NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationBar.m; sourceTree = "<group>"; };
 		024188631D3040BD0006C00B /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.h; sourceTree = "<group>"; };
@@ -221,6 +226,9 @@
 		028387CD1D533C58008776AC /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				022D60191D548CF0003C8837 /* EditPaintBrushViewController.h */,
+				022D601A1D548CF0003C8837 /* EditPaintBrushViewController.mm */,
+				022D601B1D548CF0003C8837 /* EditPaintBrushViewController.xib */,
 				022D60141D548889003C8837 /* EditPaintColorViewController.h */,
 				022D60151D548889003C8837 /* EditPaintColorViewController.mm */,
 				022D60161D548889003C8837 /* EditPaintColorViewController.xib */,
@@ -355,6 +363,7 @@
 				021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */,
 				028387E31D533C58008776AC /* EditShapeLineViewController.xib in Resources */,
 				021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */,
+				022D601D1D548CF0003C8837 /* EditPaintBrushViewController.xib in Resources */,
 				028387E91D533C58008776AC /* EditViewController.xib in Resources */,
 				028387EE1D533D20008776AC /* EditBGViewController.xib in Resources */,
 				028387E71D533C58008776AC /* EditShapeViewController.xib in Resources */,
@@ -397,6 +406,7 @@
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,
+				022D601C1D548CF0003C8837 /* EditPaintBrushViewController.mm in Sources */,
 				02A057B81D257DC000DD16B4 /* SVGWriter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

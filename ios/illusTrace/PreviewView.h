@@ -23,6 +23,7 @@
 @property (assign, nonatomic) BOOL scrollEnabled;
 @property (assign, nonatomic) BOOL zoomEnabled;
 @property (assign, nonatomic) BOOL drawPreprocessedImage;
+@property (assign, nonatomic) BOOL drawPaintLayer;
 - (CGPoint)locationInDocument:(CGPoint)point;
 - (CGPoint)locationInDocumentWithTouch:(UITouch *)touch;
 @end

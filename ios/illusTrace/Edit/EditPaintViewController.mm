@@ -8,6 +8,7 @@
 
 #import "EditPaintViewController.h"
 #import "EditPaintColorViewController.h"
+#import "EditPaintBrushViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
@@ -23,6 +24,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditPaintColorViewController *colorVC;
+@property (strong, nonatomic) EditPaintBrushViewController *brushVC;
 @end
 
 @implementation EditPaintViewController
@@ -36,6 +38,10 @@ using namespace illustrace;
     _colorVC = [EditPaintColorViewController new];
     _colorVC.editor = _editor;
     _colorVC.previewView = _previewView;
+    
+    _brushVC = [EditPaintBrushViewController new];
+    _brushVC.editor = _editor;
+    _brushVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,7 +121,7 @@ using namespace illustrace;
 - (IBAction)brushAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Brush);
-    self.activeVC = nil;
+    self.activeVC = _brushVC;
 }
 
 - (IBAction)fillAction:(id)sender

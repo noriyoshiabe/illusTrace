@@ -68,6 +68,12 @@ using namespace illustrace;
     [self setNeedsDisplay];
 }
 
+- (void)setDrawPaintLayer:(BOOL)drawPaintLayer
+{
+    _drawPaintLayer = drawPaintLayer;
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -80,6 +86,12 @@ using namespace illustrace;
         [self drawPreprocessedImage:context];
     }
     else {
+        if (_drawPaintLayer) {
+            CGContextSaveGState(context);
+            [self drawPaintLayer:context];
+            CGContextRestoreGState(context);
+        }
+        
         [self drawPaths:context];
     }
     
@@ -161,7 +173,8 @@ using namespace illustrace;
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     CGImageRef image = CGImageCreate(_image.cols, _image.rows, 8, 8, _image.step[0], colorSpace, kCGBitmapByteOrderDefault, provider, NULL, NO, kCGRenderingIntentDefault);
     
-    CGContextConcatCTM(context, CGAffineTransformMake(1, 0, 0, -1, 0, _image.rows));
+    CGAffineTransform flipY = CGAffineTransformMake(1, 0, 0, -1, 0, _image.rows);
+    CGContextConcatCTM(context, flipY);
     
     CGRect rect = CGRectMake(0, 0, _image.cols, _image.rows);
     CGContextClipToMask(context, rect, image);
@@ -172,6 +185,30 @@ using namespace illustrace;
     CGColorSpaceRelease(colorSpace);
     CGDataProviderRelease(provider);
     CFRelease(data);
+    
+    CGContextConcatCTM(context, CGAffineTransformInvert(flipY));
+}
+
+- (void)drawPaintLayer:(CGContextRef)context
+{
+    auto &_image = _document->paintLayer();
+    CFDataRef data = CFDataCreate(NULL, _image.data, _image.step[0] * _image.rows);
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGImageRef image = CGImageCreate(_image.cols, _image.rows, 8, 32, _image.step[0], colorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaLast, provider, NULL, NO, kCGRenderingIntentDefault);
+    
+    CGAffineTransform flipY = CGAffineTransformMake(1, 0, 0, -1, 0, _image.rows);
+    CGContextConcatCTM(context, flipY);
+   
+    CGRect rect = CGRectMake(0, 0, _image.cols, _image.rows);
+    CGContextDrawImage(context, rect, image);
+    
+    CGImageRelease(image);
+    CGColorSpaceRelease(colorSpace);
+    CGDataProviderRelease(provider);
+    CFRelease(data);
+    
+    CGContextConcatCTM(context, CGAffineTransformInvert(flipY));
 }
 
 - (void)inertia:(CFAbsoluteTime)delta
