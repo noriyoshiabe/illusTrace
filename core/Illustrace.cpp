@@ -153,7 +153,7 @@ void Illustrace::buildPathsHierarchy(std::vector<Path *> &paths, Path *parent, s
 
 void Illustrace::buildPaintMask(Document *document)
 {
-    const cv::Mat &image = document->binarizedImage();
+    const cv::Mat &image = document->preprocessedImage();
     cv::Mat paintMask = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
 
     PaintMaskBuilder::build(paintMask, document);
