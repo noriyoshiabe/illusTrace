@@ -359,7 +359,7 @@ void Illustrace::buildPaintPaths(Document *document)
 
         for (auto line : contours) {
             std::vector<cv::Point2f> approx;
-            cv::approxPolyDP(cv::Mat(line), approx, 1, false);
+            cv::approxPolyDP(cv::Mat(line), approx, 0.5, false);
             approximatedLines.push_back(approx);
         }
 

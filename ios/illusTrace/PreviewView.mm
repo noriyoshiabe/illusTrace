@@ -87,9 +87,10 @@ using namespace illustrace;
     }
     else {
         if (_drawPaintLayer) {
-            CGContextSaveGState(context);
             [self drawPaintLayer:context];
-            CGContextRestoreGState(context);
+        }
+        else {
+            [self drawPaintPaths:context];
         }
         
         [self drawPaths:context];
@@ -139,6 +140,27 @@ using namespace illustrace;
         
         CGContextAddPath(context, pathRef);
         CGContextStrokePath(context);
+        
+        CGPathRelease(pathRef);
+    }
+}
+
+- (void)drawPaintPaths:(CGContextRef)context
+{
+    for (auto *path : *_document->paintPaths()) {
+        CGMutablePathRef pathRef = CGPathCreateMutable();
+        
+        auto &color = *path->color;
+        CGFloat r = color[0] / 255.0;
+        CGFloat g = color[1] / 255.0;
+        CGFloat b = color[2] / 255.0;
+        
+        CGContextSetRGBFillColor(context, r, g, b, 1.0);
+        
+        [self drawPath:path subPath:pathRef];
+        
+        CGContextAddPath(context, pathRef);
+        CGContextEOFillPath(context);
         
         CGPathRelease(pathRef);
     }
