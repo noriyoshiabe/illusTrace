@@ -214,7 +214,7 @@ void Illustrace::drawLineOnPaintLayer(cv::Point &point1, cv::Point &point2, int 
             for (int x = 0; x < rect.width; ++x) {
                 int dstX = rect.x + x;
                 if (0 <= dstX && dstX < paintLayer.cols) {
-                    if (0 != line.data[yOffset + x] && 0 == paintMaskData[yDstOffset + dstX]) {
+                    if (0 != line.data[yOffset + x] && 255 != paintMaskData[yDstOffset + dstX]) {
                         if (data[yDstOffset + dstX] != newColor) {
                             data[yDstOffset + dstX] = newColor;
                             changed = true;
