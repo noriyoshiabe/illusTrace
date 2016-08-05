@@ -215,6 +215,7 @@ Editor::Editor(Illustrace *illustrace, Document *document)
       preprocessedImageThickness(5),
       paintLayerThickness(5),
       _paintColor(cv::Scalar(255, 255, 255, 255)),
+      _clearColor(cv::Scalar(0, 0, 0, 0)),
       lastCommand(nullptr),
       currentPoint(0),
       savedPoint(0)
@@ -475,8 +476,15 @@ void Editor::draw(float x, float y)
         }
         break;
     case Mode::Paint:
-        if (PaintState::Brush == _paintState) {
+        switch (_paintState) {
+        case PaintState::Brush:
             illustrace->drawLineOnPaintLayer(prevPoint ? *prevPoint : point, point, paintLayerThickness, _paintColor, document);
+            break;
+        case PaintState::Eraser:
+            illustrace->drawLineOnPaintLayer(prevPoint ? *prevPoint : point, point, paintLayerThickness, _clearColor, document);
+            break;
+        default:
+            break;
         }
         break;
     default:

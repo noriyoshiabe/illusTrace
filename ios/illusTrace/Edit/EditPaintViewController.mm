@@ -25,6 +25,7 @@ using namespace illustrace;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditPaintColorViewController *colorVC;
 @property (strong, nonatomic) EditPaintBrushViewController *brushVC;
+@property (strong, nonatomic) EditPaintBrushViewController *eraserVC;
 @end
 
 @implementation EditPaintViewController
@@ -42,6 +43,10 @@ using namespace illustrace;
     _brushVC = [EditPaintBrushViewController new];
     _brushVC.editor = _editor;
     _brushVC.previewView = _previewView;
+    
+    _eraserVC = [EditPaintBrushViewController new];
+    _eraserVC.editor = _editor;
+    _eraserVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -133,7 +138,7 @@ using namespace illustrace;
 - (IBAction)eraserAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Eraser);
-    self.activeVC = nil;
+    self.activeVC = _eraserVC;
 }
 
 #pragma mark EditorObserver

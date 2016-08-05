@@ -189,6 +189,7 @@ private:
     int preprocessedImageThickness;
     int paintLayerThickness;
     cv::Scalar _paintColor;
+    cv::Scalar _clearColor;
 
     std::stack<Command *> undoStack;
     std::stack<Command *> redoStack;
