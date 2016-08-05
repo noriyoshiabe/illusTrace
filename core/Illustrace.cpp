@@ -166,10 +166,16 @@ inline cv::Rect lineRect(cv::Point &point1, cv::Point &point2, int thickness, cv
 {
     int radius = thickness / 2 + 1;
 
-    int minX = MAX(0, MIN(point1.x, point2.x) - radius);
-    int minY = MAX(0, MIN(point1.y, point2.y) - radius);
-    int maxX = MIN(MAX(point1.x, point2.x) + radius, canvas.cols - 1);
-    int maxY = MIN(MAX(point1.y, point2.y) + radius, canvas.rows - 1);
+    int minX = MIN(point1.x, point2.x) - radius;
+    int minY = MIN(point1.y, point2.y) - radius;
+    int maxX = MAX(point1.x, point2.x) + radius;
+    int maxY = MAX(point1.y, point2.y) + radius;
+
+    minX = MAX(0, MIN(minX, canvas.cols - 1));
+    maxX = MAX(0, MIN(maxX, canvas.cols - 1));
+    minY = MAX(0, MIN(minY, canvas.rows - 1));
+    maxY = MAX(0, MIN(maxY, canvas.rows - 1));
+
     return cv::Rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
 }
 
