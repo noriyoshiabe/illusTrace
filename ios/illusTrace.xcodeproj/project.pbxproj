@@ -13,6 +13,8 @@
 		021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8A1D255034008CE5B0 /* Main.storyboard */; };
 		021D2F8E1D255034008CE5B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8D1D255034008CE5B0 /* Assets.xcassets */; };
 		021D2F911D255034008CE5B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 021D2F8F1D255034008CE5B0 /* LaunchScreen.storyboard */; };
+		022D60121D5484AC003C8837 /* EditPaintViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 022D60101D5484AC003C8837 /* EditPaintViewController.mm */; };
+		022D60131D5484AC003C8837 /* EditPaintViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022D60111D5484AC003C8837 /* EditPaintViewController.xib */; };
 		024188621D303AF80006C00B /* NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188611D303AF80006C00B /* NavigationBar.m */; };
 		024188651D3040BD0006C00B /* Slider.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188641D3040BD0006C00B /* Slider.m */; };
 		024188681D30470A0006C00B /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 024188671D30470A0006C00B /* Color.m */; };
@@ -58,6 +60,9 @@
 		021D2F8D1D255034008CE5B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		021D2F901D255034008CE5B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		021D2F921D255034008CE5B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		022D600F1D5484AC003C8837 /* EditPaintViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPaintViewController.h; sourceTree = "<group>"; };
+		022D60101D5484AC003C8837 /* EditPaintViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditPaintViewController.mm; sourceTree = "<group>"; };
+		022D60111D5484AC003C8837 /* EditPaintViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditPaintViewController.xib; sourceTree = "<group>"; };
 		024188601D303AF80006C00B /* NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationBar.h; sourceTree = "<group>"; };
 		024188611D303AF80006C00B /* NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationBar.m; sourceTree = "<group>"; };
 		024188631D3040BD0006C00B /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.h; sourceTree = "<group>"; };
@@ -211,6 +216,9 @@
 		028387CD1D533C58008776AC /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				022D600F1D5484AC003C8837 /* EditPaintViewController.h */,
+				022D60101D5484AC003C8837 /* EditPaintViewController.mm */,
+				022D60111D5484AC003C8837 /* EditPaintViewController.xib */,
 				028387EA1D533D20008776AC /* EditBGViewController.h */,
 				028387EB1D533D20008776AC /* EditBGViewController.mm */,
 				028387EC1D533D20008776AC /* EditBGViewController.xib */,
@@ -344,6 +352,7 @@
 				028387E71D533C58008776AC /* EditShapeViewController.xib in Resources */,
 				021D2F8C1D255034008CE5B0 /* Main.storyboard in Resources */,
 				028387E51D533C58008776AC /* EditShapePencilViewController.xib in Resources */,
+				022D60131D5484AC003C8837 /* EditPaintViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +383,7 @@
 				028387E41D533C58008776AC /* EditShapePencilViewController.mm in Sources */,
 				025B2F2E1D41440200666AC9 /* TouchThroughView.m in Sources */,
 				025B2F211D4135B900666AC9 /* Toolbar.m in Sources */,
+				022D60121D5484AC003C8837 /* EditPaintViewController.mm in Sources */,
 				0241886B1D305A0A0006C00B /* DocumentViewController.mm in Sources */,
 				024188621D303AF80006C00B /* NavigationBar.m in Sources */,
 				024188651D3040BD0006C00B /* Slider.m in Sources */,

@@ -10,6 +10,7 @@
 #import "PreviewView.h"
 #import "EditShapeViewController.h"
 #import "EditBGViewController.h"
+#import "EditPaintViewController.h"
 #import "Illustrace.h"
 #import "Editor.h"
 #import "EditorObserver.h"
@@ -35,6 +36,7 @@ using namespace illustrace;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditShapeViewController *shapeVC;
 @property (strong, nonatomic) EditBGViewController *bgVC;
+@property (strong, nonatomic) EditPaintViewController *paintVC;
 @end
 
 @implementation EditViewController
@@ -56,6 +58,10 @@ using namespace illustrace;
     _bgVC = [EditBGViewController new];
     _bgVC.editor = _editor;
     _bgVC.previewView = _previewView;
+    
+    _paintVC = [EditPaintViewController new];
+    _paintVC.editor = _editor;
+    _paintVC.previewView = _previewView;
     
     _editor->mode(Editor::Mode::Shape);
     self.activeVC = _shapeVC;
@@ -139,7 +145,8 @@ using namespace illustrace;
 
 - (IBAction)brushAction:(id)sender
 {
-    __Trace__
+    _editor->mode(Editor::Mode::Paint);
+    self.activeVC = _paintVC;
 }
 
 - (IBAction)trimmingAction:(id)sender
