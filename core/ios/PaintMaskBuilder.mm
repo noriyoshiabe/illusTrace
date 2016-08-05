@@ -18,6 +18,9 @@ void PaintMaskBuilder::build(cv::Mat &paintMask, Document *document)
 {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     CGContextRef context = CGBitmapContextCreate(paintMask.data, paintMask.cols, paintMask.rows, 8, paintMask.cols, colorSpace, kCGImageAlphaNone);
+    
+    CGAffineTransform flipY = CGAffineTransformMake(1, 0, 0, -1, 0, paintMask.rows);
+    CGContextConcatCTM(context, flipY);
 
     CGContextSetLineWidth(context, document->thickness());
     CGContextSetLineCap(context, kCGLineCapRound);
