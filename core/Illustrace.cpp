@@ -245,7 +245,7 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
     uint32_t newColor = (int)color[0] | (int)color[1] << 8 | (int)color[2] << 16 | (int)color[3] << 24;
     uint32_t oldColor = data[seed.y * paintLayer.cols + seed.x];
 
-    if (oldColor == newColor || 0 != paintMaskData[seed.y * paintLayer.cols + seed.x]) {
+    if (oldColor == newColor || 255 == paintMaskData[seed.y * paintLayer.cols + seed.x]) {
         return;
     }
 
@@ -269,7 +269,7 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
         minX = MIN(pt.y, minY);
         maxY = MAX(pt.y, maxY);
 
-        while (0 <= pt.x && data[yOffset + pt.x] == oldColor && 0 == paintMaskData[yOffset + pt.x]) {
+        while (0 <= pt.x && data[yOffset + pt.x] == oldColor && 255 != paintMaskData[yOffset + pt.x]) {
             --pt.x;
         }
 
@@ -280,25 +280,25 @@ void Illustrace::fillRegionOnPaintLayer(cv::Point &seed, cv::Scalar &color, Docu
         bool spanAbove = false;
         bool spanBelow = false;
 
-        while (pt.x < paintLayer.cols && data[yOffset + pt.x] == oldColor && 0 == paintMaskData[yOffset + pt.x]) {
+        while (pt.x < paintLayer.cols && data[yOffset + pt.x] == oldColor && 255 != paintMaskData[yOffset + pt.x]) {
             data[yOffset + pt.x] = newColor;
 
             if (0 < pt.y) {
-                if (!spanAbove && data[yOffsetMinus1 + pt.x] == oldColor && 0 == paintMaskData[yOffsetMinus1 + pt.x]) {
+                if (!spanAbove && data[yOffsetMinus1 + pt.x] == oldColor && 255 != paintMaskData[yOffsetMinus1 + pt.x]) {
                     stack.push(cv::Point(pt.x, pt.y - 1));
                     spanAbove = true;
                 }
-                else if(spanAbove && (data[yOffsetMinus1 + pt.x] != oldColor || 0 != paintMaskData[yOffsetMinus1 + pt.x])) {
+                else if(spanAbove && (data[yOffsetMinus1 + pt.x] != oldColor || 255 == paintMaskData[yOffsetMinus1 + pt.x])) {
                     spanAbove = false;
                 }
             }
 
             if (pt.y < paintLayer.rows - 1) {
-                if (!spanBelow && data[yOffsetPlus1 + pt.x] == oldColor && 0 == paintMaskData[yOffsetPlus1 + pt.x]) {
+                if (!spanBelow && data[yOffsetPlus1 + pt.x] == oldColor && 255 != paintMaskData[yOffsetPlus1 + pt.x]) {
                     stack.push(cv::Point(pt.x, pt.y + 1));
                     spanBelow = true;
                 }
-                else if (spanBelow && (data[yOffsetPlus1 + pt.x] != oldColor || 0 != paintMaskData[yOffsetPlus1 + pt.x])) {
+                else if (spanBelow && (data[yOffsetPlus1 + pt.x] != oldColor || 255 == paintMaskData[yOffsetPlus1 + pt.x])) {
                     spanBelow = false;
                 }
             }

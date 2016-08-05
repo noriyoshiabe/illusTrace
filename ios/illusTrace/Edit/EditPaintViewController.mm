@@ -9,6 +9,7 @@
 #import "EditPaintViewController.h"
 #import "EditPaintColorViewController.h"
 #import "EditPaintBrushViewController.h"
+#import "EditPaintFillViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
@@ -25,6 +26,7 @@ using namespace illustrace;
 @property (weak, nonatomic) UIViewController *activeVC;
 @property (strong, nonatomic) EditPaintColorViewController *colorVC;
 @property (strong, nonatomic) EditPaintBrushViewController *brushVC;
+@property (strong, nonatomic) EditPaintFillViewController *fillVC;
 @property (strong, nonatomic) EditPaintBrushViewController *eraserVC;
 @end
 
@@ -43,6 +45,10 @@ using namespace illustrace;
     _brushVC = [EditPaintBrushViewController new];
     _brushVC.editor = _editor;
     _brushVC.previewView = _previewView;
+    
+    _fillVC = [EditPaintFillViewController new];
+    _fillVC.editor = _editor;
+    _fillVC.previewView = _previewView;
     
     _eraserVC = [EditPaintBrushViewController new];
     _eraserVC.editor = _editor;
@@ -132,7 +138,7 @@ using namespace illustrace;
 - (IBAction)fillAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Fill);
-    self.activeVC = nil;
+    self.activeVC = _fillVC;
 }
 
 - (IBAction)eraserAction:(id)sender
