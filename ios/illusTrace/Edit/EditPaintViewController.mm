@@ -7,6 +7,7 @@
 //
 
 #import "EditPaintViewController.h"
+#import "EditPaintColorViewController.h"
 #import "EditorObserver.h"
 #import "Color.h"
 
@@ -21,6 +22,7 @@ using namespace illustrace;
 @property (weak, nonatomic) IBOutlet UIButton *eraserButton;
 @property (weak, nonatomic) IBOutlet UIView *childContainer;
 @property (weak, nonatomic) UIViewController *activeVC;
+@property (strong, nonatomic) EditPaintColorViewController *colorVC;
 @end
 
 @implementation EditPaintViewController
@@ -30,6 +32,10 @@ using namespace illustrace;
     [super viewDidLoad];
     
     _editorObserverBridge.observer = self;
+    
+    _colorVC = [EditPaintColorViewController new];
+    _colorVC.editor = _editor;
+    _colorVC.previewView = _previewView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,7 +51,7 @@ using namespace illustrace;
     _editor->addObserver(&_editorObserverBridge);
     _editor->paintState(Editor::PaintState::Color);
     
-    self.activeVC = nil;
+    self.activeVC = _colorVC;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -103,25 +109,25 @@ using namespace illustrace;
 - (IBAction)colorAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Color);
-    //self.activeVC = _colorVC;
+    self.activeVC = _colorVC;
 }
 
 - (IBAction)brushAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Brush);
-    //self.activeVC = _brushVC;
+    self.activeVC = nil;
 }
 
 - (IBAction)fillAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Fill);
-    //self.activeVC = _fillVC;
+    self.activeVC = nil;
 }
 
 - (IBAction)eraserAction:(id)sender
 {
     _editor->paintState(Editor::PaintState::Eraser);
-    //self.activeVC = _eraserVC;
+    self.activeVC = nil;
 }
 
 #pragma mark EditorObserver
