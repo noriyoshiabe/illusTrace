@@ -196,7 +196,7 @@ void Illustrace::drawLineOnPaintLayer(cv::Point &point1, cv::Point &point2, int 
     uint32_t newColor = (int)color[0] | (int)color[1] << 8 | (int)color[2] << 16 | (int)color[3] << 24;
 
     cv::Rect rect = lineRect(point1, point2, thickness, paintLayer);
-    cv::Mat line = cv::Mat::zeros(rect.width, rect.height, CV_8UC1);
+    cv::Mat line = cv::Mat::zeros(rect.height, rect.width, CV_8UC1);
 
     cv::line(line, cv::Point(point1.x - rect.x, point1.y - rect.y), cv::Point(point2.x - rect.x, point2.y - rect.y), cv::Scalar(255), thickness);
 
